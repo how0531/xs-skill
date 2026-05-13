@@ -1,282 +1,752 @@
-# XScript 範例搜尋索引（AI 專用）
+# XScript 實戰範例索引（場景 620–1241）
 
-> **用途：** 讓 AI 機器人能快速找到相關範例  
-> **更新：** 2026-02-08  
-> **範例總數：** 200+ 個官方範例
+> 索引整理自 [www.xq.com.tw/xstrader/](https://www.xq.com.tw/xstrader/) 的 **622 個官方場景**（原始檔位於 `references/source/XScript_實戰範例寶典_下.md`，共 21K+ 行、594 KB）。
 
----
+**總場景數**：622 個（場景 620 ~ 1241）
 
-## 🔍 如何使用此索引
+## 使用方式
 
-### AI 機器人使用方式
+1. **找對應主題** → 從下方分類找到場景編號
+2. **讀完整腳本** → 用 grep/Read 在 `references/source/XScript_實戰範例寶典_下.md` 內搜尋 `## 場景 N：` 取得完整程式碼
+3. **看原始說明** → 點擊「來源」連結看 xstrader 原文敘述
 
-當用戶請求撰寫 XS 腳本時，按以下步驟使用此索引：
+> **提示**：分類為自動標籤，僅作快速導航；場景內容常常同時涉及多主題（例如「籌碼+技術突破」），找不到時請直接 grep 關鍵字。
 
-1. **識別腳本類別**（指標/交易/選股/警示/函數）
-2. **識別關鍵技術/需求**（例如：均線、KD、停損、rank 等）
-3. **在下方索引中搜尋關鍵字**
-4. **找到相關範例路徑**
-5. **使用 view_file 讀取範例**
-6. **參考範例結構撰寫程式碼**
+## 外部範例庫（200+ .xs 檔案）
 
-### 搜尋技巧
+進階使用者可至官方 XScript Preset 庫挖更完整的範例集：
 
-- 使用 Ctrl+F 搜尋關鍵字
-- 每個範例都有「關鍵字」標籤
-- 每個範例都有「學習重點」說明
-
----
-
-## 📊 指標腳本範例索引
-
-### 基礎技術指標
-
-| 範例名稱    | 路徑                                                       | 關鍵字              | 學習重點                     |
-| ----------- | ---------------------------------------------------------- | ------------------- | ---------------------------- |
-| KD 隨機指標 | `references/xscript_preset/指標/XQ技術指標/KD 隨機指標.xs` | KD, RSV, Stochastic | 經典 KD 指標，學習 plot 用法 |
-| MACD        | `references/xscript_preset/指標/XQ技術指標/MACD.xs`        | MACD, DIF, OSC      | MACD 指標，學習多條線繪製    |
-| BB指標      | `references/xscript_preset/指標/技術指標/BB指標.xs`        | 布林通道, 標準差    | 布林通道，學習波動指標       |
-| RSI         | `references/xscript_preset/指標/XQ技術指標/RSI.xs`         | RSI, 相對強弱       | RSI 指標，學習超買超賣       |
-| DMI         | `references/xscript_preset/指標/技術指標/DMI.xs`           | DMI, ADX, 趨向      | 趨向指標，學習多空判斷       |
-
-### 跨頻率指標（重要）
-
-| 範例名稱   | 路徑                                                      | 關鍵字           | 學習重點                   |
-| ---------- | --------------------------------------------------------- | ---------------- | -------------------------- |
-| 分鐘與日KD | `references/xscript_preset/指標/跨頻率指標/分鐘與日KD.xs` | 跨頻率, GetField | ⭐ 如何在分鐘線引用日線 KD |
-| 週KD       | `references/xscript_preset/指標/跨頻率指標/週KD.xs`       | 週線, 跨頻率     | 週線 KD 指標實作           |
-
-### 進階指標
-
-| 範例名稱         | 路徑                                                          | 關鍵字           | 學習重點       |
-| ---------------- | ------------------------------------------------------------- | ---------------- | -------------- |
-| 股性綜合分數指標 | `references/xscript_preset/指標/技術指標/股性綜合分數指標.xs` | 多維度, 評分系統 | 多指標綜合評分 |
-| 波動率指標       | `references/xscript_preset/指標/技術指標/波動率指標.xs`       | 波動率, ATR      | 市場波動度量測 |
-| 動量指標         | `references/xscript_preset/指標/技術指標/動量指標.xs`         | 動量, Momentum   | 價格動能分析   |
+- [how0531/XScript_Preset](https://github.com/how0531/XScript_Preset) — 200+ 個 `.xs` 範例檔
+  - `指標/XQ技術指標/` — KD / MACD / RSI / DMI 等經典指標的官方版
+  - `指標/跨頻率指標/` — `分鐘與日KD.xs`、`週KD.xs` 等跨頻率範例
+  - `自動交易/0-基本語法/` — `01-SetPosition.xs`、`03-Filled.xs`、`05-FilledAvgPrice以及停損停利範例.xs`（**初學必讀**）
+  - `自動交易/常見技術分析/` — 均線交叉、KD、MACD、布林通道等策略
+  - `選股/00.語法範例/` — `_基本範例.xs`、`月營收創N期新高.xs`、`本益比小於X倍.xs`
+  - `選股/04.價量選股/`、`/06.籌碼選股/`、`/07.月營收選股/`、`/08.財報選股/`、`/10.價值投資/`、`/11.選股機器人/`
+  - `警示/!語法範例/`、`/1.籌碼監控/`、`/3.出場常用警示/`
+  - `函數/技術指標/`、`/跨頻率/`、`/期權相關/`、`/統計分析/`
+- [sysjust-xq/XS_Blocks](https://github.com/sysjust-xq/XS_Blocks) — XQ 官方「量化積木」（使用者指定積木時才用）
 
 ---
 
-## 💼 交易腳本範例索引
+## 選股（454 個場景）
 
-### 基本語法（必讀）
+### 籌碼面（31）
 
-| 範例名稱                        | 路徑                                                                               | 關鍵字                 | 學習重點                       |
-| ------------------------------- | ---------------------------------------------------------------------------------- | ---------------------- | ------------------------------ |
-| 01-SetPosition                  | `references/xscript_preset/自動交易/0-基本語法/01-SetPosition.xs`                  | SetPosition, Position  | ⭐ 必讀：Position 概念完整說明 |
-| 03-Filled                       | `references/xscript_preset/自動交易/0-基本語法/03-Filled.xs`                       | Filled, 實際部位       | ⭐ 必讀：Filled 函數詳解       |
-| 07-Position跟Filled的異動時機點 | `references/xscript_preset/自動交易/0-基本語法/07-Position跟Filled的異動時機點.xs` | Position, Filled, 時機 | ⭐ 必讀：核心概念理解          |
+- **場景 673**：[籌碼分析中的券商分公司買賣數據目前在XS上的應用](https://www.xq.com.tw/xstrader/%e7%b1%8c%e7%a2%bc%e5%88%86%e6%9e%90%e4%b8%ad%e7%9a%84%e5%88%b8%e5%95%86%e5%88%86%e5%85%ac%e5%8f%b8%e8%b2%b7%e8%b3%a3%e8%b3%87%e6%96%99%e7%9b%ae%e5%89%8d%e5%9c%a8xs%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 674**：[籌碼分析中的券商分公司買賣數據目前在XS上的應用](https://www.xq.com.tw/xstrader/%e7%b1%8c%e7%a2%bc%e5%88%86%e6%9e%90%e4%b8%ad%e7%9a%84%e5%88%b8%e5%95%86%e5%88%86%e5%85%ac%e5%8f%b8%e8%b2%b7%e8%b3%a3%e8%b3%87%e6%96%99%e7%9b%ae%e5%89%8d%e5%9c%a8xs%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 689**：[外資買超佔股本比排行](https://www.xq.com.tw/xstrader/%e5%a4%96%e8%b3%87%e8%b2%b7%e8%b6%85%e4%bd%94%e8%82%a1%e6%9c%ac%e6%af%94%e6%8e%92%e8%a1%8c/)
+- **場景 691**：[從千張大戶數增減看大戶有否落跑！](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%8d%83%e5%bc%b5%e5%a4%a7%e6%88%b6%e6%95%b8%e5%a2%9e%e6%b8%9b%e7%9c%8b%e5%a4%a7%e6%88%b6%e6%9c%89%e5%90%a6%e8%90%bd%e8%b7%91%ef%bc%81/)
+- **場景 692**：[從千張大戶數增減看大戶有否落跑！](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%8d%83%e5%bc%b5%e5%a4%a7%e6%88%b6%e6%95%b8%e5%a2%9e%e6%b8%9b%e7%9c%8b%e5%a4%a7%e6%88%b6%e6%9c%89%e5%90%a6%e8%90%bd%e8%b7%91%ef%bc%81/)
+- **場景 703**：[大漲後大戶落跑](https://www.xq.com.tw/xstrader/%e5%a4%a7%e6%bc%b2%e5%be%8c%e5%a4%a7%e6%88%b6%e8%90%bd%e8%b7%91/)
+- **場景 704**：[大漲後大戶落跑](https://www.xq.com.tw/xstrader/%e5%a4%a7%e6%bc%b2%e5%be%8c%e5%a4%a7%e6%88%b6%e8%90%bd%e8%b7%91/)
+- **場景 741**：[那些股票外資買超的隔天上漲的機會比較大??](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e5%a4%96%e8%b3%87%e8%b2%b7%e8%b6%85%e7%9a%84%e9%9a%94%e5%a4%a9%e4%b8%8a%e6%bc%b2%e7%9a%84%e6%a9%9f%e6%9c%83%e6%af%94%e8%bc%83%e5%a4%a7/)
+- **場景 742**：[那些股票外資買超的隔天上漲的機會比較大??](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e5%a4%96%e8%b3%87%e8%b2%b7%e8%b6%85%e7%9a%84%e9%9a%94%e5%a4%a9%e4%b8%8a%e6%bc%b2%e7%9a%84%e6%a9%9f%e6%9c%83%e6%af%94%e8%bc%83%e5%a4%a7/)
+- **場景 763**：[雲端策略中心精進版之41~投信初介入](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b41%e6%8a%95%e4%bf%a1%e5%88%9d%e4%bb%8b%e5%85%a5/)
+- **場景 791**：[雲端策略中心精進版之14~投信強買發動](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b14%e6%8a%95%e4%bf%a1%e5%bc%b7%e8%b2%b7%e7%99%bc%e5%8b%95/)
+- **場景 801**：[雲端策略中心精進版之4~主力偷偷收集籌碼後攻堅](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b4%e4%b8%bb%e5%8a%9b%e5%81%b7%e5%81%b7%e6%94%b6%e9%9b%86%e7%b1%8c%e7%a2%bc%e5%be%8c%e6%94%bb%e5%a0%85/)
+- **場景 802**：[雲端策略中心精進版之3~主力偷偷調節持股後下殺](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b3%e4%b8%bb%e5%8a%9b%e5%81%b7%e5%81%b7%e8%aa%bf%e7%af%80%e6%8c%81%e8%82%a1%e5%be%8c%e4%b8%8b%e6%ae%ba/)
+- **場景 833**：[開盤開始發動攻勢的主力買超股~交易時機策略的應用方式](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%9b%a4%e9%96%8b%e5%a7%8b%e7%99%bc%e5%8b%95%e6%94%bb%e5%8b%a2%e7%9a%84%e4%b8%bb%e5%8a%9b%e8%b2%b7%e8%b6%85%e8%82%a1/)
+- **場景 834**：[開盤開始發動攻勢的主力買超股~交易時機策略的應用方式](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%9b%a4%e9%96%8b%e5%a7%8b%e7%99%bc%e5%8b%95%e6%94%bb%e5%8b%a2%e7%9a%84%e4%b8%bb%e5%8a%9b%e8%b2%b7%e8%b6%85%e8%82%a1/)
+- **場景 951**：[散戶買進賣出比例及控盤者買賣盤](https://www.xq.com.tw/xstrader/%e7%a0%94%e5%88%a4%e4%b8%bb%e5%8a%9b%e6%9c%89%e6%b2%92%e6%9c%89%e8%90%bd%e8%b7%91%e7%9a%84%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99/)
+- **場景 952**：[散戶買進賣出比例及控盤者買賣盤](https://www.xq.com.tw/xstrader/%e7%a0%94%e5%88%a4%e4%b8%bb%e5%8a%9b%e6%9c%89%e6%b2%92%e6%9c%89%e8%90%bd%e8%b7%91%e7%9a%84%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99/)
+- **場景 953**：[散戶買進賣出比例及控盤者買賣盤](https://www.xq.com.tw/xstrader/%e7%a0%94%e5%88%a4%e4%b8%bb%e5%8a%9b%e6%9c%89%e6%b2%92%e6%9c%89%e8%90%bd%e8%b7%91%e7%9a%84%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99/)
+- **場景 959**：[年底前投信作帳的可能標的](https://www.xq.com.tw/xstrader/%e5%b9%b4%e5%ba%95%e5%89%8d%e6%8a%95%e4%bf%a1%e4%bd%9c%e5%b8%b3%e7%9a%84%e5%8f%af%e8%83%bd%e6%a8%99%e7%9a%84/)
+- **場景 1035**：[主力作多成本線](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e4%bd%9c%e5%a4%9a%e6%88%90%e6%9c%ac%e7%b7%9a/)
+- **場景 1048**：[投信作帳的標的](https://www.xq.com.tw/xstrader/%e6%8a%95%e4%bf%a1%e4%bd%9c%e5%b8%b3%e7%9a%84%e6%a8%99%e7%9a%84/)
+- **場景 1116**：[主力法人成本價格的判斷](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e6%b3%95%e4%ba%ba%e6%88%90%e6%9c%ac%e5%83%b9%e6%a0%bc%e7%9a%84%e5%88%a4%e6%96%b7/)
+- **場景 1119**：[突破投信成本線](https://www.xq.com.tw/xstrader/976/)
+- **場景 1151**：[投信開始押的冷門股](https://www.xq.com.tw/xstrader/%e6%8a%95%e4%bf%a1%e9%96%8b%e5%a7%8b%e6%8a%bc%e7%9a%84%e5%86%b7%e9%96%80%e8%82%a1/)
+- **場景 1169**：[在盤中尋找不只一個法人在買進的股票](https://www.xq.com.tw/xstrader/%e5%9c%a8%e7%9b%a4%e4%b8%ad%e5%b0%8b%e6%89%be%e4%b8%8d%e5%8f%aa%e4%b8%80%e5%80%8b%e6%b3%95%e4%ba%ba%e5%9c%a8%e8%b2%b7%e9%80%b2%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1171**：[主力出貨](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e5%87%ba%e8%b2%a8/)
+- **場景 1173**：[主力可能出貨的股票](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e5%8f%af%e8%83%bd%e5%87%ba%e8%b2%a8%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1174**：[法人買進比重大的非權值股。](https://www.xq.com.tw/xstrader/%e6%b3%95%e4%ba%ba%e8%b2%b7%e9%80%b2%e6%af%94%e9%87%8d%e5%a4%a7%e7%9a%84%e9%9d%9e%e6%ac%8a%e5%80%bc%e8%82%a1%e3%80%82/)
+- **場景 1181**：[大跌但主力大買超的股票](https://www.xq.com.tw/xstrader/%e5%a4%a7%e8%b7%8c%e4%bd%86%e4%b8%bb%e5%8a%9b%e5%a4%a7%e8%b2%b7%e8%b6%85%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1189**：[主力成本線](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e6%88%90%e6%9c%ac%e7%b7%9a/)
+- **場景 1239**：[如何知道公司派，主力是不是在出貨](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e7%9f%a5%e9%81%93%e5%85%ac%e5%8f%b8%e6%b4%be%ef%bc%8c%e4%b8%bb%e5%8a%9b%e6%98%af%e4%b8%8d%e6%98%af%e5%9c%a8%e5%87%ba%e8%b2%a8/)
 
-### 停損停利
+### 營收與財報（38）
 
-| 範例名稱                          | 路徑                                                                                 | 關鍵字                     | 學習重點              |
-| --------------------------------- | ------------------------------------------------------------------------------------ | -------------------------- | --------------------- |
-| 05-FilledAvgPrice以及停損停利範例 | `references/xscript_preset/自動交易/0-基本語法/05-FilledAvgPrice以及停損停利範例.xs` | 停損, 停利, FilledAvgPrice | 🎯 實戰：停損停利實作 |
+- **場景 670**：[累計營收年增率開始出現異於以往的股票](https://www.xq.com.tw/xstrader/%e7%b4%af%e8%a8%88%e7%87%9f%e6%94%b6%e5%b9%b4%e5%a2%9e%e7%8e%87%e9%96%8b%e5%a7%8b%e5%87%ba%e7%8f%be%e7%95%b0%e6%96%bc%e4%bb%a5%e5%be%80%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 740**：[低PB股轉強](https://www.xq.com.tw/xstrader/%e4%bd%8epb%e8%82%a1%e8%bd%89%e5%bc%b7/)
+- **場景 773**：[雲端策略中心精進版之33~低預估本益比攻勢發動](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b33%e4%bd%8e%e9%a0%90%e4%bc%b0%e6%9c%ac%e7%9b%8a%e6%af%94%e6%94%bb%e5%8b%a2%e7%99%bc%e5%8b%95/)
+- **場景 774**：[雲端策略中心精進版之32~低PB股的逆襲](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b32%e4%bd%8epb%e8%82%a1%e7%9a%84%e9%80%86%e8%a5%b2/)
+- **場景 805**：[跌不下去的高殖利率股](https://www.xq.com.tw/xstrader/%e8%b7%8c%e4%b8%8d%e4%b8%8b%e5%8e%bb%e7%9a%84%e9%ab%98%e6%ae%96%e5%88%a9%e7%8e%87%e8%82%a1/)
+- **場景 806**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 807**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 808**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 809**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 810**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 811**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 812**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 813**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 814**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 815**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 816**：[從最新公佈月營收挖寶的十個方法](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%80%e6%96%b0%e5%85%ac%e4%bd%88%e6%9c%88%e7%87%9f%e6%94%b6%e6%8c%96%e5%af%b6%e7%9a%84%e5%8d%81%e5%80%8b%e6%96%b9%e6%b3%95/)
+- **場景 830**：[以月營收為基礎而建構的三個冷門股選股策略](https://www.xq.com.tw/xstrader/%e4%bb%a5%e6%9c%88%e7%87%9f%e6%94%b6%e7%82%ba%e5%9f%ba%e7%a4%8e%e8%80%8c%e5%bb%ba%e6%a7%8b%e7%9a%84%e5%b9%be%e5%80%8b%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5/)
+- **場景 831**：[以月營收為基礎而建構的三個冷門股選股策略](https://www.xq.com.tw/xstrader/%e4%bb%a5%e6%9c%88%e7%87%9f%e6%94%b6%e7%82%ba%e5%9f%ba%e7%a4%8e%e8%80%8c%e5%bb%ba%e6%a7%8b%e7%9a%84%e5%b9%be%e5%80%8b%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5/)
+- **場景 869**：[高現金股利低本益比且本業仍不差](https://www.xq.com.tw/xstrader/%e9%ab%98%e7%8f%be%e9%87%91%e8%82%a1%e5%88%a9%e4%bd%8e%e6%9c%ac%e7%9b%8a%e6%af%94%e4%b8%94%e6%9c%ac%e6%a5%ad%e4%bb%8d%e4%b8%8d%e5%b7%ae/)
+- **場景 887**：[3月份月營收數據公佈後的選股方向](https://www.xq.com.tw/xstrader/3%e6%9c%88%e4%bb%bd%e6%9c%88%e7%87%9f%e6%94%b6%e6%95%b8%e6%93%9a%e5%85%ac%e4%bd%88%e5%be%8c%e7%9a%84%e9%81%b8%e8%82%a1%e6%96%b9%e5%90%91/)
+- **場景 888**：[3月份月營收數據公佈後的選股方向](https://www.xq.com.tw/xstrader/3%e6%9c%88%e4%bb%bd%e6%9c%88%e7%87%9f%e6%94%b6%e6%95%b8%e6%93%9a%e5%85%ac%e4%bd%88%e5%be%8c%e7%9a%84%e9%81%b8%e8%82%a1%e6%96%b9%e5%90%91/)
+- **場景 911**：[尋找那些創過去五年同月份營收新高的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%82%a3%e4%ba%9b%e5%89%b5%e9%81%8e%e5%8e%bb%e4%ba%94%e5%b9%b4%e5%90%8c%e6%9c%88%e4%bb%bd%e7%87%9f%e6%94%b6%e6%96%b0%e9%ab%98%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 912**：[尋找那些創過去五年同月份營收新高的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%82%a3%e4%ba%9b%e5%89%b5%e9%81%8e%e5%8e%bb%e4%ba%94%e5%b9%b4%e5%90%8c%e6%9c%88%e4%bb%bd%e7%87%9f%e6%94%b6%e6%96%b0%e9%ab%98%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 944**：[高毛利低獲利高成長的股票～選股起手式](https://www.xq.com.tw/xstrader/%e9%ab%98%e6%af%9b%e5%88%a9%e4%bd%8e%e7%8d%b2%e5%88%a9%e9%ab%98%e6%88%90%e9%95%b7%e7%9a%84%e8%82%a1%e7%a5%a8%ef%bd%9e%e9%81%b8%e8%82%a1%e8%b5%b7%e6%89%8b%e5%bc%8f/)
+- **場景 966**：[用月營收來選股的幾種方法](https://www.xq.com.tw/xstrader/%e7%94%a8%e6%9c%88%e7%87%9f%e6%94%b6%e4%be%86%e9%81%b8%e8%82%a1%e7%9a%84%e5%b9%be%e7%a8%ae%e6%96%b9%e6%b3%95/)
+- **場景 967**：[用月營收來選股的幾種方法](https://www.xq.com.tw/xstrader/%e7%94%a8%e6%9c%88%e7%87%9f%e6%94%b6%e4%be%86%e9%81%b8%e8%82%a1%e7%9a%84%e5%b9%be%e7%a8%ae%e6%96%b9%e6%b3%95/)
+- **場景 993**：[盤中開始暴量的低PB股](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%ad%e9%96%8b%e5%a7%8b%e6%9a%b4%e9%87%8f%e7%9a%84%e4%bd%8epb%e8%82%a1/)
+- **場景 994**：[盤中開始暴量的低PB股](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%ad%e9%96%8b%e5%a7%8b%e6%9a%b4%e9%87%8f%e7%9a%84%e4%bd%8epb%e8%82%a1/)
+- **場景 1016**：[月營收推估的低本益比股](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%96%b0%e7%9a%84%e6%9c%88%e7%87%9f%e6%94%b6%e5%85%ac%e4%bd%88%e6%99%82%ef%bc%8c%e5%bf%ab%e9%80%9f%e9%81%b8%e8%82%a1%e7%9a%84%e6%96%b9%e6%b3%95/)
+- **場景 1031**：[那些股票如果財報不如預期賣壓及拉回幅度會比較重](https://www.xq.com.tw/xstrader/%e6%ae%ba%e7%9b%a4%e7%b8%bd%e5%9c%a8%e8%b2%a1%e5%a0%b1%e5%85%ac%e4%bd%88%e5%be%8c%e9%81%bf%e9%96%8b%e5%9c%b0%e9%9b%b7%e7%9a%84%e5%8d%81%e7%a8%ae%e6%96%b9%e6%b3%95%e4%b9%8b%e4%b8%80/)
+- **場景 1032**：[找出在財報公佈前可能要先避開的公司](https://www.xq.com.tw/xstrader/%e6%89%be%e5%87%ba%e5%9c%a8%e8%b2%a1%e5%a0%b1%e5%85%ac%e4%bd%88%e5%89%8d%e5%8f%af%e8%83%bd%e8%a6%81%e5%85%88%e9%81%bf%e9%96%8b%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 1033**：[找出在財報公佈前可能要先避開的公司](https://www.xq.com.tw/xstrader/%e6%89%be%e5%87%ba%e5%9c%a8%e8%b2%a1%e5%a0%b1%e5%85%ac%e4%bd%88%e5%89%8d%e5%8f%af%e8%83%bd%e8%a6%81%e5%85%88%e9%81%bf%e9%96%8b%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 1102**：[合理的本益比跟盈餘品質與成長力有關](https://www.xq.com.tw/xstrader/%e5%90%88%e7%90%86%e7%9a%84%e6%9c%ac%e7%9b%8a%e6%af%94%e8%b7%9f%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa%e8%88%87%e6%88%90%e9%95%b7%e5%8a%9b%e6%9c%89%e9%97%9c-2/)
+- **場景 1103**：[合理的本益比跟盈餘品質與成長力有關](https://www.xq.com.tw/xstrader/%e5%90%88%e7%90%86%e7%9a%84%e6%9c%ac%e7%9b%8a%e6%af%94%e8%b7%9f%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa%e8%88%87%e6%88%90%e9%95%b7%e5%8a%9b%e6%9c%89%e9%97%9c-2/)
+- **場景 1193**：[合理的本益比跟盈餘品質與成長力有關](https://www.xq.com.tw/xstrader/%e5%90%88%e7%90%86%e7%9a%84%e6%9c%ac%e7%9b%8a%e6%af%94%e8%b7%9f%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa%e8%88%87%e6%88%90%e9%95%b7%e5%8a%9b%e6%9c%89%e9%97%9c/)
+- **場景 1194**：[合理的本益比跟盈餘品質與成長力有關](https://www.xq.com.tw/xstrader/%e5%90%88%e7%90%86%e7%9a%84%e6%9c%ac%e7%9b%8a%e6%af%94%e8%b7%9f%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa%e8%88%87%e6%88%90%e9%95%b7%e5%8a%9b%e6%9c%89%e9%97%9c/)
+- **場景 1229**：[低本益比的定存股](https://www.xq.com.tw/xstrader/%e4%bd%8e%e6%9c%ac%e7%9b%8a%e6%af%94%e7%9a%84%e5%ae%9a%e5%ad%98%e8%82%a1/)
+- **場景 1231**：[現金股利跳島戰術](https://www.xq.com.tw/xstrader/%e7%8f%be%e9%87%91%e8%82%a1%e5%88%a9%e8%b7%b3%e5%b3%b6%e6%88%b0%e8%a1%93/)
 
-### 進階策略
+### 價值評估（23）
 
-| 範例名稱                   | 路徑                                                                          | 關鍵字             | 學習重點     |
-| -------------------------- | ----------------------------------------------------------------------------- | ------------------ | ------------ |
-| 04-SetPosition範例#4(追價) | `references/xscript_preset/自動交易/0-基本語法/04-SetPosition範例#4(追價).xs` | 追價, AddSpread    | 追價策略實作 |
-| 04-SetPosition範例#5(加碼) | `references/xscript_preset/自動交易/0-基本語法/04-SetPosition範例#5(加碼).xs` | 加碼, Position加減 | 加碼邏輯實作 |
+- **場景 620**：[估值高折價股盤整後出量](https://www.xq.com.tw/xstrader/%e4%bc%b0%e5%80%bc%e9%ab%98%e6%8a%98%e5%83%b9%e8%82%a1%e7%9b%a4%e6%95%b4%e5%be%8c%e5%87%ba%e9%87%8f/)
+- **場景 621**：[夠便宜且整理結束](https://www.xq.com.tw/xstrader/%e5%a4%a0%e4%be%bf%e5%ae%9c%e4%b8%94%e6%95%b4%e7%90%86%e7%b5%90%e6%9d%9f/)
+- **場景 622**：[夠便宜且整理結束](https://www.xq.com.tw/xstrader/%e5%a4%a0%e4%be%bf%e5%ae%9c%e4%b8%94%e6%95%b4%e7%90%86%e7%b5%90%e6%9d%9f/)
+- **場景 623**：[好公司，夠便宜~David Dreman的選股方法](https://www.xq.com.tw/xstrader/%e5%a5%bd%e5%85%ac%e5%8f%b8%ef%bc%8c%e5%a4%a0%e4%be%bf%e5%ae%9cdavid-dreman%e7%9a%84%e9%81%b8%e8%82%a1%e6%96%b9%e6%b3%95/)
+- **場景 629**：[葛拉罕的價值投資標的](https://www.xq.com.tw/xstrader/%e8%91%9b%e6%8b%89%e7%bd%95%e7%9a%84%e5%83%b9%e5%80%bc%e6%8a%95%e8%b3%87%e6%a8%99%e7%9a%84/)
+- **場景 720**：[葛拉罕留下來的投資智慧](https://www.xq.com.tw/xstrader/%e8%91%9b%e6%8b%89%e7%bd%95%e7%95%99%e4%b8%8b%e4%be%86%e7%9a%84%e6%8a%95%e8%b3%87%e6%99%ba%e6%85%a7/)
+- **場景 722**：[價值衡量九式之九](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e4%b9%9d/)
+- **場景 723**：[價值衡量九式之八](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e5%85%ab/)
+- **場景 724**：[價值衡量九式之七](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e4%b8%83/)
+- **場景 725**：[價值衡量九式之七](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e4%b8%83/)
+- **場景 726**：[價值衡量九式之六](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e5%85%ad/)
+- **場景 727**：[價值衡量九式之五](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e4%ba%94/)
+- **場景 728**：[價值衡量九式之四](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e5%9b%9b/)
+- **場景 729**：[價值衡量九式之三](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e4%b8%89/)
+- **場景 730**：[價值衡量九式之二](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e8%a1%a1%e9%87%8f%e4%b9%9d%e5%bc%8f%e4%b9%8b%e4%ba%8c/)
+- **場景 731**：[價值衡量九式之一](https://www.xq.com.tw/xstrader/9-1/)
+- **場景 932**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
+- **場景 933**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
+- **場景 934**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
+- **場景 935**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
+- **場景 936**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
+- **場景 937**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
+- **場景 938**：[價值型轉機股](https://www.xq.com.tw/xstrader/%e5%83%b9%e5%80%bc%e5%9e%8b%e8%bd%89%e6%a9%9f%e8%82%a1/)
 
-### 技術分析策略
+### 創高與突破（29）
 
-請查看 `references/xscript_preset/自動交易/常見技術分析/` 資料夾，包含：
+- **場景 626**：[長期未破底後創新高的選股策略](https://www.xq.com.tw/xstrader/%e9%95%b7%e6%9c%9f%e6%9c%aa%e7%a0%b4%e5%ba%95%e5%be%8c%e5%89%b5%e6%96%b0%e9%ab%98%e7%9a%84%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5/)
+- **場景 648**：[百日來首次創百日新高](https://www.xq.com.tw/xstrader/%e7%99%be%e6%97%a5%e4%be%86%e9%a6%96%e6%ac%a1%e5%89%b5%e7%99%be%e6%97%a5%e6%96%b0%e9%ab%98/)
+- **場景 650**：[突破股價波動均勢（ATR通道突破）](https://www.xq.com.tw/xstrader/%e7%aa%81%e7%a0%b4%e8%82%a1%e5%83%b9%e6%b3%a2%e5%8b%95%e5%9d%87%e5%8b%a2%ef%bc%88atr%e9%80%9a%e9%81%93%e7%aa%81%e7%a0%b4%ef%bc%89/)
+- **場景 653**：[ＫＤ低檔黃金交叉](https://www.xq.com.tw/xstrader/%ef%bd%8b%ef%bd%84%e4%bd%8e%e6%aa%94%e9%bb%83%e9%87%91%e4%ba%a4%e5%8f%89/)
+- **場景 656**：[好久都沒有破底且創新高](https://www.xq.com.tw/xstrader/%e5%a5%bd%e4%b9%85%e9%83%bd%e6%b2%92%e6%9c%89%e7%a0%b4%e5%ba%95%e4%b8%94%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 657**：[突破重大壓力區](https://www.xq.com.tw/xstrader/%e7%aa%81%e7%a0%b4%e9%87%8d%e5%a4%a7%e5%a3%93%e5%8a%9b%e5%8d%80/)
+- **場景 658**：[大跌後突破短中長期平均成本](https://www.xq.com.tw/xstrader/%e5%a4%a7%e8%b7%8c%e5%be%8c%e7%aa%81%e7%a0%b4%e7%9f%ad%e4%b8%ad%e9%95%b7%e6%9c%9f%e5%b9%b3%e5%9d%87%e6%88%90%e6%9c%ac/)
+- **場景 659**：[箱型突破](https://www.xq.com.tw/xstrader/%e7%ae%b1%e5%9e%8b%e7%aa%81%e7%a0%b4/)
+- **場景 660**：[日線週線的均線都黃金交叉](https://www.xq.com.tw/xstrader/%e6%97%a5%e7%b7%9a%e9%80%b1%e7%b7%9a%e7%9a%84%e5%9d%87%e7%b7%9a%e9%83%bd%e9%bb%83%e9%87%91%e4%ba%a4%e5%8f%89/)
+- **場景 735**：[突破繼續型態選股策略](https://www.xq.com.tw/xstrader/%e7%aa%81%e7%a0%b4%e7%b9%bc%e7%ba%8c%e5%9e%8b%e6%85%8b%e7%9a%84%e9%81%b8%e8%82%a1%e6%a9%9f%e5%99%a8%e4%ba%ba%e7%ad%96%e7%95%a5%e8%aa%aa%e6%98%8e/)
+- **場景 758**：[股價領先大盤創長期新高的股票是不是值得作多?](https://www.xq.com.tw/xstrader/%e8%82%a1%e5%83%b9%e9%a0%98%e5%85%88%e5%a4%a7%e7%9b%a4%e5%89%b5%e9%95%b7%e6%9c%9f%e6%96%b0%e9%ab%98%e7%9a%84%e8%82%a1%e7%a5%a8%e6%98%af%e4%b8%8d%e6%98%af%e5%80%bc%e5%be%97%e4%bd%9c%e5%a4%9a/)
+- **場景 776**：[雲端策略中心精進版之29~突破糾結均線](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b29%e7%aa%81%e7%a0%b4%e7%b3%be%e7%b5%90%e5%9d%87%e7%b7%9a/)
+- **場景 778**：[雲端策略中心精進版之27~平台整理後突破](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b27%e5%b9%b3%e5%8f%b0%e6%95%b4%e7%90%86%e5%be%8c%e7%aa%81%e7%a0%b4/)
+- **場景 781**：[雲端策略中心精進版之24~突破繼續型態](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b24%e7%aa%81%e7%a0%b4%e7%b9%bc%e7%ba%8c%e5%9e%8b%e6%85%8b/)
+- **場景 783**：[雲端策略中心精進版之22~平台三角形收斂突破](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b22%e5%b9%b3%e5%8f%b0%e4%b8%89%e8%a7%92%e5%bd%a2%e6%94%b6%e6%96%82%e7%aa%81%e7%a0%b4/)
+- **場景 793**：[雲端策略中心精進版之12~開盤五分鐘三創新高](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b12%e9%96%8b%e7%9b%a4%e4%ba%94%e5%88%86%e9%90%98%e4%b8%89%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 797**：[雲端策略中心精進版之8~籌碼沈澱突破買進訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b8%e7%b1%8c%e7%a2%bc%e6%b2%88%e6%be%b1%e7%aa%81%e7%a0%b4%e8%b2%b7%e9%80%b2%e8%a8%8a%e8%99%9f/)
+- **場景 800**：[雲端策略中心精進版之5~股價突破開盤委買大單成本區](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b5%e8%82%a1%e5%83%b9%e7%aa%81%e7%a0%b4%e9%96%8b%e7%9b%a4%e5%a7%94%e8%b2%b7%e5%a4%a7%e5%96%ae%e6%88%90%e6%9c%ac/)
+- **場景 803**：[雲端策略中心精進版之2~股價領先大盤創新高](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b2%e8%82%a1%e5%83%b9%e9%a0%98%e5%85%88%e5%a4%a7%e7%9b%a4%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 804**：[雲端策略中心精進版之2~股價領先大盤創新高](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b2%e8%82%a1%e5%83%b9%e9%a0%98%e5%85%88%e5%a4%a7%e7%9b%a4%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 837**：[股價突破10年線到底算不算是個好的交易訊號?](https://www.xq.com.tw/xstrader/%e8%82%a1%e5%83%b9%e7%aa%81%e7%a0%b410%e5%b9%b4%e7%b7%9a%e5%88%b0%e5%ba%95%e7%ae%97%e4%b8%8d%e7%ae%97%e6%98%af%e5%80%8b%e5%a5%bd%e7%9a%84%e4%ba%a4%e6%98%93%e8%a8%8a%e8%99%9f/)
+- **場景 843**：[創區間來新高的股票是不是真的是作多的好標的?](https://www.xq.com.tw/xstrader/%e5%89%b5%e5%8d%80%e9%96%93%e4%be%86%e6%96%b0%e9%ab%98%e7%9a%84%e8%82%a1%e7%a5%a8%e6%98%af%e4%b8%8d%e6%98%af%e7%9c%9f%e7%9a%84%e6%98%af%e4%bd%9c%e5%a4%9a%e7%9a%84%e5%a5%bd%e6%a8%99%e7%9a%84/)
+- **場景 960**：[平台整理後的突破與跌破](https://www.xq.com.tw/xstrader/%e5%b9%b3%e5%8f%b0%e6%95%b4%e7%90%86%e5%be%8c%e7%9a%84%e7%aa%81%e7%a0%b4%e8%88%87%e8%b7%8c%e7%a0%b4/)
+- **場景 1107**：[糾結均線突破](https://www.xq.com.tw/xstrader/%e7%b3%be%e7%b5%90%e5%9d%87%e7%b7%9a%e7%aa%81%e7%a0%b4-2/)
+- **場景 1168**：[15分鐘線的突破盤整區](https://www.xq.com.tw/xstrader/15%e5%88%86%e9%90%98%e7%b7%9a%e7%9a%84%e7%aa%81%e7%a0%b4%e7%9b%a4%e6%95%b4%e5%8d%80/)
+- **場景 1179**：[狹長整理後的突破](https://www.xq.com.tw/xstrader/%e7%8b%b9%e9%95%b7%e6%95%b4%e7%90%86%e5%be%8c%e7%9a%84%e7%aa%81%e7%a0%b4-2/)
+- **場景 1190**：[下殺反彈創新高](https://www.xq.com.tw/xstrader/%e4%b8%8b%e6%ae%ba%e5%8f%8d%e5%bd%88%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 1222**：[什麼是真*創新高!!](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e6%98%af%e7%9c%9f%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 1237**：[盤中突破區間](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%ad%e7%aa%81%e7%a0%b4%e5%8d%80%e9%96%93/)
 
-- 均線策略（黃金交叉、死亡交叉）
-- KD 策略（超買超賣、背離）
-- MACD 策略（DIF 交叉、柱狀圖）
-- 布林通道策略（突破、反轉）
+### 空方與下跌（16）
+
+- **場景 630**：[近幾日總收黑](https://www.xq.com.tw/xstrader/%e8%bf%91%e5%b9%be%e6%97%a5%e7%b8%bd%e6%94%b6%e9%bb%91/)
+- **場景 631**：[跌破上昇趨勢](https://www.xq.com.tw/xstrader/%e8%b7%8c%e7%a0%b4%e4%b8%8a%e6%98%87%e8%b6%a8%e5%8b%a2/)
+- **場景 632**：[井字型死亡交叉](https://www.xq.com.tw/xstrader/%e4%ba%95%e5%ad%97%e5%9e%8b%e6%ad%bb%e4%ba%a1%e4%ba%a4%e5%8f%89/)
+- **場景 634**：[MACD死亡交叉關鍵價跌破](https://www.xq.com.tw/xstrader/macd%e6%ad%bb%e4%ba%a1%e4%ba%a4%e5%8f%89%e9%97%9c%e9%8d%b5%e5%83%b9%e8%b7%8c%e7%a0%b4/)
+- **場景 635**：[DMI翻空](https://www.xq.com.tw/xstrader/dmi%e7%bf%bb%e7%a9%ba/)
+- **場景 640**：[多方勢力壓過空方](https://www.xq.com.tw/xstrader/%e5%a4%9a%e6%96%b9%e5%8b%a2%e5%8a%9b%e5%a3%93%e9%81%8e%e7%a9%ba%e6%96%b9/)
+- **場景 664**：[尋找股價已跌破7千點時股價的股票~ getbaroffset函數使用示範](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e8%82%a1%e5%83%b9%e5%b7%b2%e8%b7%8c%e7%a0%b47%e5%8d%83%e9%bb%9e%e6%99%82%e8%82%a1%e5%83%b9%e7%9a%84%e8%82%a1%e7%a5%a8-getbaroffset%e5%87%bd%e6%95%b8%e4%bd%bf%e7%94%a8%e7%a4%ba/)
+- **場景 665**：[尋找股價已跌破7千點時股價的股票~ getbaroffset函數使用示範](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e8%82%a1%e5%83%b9%e5%b7%b2%e8%b7%8c%e7%a0%b47%e5%8d%83%e9%bb%9e%e6%99%82%e8%82%a1%e5%83%b9%e7%9a%84%e8%82%a1%e7%a5%a8-getbaroffset%e5%87%bd%e6%95%b8%e4%bd%bf%e7%94%a8%e7%a4%ba/)
+- **場景 775**：[雲端策略中心精進版之30~跌破糾結均線](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b30%e8%b7%8c%e7%a0%b4%e7%b3%be%e7%b5%90%e5%9d%87%e7%b7%9a/)
+- **場景 777**：[雲端策略中心精進版之28~平台整理後跌破](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b28%e5%b9%b3%e5%8f%b0%e6%95%b4%e7%90%86%e5%be%8c%e8%b7%8c%e7%a0%b4/)
+- **場景 779**：[雲端策略中心精進版之26~多次到底跌破](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b26%e5%a4%9a%e6%ac%a1%e5%88%b0%e5%ba%95%e8%b7%8c%e7%a0%b4/)
+- **場景 790**：[雲端策略中心精進版之15~多日價量背離跌破](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b15%e5%a4%9a%e6%97%a5%e5%83%b9%e9%87%8f%e8%83%8c%e9%9b%a2%e8%b7%8c%e7%a0%b4/)
+- **場景 992**：[用趨勢變化來判斷當前大盤的多空方向](https://www.xq.com.tw/xstrader/%e7%94%a8%e8%b6%a8%e5%8b%a2%e8%ae%8a%e5%8c%96%e4%be%86%e5%88%a4%e6%96%b7%e7%95%b6%e5%89%8d%e5%a4%a7%e7%9b%a4%e7%9a%84%e5%a4%9a%e7%a9%ba%e6%96%b9%e5%90%91/)
+- **場景 1108**：[大漲後的天量收黑](https://www.xq.com.tw/xstrader/%e5%a4%a7%e6%bc%b2%e5%be%8c%e7%9a%84%e5%a4%a9%e9%87%8f%e6%94%b6%e9%bb%91/)
+- **場景 1141**：[站上月線第四天還未跌破的才能買](https://www.xq.com.tw/xstrader/%e7%ab%99%e4%b8%8a%e6%9c%88%e7%b7%9a%e7%ac%ac%e5%9b%9b%e5%a4%a9%e9%82%84%e6%9c%aa%e8%b7%8c%e7%a0%b4%e7%9a%84%e6%89%8d%e8%83%bd%e8%b2%b7/)
+- **場景 1161**：[十二點之後跌破今天多次觸及但未跌破的低檔區](https://www.xq.com.tw/xstrader/763/)
+
+### 盤整與反轉（29）
+
+- **場景 624**：[長期盤整後的資金流向轉正](https://www.xq.com.tw/xstrader/%e9%95%b7%e6%9c%9f%e7%9b%a4%e6%95%b4%e5%be%8c%e7%9a%84%e8%b3%87%e9%87%91%e6%b5%81%e5%90%91%e8%bd%89%e6%ad%a3/)
+- **場景 625**：[長期盤整後的資金流向轉正](https://www.xq.com.tw/xstrader/%e9%95%b7%e6%9c%9f%e7%9b%a4%e6%95%b4%e5%be%8c%e7%9a%84%e8%b3%87%e9%87%91%e6%b5%81%e5%90%91%e8%bd%89%e6%ad%a3/)
+- **場景 638**：[CCI超買反轉直下](https://www.xq.com.tw/xstrader/cci%e8%b6%85%e8%b2%b7%e5%8f%8d%e8%bd%89%e7%9b%b4%e4%b8%8b/)
+- **場景 646**：[多頭走勢剛剛開始（濾除盤整的趨勢化操作）](https://www.xq.com.tw/xstrader/%e5%a4%9a%e9%a0%ad%e8%b5%b0%e5%8b%a2%e5%89%9b%e5%89%9b%e9%96%8b%e5%a7%8b%ef%bc%88%e6%bf%be%e9%99%a4%e7%9b%a4%e6%95%b4%e7%9a%84%e8%b6%a8%e5%8b%a2%e5%8c%96%e6%93%8d%e4%bd%9c%ef%bc%89/)
+- **場景 654**：[盤整後價量齊揚](https://www.xq.com.tw/xstrader/%e7%9b%a4%e6%95%b4%e5%be%8c%e5%83%b9%e9%87%8f%e9%bd%8a%e6%8f%9a/)
+- **場景 661**：[下檔有撐（三下影線完成打底）](https://www.xq.com.tw/xstrader/%e4%b8%8b%e6%aa%94%e6%9c%89%e6%92%90%ef%bc%88%e4%b8%89%e4%b8%8b%e5%bd%b1%e7%b7%9a%e5%ae%8c%e6%88%90%e6%89%93%e5%ba%95%ef%bc%89/)
+- **場景 683**：[大盤抄底策略](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e6%93%8d%e5%ba%95%e7%ad%96%e7%95%a5/)
+- **場景 684**：[大盤抄底策略](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e6%93%8d%e5%ba%95%e7%ad%96%e7%95%a5/)
+- **場景 706**：[綜合抄底策略](https://www.xq.com.tw/xstrader/%e7%b6%9c%e5%90%88%e6%8a%84%e5%ba%95%e7%ad%96%e7%95%a5/)
+- **場景 719**：[試著用程式來描述型態之一 見底強勢回昇](https://www.xq.com.tw/xstrader/%e8%a9%a6%e8%91%97%e7%94%a8%e7%a8%8b%e5%bc%8f%e4%be%86%e6%8f%8f%e8%bf%b0%e5%9e%8b%e6%85%8b%e4%b9%8b%e4%b8%80/)
+- **場景 733**：[雞蛋水餃股的反彈行情](https://www.xq.com.tw/xstrader/%e9%9b%9e%e8%9b%8b%e6%b0%b4%e9%a4%83%e8%82%a1%e7%9a%84%e5%8f%8d%e5%bd%88%e8%a1%8c%e6%83%85/)
+- **場景 734**：[雞蛋水餃股的反彈行情](https://www.xq.com.tw/xstrader/%e9%9b%9e%e8%9b%8b%e6%b0%b4%e9%a4%83%e8%82%a1%e7%9a%84%e5%8f%8d%e5%bd%88%e8%a1%8c%e6%83%85/)
+- **場景 759**：[尋找止跌的訊號？](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e6%ad%a2%e8%b7%8c%e7%9a%84%e8%a8%8a%e8%99%9f%ef%bc%9f/)
+- **場景 786**：[雲端策略中心精進版之19~開盤反轉賣出訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b19%e9%96%8b%e7%9b%a4%e5%8f%8d%e8%bd%89%e8%b3%a3%e5%87%ba%e8%a8%8a%e8%99%9f/)
+- **場景 789**：[雲端策略中心精進版之16~天量後反轉](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b16%e5%a4%a9%e9%87%8f%e5%be%8c%e5%8f%8d%e8%bd%89/)
+- **場景 792**：[雲端策略中心精進版之13~炒高後無量反轉下跌](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b13%e7%82%92%e9%ab%98%e5%be%8c%e7%84%a1%e9%87%8f%e5%8f%8d%e8%bd%89%e4%b8%8b%e8%b7%8c/)
+- **場景 794**：[雲端策略中心精進版之11~開盤反轉買進訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b11%e9%96%8b%e7%9b%a4%e5%8f%8d%e8%bd%89%e8%b2%b7%e9%80%b2%e8%a8%8a%e8%99%9f/)
+- **場景 841**：[日KD向上時的60分鐘線盤整後噴出](https://www.xq.com.tw/xstrader/%e6%97%a5kd%e5%90%91%e4%b8%8a%e6%99%82%e7%9a%8460%e5%88%86%e9%90%98%e7%b7%9a%e7%9b%a4%e6%95%b4%e5%be%8c%e5%99%b4%e5%87%ba/)
+- **場景 873**：[報復性反彈](https://www.xq.com.tw/xstrader/%e5%a0%b1%e5%be%a9%e6%80%a7%e5%8f%8d%e5%bd%88/)
+- **場景 1030**：[反彈的計算語法](https://www.xq.com.tw/xstrader/%e9%97%9c%e6%96%bc%e6%90%b6%e5%8f%8d%e5%bd%88%ef%bc%8c%e6%88%91%e5%80%91%e8%a9%b2%e7%9f%a5%e9%81%93%e7%9a%84%e4%ba%8b/)
+- **場景 1106**：[第一時間抓住反轉契機](https://www.xq.com.tw/xstrader/%e7%ac%ac%e4%b8%80%e6%99%82%e9%96%93%e6%8a%93%e4%bd%8f%e5%8f%8d%e8%bd%89%e5%a5%91%e6%a9%9f/)
+- **場景 1117**：[典型反轉訊號](https://www.xq.com.tw/xstrader/%e5%85%b8%e5%9e%8b%e5%8f%8d%e8%bd%89%e8%a8%8a%e8%99%9f/)
+- **場景 1118**：[典型反轉訊號](https://www.xq.com.tw/xstrader/%e5%85%b8%e5%9e%8b%e5%8f%8d%e8%bd%89%e8%a8%8a%e8%99%9f/)
+- **場景 1137**：[在評價低檔區，等待大風吹起的股票](https://www.xq.com.tw/xstrader/%e5%9c%a8%e8%a9%95%e5%83%b9%e4%bd%8e%e6%aa%94%e5%8d%80%ef%bc%8c%e7%ad%89%e5%be%85%e5%a4%a7%e9%a2%a8%e5%90%b9%e8%b5%b7%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1142**：[盤整後開高不拉回](https://www.xq.com.tw/xstrader/%e7%9b%a4%e6%95%b4%e5%be%8c%e9%96%8b%e9%ab%98%e4%b8%8d%e6%8b%89%e5%9b%9e/)
+- **場景 1147**：[用週線反轉來確認主流股漲勢結束](https://www.xq.com.tw/xstrader/835/)
+- **場景 1150**：[尋找趨勢反轉的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e8%b6%a8%e5%8b%a2%e5%8f%8d%e8%bd%89%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1162**：[開高後破平盤，反彈站不回平盤](https://www.xq.com.tw/xstrader/%e9%96%8b%e9%ab%98%e5%be%8c%e7%a0%b4%e5%b9%b3%e7%9b%a4%ef%bc%8c%e5%8f%8d%e5%bd%88%e7%ab%99%e4%b8%8d%e5%9b%9e%e5%b9%b3%e7%9b%a4/)
+- **場景 1224**：[暴量脫離區間盤整區](https://www.xq.com.tw/xstrader/%e6%9a%b4%e9%87%8f%e8%84%ab%e9%9b%a2%e5%8d%80%e9%96%93%e7%9b%a4%e6%95%b4%e5%8d%80/)
+
+### 量價與漲跌（56）
+
+- **場景 627**：[回檔整理後的加速上漲](https://www.xq.com.tw/xstrader/%e5%9b%9e%e6%aa%94%e6%95%b4%e7%90%86%e5%be%8c%e7%9a%84%e5%8a%a0%e9%80%9f%e4%b8%8a%e6%bc%b2/)
+- **場景 639**：[好久沒出現的連五日上漲](https://www.xq.com.tw/xstrader/%e5%a5%bd%e4%b9%85%e6%b2%92%e5%87%ba%e7%8f%be%e7%9a%84%e9%80%a3%e4%ba%94%e6%97%a5%e4%b8%8a%e6%bc%b2/)
+- **場景 643**：[價量配合良好](https://www.xq.com.tw/xstrader/%e5%83%b9%e9%87%8f%e9%85%8d%e5%90%88%e8%89%af%e5%a5%bd/)
+- **場景 644**：[價量都呈多頭排列](https://www.xq.com.tw/xstrader/%e5%83%b9%e9%87%8f%e9%83%bd%e5%91%88%e5%a4%9a%e9%a0%ad%e6%8e%92%e5%88%97/)
+- **場景 652**：[上漲天數變多](https://www.xq.com.tw/xstrader/%e4%b8%8a%e6%bc%b2%e5%a4%a9%e6%95%b8%e8%ae%8a%e5%a4%9a/)
+- **場景 685**：[如何縮小範圍，找出有機會拉出較大漲幅的個股](https://www.xq.com.tw/xstrader/%e6%95%a3%e6%88%b6%e7%9a%8450%e9%81%93%e9%9b%a3%e9%a1%8c%e7%8b%97%e5%b0%be%e7%89%88%e4%b9%8b1%e5%a6%82%e4%bd%95%e7%b8%ae%e5%b0%8f%e7%af%84%e5%9c%8d%ef%bc%8c%e6%89%be%e5%87%ba%e6%9c%89%e6%a9%9f/)
+- **場景 686**：[如何縮小範圍，找出有機會拉出較大漲幅的個股](https://www.xq.com.tw/xstrader/%e6%95%a3%e6%88%b6%e7%9a%8450%e9%81%93%e9%9b%a3%e9%a1%8c%e7%8b%97%e5%b0%be%e7%89%88%e4%b9%8b1%e5%a6%82%e4%bd%95%e7%b8%ae%e5%b0%8f%e7%af%84%e5%9c%8d%ef%bc%8c%e6%89%be%e5%87%ba%e6%9c%89%e6%a9%9f/)
+- **場景 687**：[如何縮小範圍，找出有機會拉出較大漲幅的個股](https://www.xq.com.tw/xstrader/%e6%95%a3%e6%88%b6%e7%9a%8450%e9%81%93%e9%9b%a3%e9%a1%8c%e7%8b%97%e5%b0%be%e7%89%88%e4%b9%8b1%e5%a6%82%e4%bd%95%e7%b8%ae%e5%b0%8f%e7%af%84%e5%9c%8d%ef%bc%8c%e6%89%be%e5%87%ba%e6%9c%89%e6%a9%9f/)
+- **場景 688**：[如何縮小範圍，找出有機會拉出較大漲幅的個股](https://www.xq.com.tw/xstrader/%e6%95%a3%e6%88%b6%e7%9a%8450%e9%81%93%e9%9b%a3%e9%a1%8c%e7%8b%97%e5%b0%be%e7%89%88%e4%b9%8b1%e5%a6%82%e4%bd%95%e7%b8%ae%e5%b0%8f%e7%af%84%e5%9c%8d%ef%bc%8c%e6%89%be%e5%87%ba%e6%9c%89%e6%a9%9f/)
+- **場景 705**：[重獲市場垂青的低價股](https://www.xq.com.tw/xstrader/%e9%87%8d%e7%8d%b2%e5%b8%82%e5%a0%b4%e5%9e%82%e9%9d%92%e7%9a%84%e4%bd%8e%e5%83%b9%e8%82%a1/)
+- **場景 721**：[選股腳本:Z日均量低於N而連M日量大於K](https://www.xq.com.tw/xstrader/%e5%b8%b8%e7%94%a8%e7%9a%84%e9%81%b8%e8%82%a1%e8%85%b3%e6%9c%ac%e4%b9%8b1z%e6%97%a5%e5%9d%87%e9%87%8f%e4%bd%8e%e6%96%bcn%e8%80%8c%e9%80%a3m%e6%97%a5%e9%87%8f%e5%a4%a7%e6%96%bck/)
+- **場景 751**：[盤不錯的時候，冷門股量暴增到多少值得留意?](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%8d%e9%8c%af%e7%9a%84%e6%99%82%e5%80%99%ef%bc%8c%e5%86%b7%e9%96%80%e8%82%a1%e9%87%8f%e6%9a%b4%e5%a2%9e%e5%88%b0%e5%a4%9a%e5%b0%91%e5%80%bc%e5%be%97%e7%95%99%e6%84%8f/)
+- **場景 752**：[盤不錯的時候，冷門股量暴增到多少值得留意?](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%8d%e9%8c%af%e7%9a%84%e6%99%82%e5%80%99%ef%bc%8c%e5%86%b7%e9%96%80%e8%82%a1%e9%87%8f%e6%9a%b4%e5%a2%9e%e5%88%b0%e5%a4%9a%e5%b0%91%e5%80%bc%e5%be%97%e7%95%99%e6%84%8f/)
+- **場景 755**：[內外盤量比在預測大盤後市上的應用](https://www.xq.com.tw/xstrader/%e5%85%a7%e5%a4%96%e7%9b%a4%e9%87%8f%e6%af%94%e5%9c%a8%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e5%be%8c%e5%b8%82%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 768**：[雲端策略中心精進版之36~即將鎖第一根漲停的中小型股](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b36%e5%8d%b3%e5%b0%87%e9%8e%96%e7%ac%ac%e4%b8%80%e6%a0%b9%e6%bc%b2%e5%81%9c%e7%9a%84%e4%b8%ad%e5%b0%8f/)
+- **場景 769**：[雲端策略中心精進版之35~近期持續強勢股階段式上漲](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b35%e8%bf%91%e6%9c%9f%e6%8c%81%e7%ba%8c%e5%bc%b7%e5%8b%a2%e8%82%a1%e9%9a%8e%e6%ae%b5%e5%bc%8f%e4%b8%8a/)
+- **場景 770**：[雲端策略中心精進版之35~近期持續強勢股階段式上漲](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b35%e8%bf%91%e6%9c%9f%e6%8c%81%e7%ba%8c%e5%bc%b7%e5%8b%a2%e8%82%a1%e9%9a%8e%e6%ae%b5%e5%bc%8f%e4%b8%8a/)
+- **場景 787**：[雲端策略中心精進版之18~暴量剛起漲](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b18%e6%9a%b4%e9%87%8f%e5%89%9b%e8%b5%b7%e6%bc%b2/)
+- **場景 795**：[雲端策略中心精進版之10~天價上影線穿低賣出訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b10%e5%a4%a9%e5%83%b9%e4%b8%8a%e5%bd%b1%e7%b7%9a%e7%a9%bf%e4%bd%8e%e8%b3%a3%e5%87%ba%e8%a8%8a%e8%99%9f/)
+- **場景 845**：[外盤量異常突出的買進策略](https://www.xq.com.tw/xstrader/%e5%a4%96%e7%9b%a4%e9%87%8f%e7%95%b0%e5%b8%b8%e7%aa%81%e5%87%ba%e7%9a%84%e8%b2%b7%e9%80%b2%e7%ad%96%e7%95%a5/)
+- **場景 852**：[有量的中小型股才是操作者的核心標的](https://www.xq.com.tw/xstrader/%e6%9c%89%e9%87%8f%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1%e6%89%8d%e6%98%af%e6%93%8d%e4%bd%9c%e8%80%85%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a8%99%e7%9a%84/)
+- **場景 853**：[有量的中小型股才是操作者的核心標的](https://www.xq.com.tw/xstrader/%e6%9c%89%e9%87%8f%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1%e6%89%8d%e6%98%af%e6%93%8d%e4%bd%9c%e8%80%85%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a8%99%e7%9a%84/)
+- **場景 857**：[從大盤上漲下跌家數的變化來預測大盤未來方向](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%a4%a7%e7%9b%a4%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e7%9a%84%e8%ae%8a%e5%8c%96%e4%be%86%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e6%9c%aa%e4%be%86%e6%96%b9%e5%90%91/)
+- **場景 858**：[從大盤上漲下跌家數的變化來預測大盤未來方向](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%a4%a7%e7%9b%a4%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e7%9a%84%e8%ae%8a%e5%8c%96%e4%be%86%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e6%9c%aa%e4%be%86%e6%96%b9%e5%90%91/)
+- **場景 859**：[從大盤上漲下跌家數的變化來預測大盤未來方向](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%a4%a7%e7%9b%a4%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e7%9a%84%e8%ae%8a%e5%8c%96%e4%be%86%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e6%9c%aa%e4%be%86%e6%96%b9%e5%90%91/)
+- **場景 860**：[從大盤上漲下跌家數的變化來預測大盤未來方向](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%a4%a7%e7%9b%a4%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e7%9a%84%e8%ae%8a%e5%8c%96%e4%be%86%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e6%9c%aa%e4%be%86%e6%96%b9%e5%90%91/)
+- **場景 861**：[從大盤上漲下跌家數的變化來預測大盤未來方向](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%a4%a7%e7%9b%a4%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e7%9a%84%e8%ae%8a%e5%8c%96%e4%be%86%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e6%9c%aa%e4%be%86%e6%96%b9%e5%90%91/)
+- **場景 862**：[從大盤上漲下跌家數的變化來預測大盤未來方向](https://www.xq.com.tw/xstrader/%e5%be%9e%e5%a4%a7%e7%9b%a4%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e7%9a%84%e8%ae%8a%e5%8c%96%e4%be%86%e9%a0%90%e6%b8%ac%e5%a4%a7%e7%9b%a4%e6%9c%aa%e4%be%86%e6%96%b9%e5%90%91/)
+- **場景 921**：[尋找那些開盤迄今外盤量的比重很高的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%82%a3%e4%ba%9b%e9%96%8b%e7%9b%a4%e8%bf%84%e4%bb%8a%e5%a4%96%e7%9b%a4%e9%87%8f%e7%9a%84%e6%af%94%e9%87%8d%e5%be%88%e9%ab%98%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 922**：[尋找那些開盤迄今外盤量的比重很高的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%82%a3%e4%ba%9b%e9%96%8b%e7%9b%a4%e8%bf%84%e4%bb%8a%e5%a4%96%e7%9b%a4%e9%87%8f%e7%9a%84%e6%af%94%e9%87%8d%e5%be%88%e9%ab%98%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 948**：[大盤多空轉換點之探討系列一:  上漲的股票有沒有200檔?](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e8%bd%89%e6%8f%9b%e9%bb%9e%e4%b9%8b%e6%8e%a2%e8%a8%8e%e7%b3%bb%e5%88%97%e4%b8%80-%e4%b8%8a%e6%bc%b2%e7%9a%84%e8%82%a1%e7%a5%a8%e6%9c%89%e6%b2%92%e6%9c%89200/)
+- **場景 963**：[什麼股票今天會拉漲停~老業內的不傳之秘二](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e8%82%a1%e7%a5%a8%e4%bb%8a%e5%a4%a9%e6%9c%83%e6%8b%89%e6%bc%b2%e5%81%9c%e8%80%81%e6%a5%ad%e5%85%a7%e7%9a%84%e4%b8%8d%e5%82%b3%e4%b9%8b%e7%a7%98%e4%ba%8c/)
+- **場景 964**：[什麼股票今天會拉漲停~老業內的不傳之秘一](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e8%82%a1%e7%a5%a8%e4%bb%8a%e5%a4%a9%e6%9c%83%e6%8b%89%e6%bc%b2%e5%81%9c%e8%80%81%e6%a5%ad%e5%85%a7%e7%9a%84%e4%b8%8d%e5%82%b3%e4%b9%8b%e7%a7%98%e4%b8%80/)
+- **場景 974**：[N日來有幾日漲幅較大天數](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e4%b8%80-n%e6%97%a5%e4%be%86%e6%9c%89%e5%b9%be%e6%97%a5%e6%bc%b2%e5%b9%85%e8%bc%83%e5%a4%a7/)
+- **場景 975**：[N日來有幾日漲幅較大天數](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e4%b8%80-n%e6%97%a5%e4%be%86%e6%9c%89%e5%b9%be%e6%97%a5%e6%bc%b2%e5%b9%85%e8%bc%83%e5%a4%a7/)
+- **場景 1034**：[以股價越過整數關卡為例介紹intportion這個函數](https://www.xq.com.tw/xstrader/%e8%82%a1%e5%83%b9%e8%b6%8a%e9%81%8e%e6%95%b4%e6%95%b8%e9%97%9c%e5%8d%a1/)
+- **場景 1038**：[今天走強且會量增超過三成，且短期未漲的股票~預估量函數的應用](https://www.xq.com.tw/xstrader/%e4%bb%8a%e5%a4%a9%e8%b5%b0%e5%bc%b7%e4%b8%94%e6%9c%83%e9%87%8f%e5%a2%9e%e8%b6%85%e9%81%8e%e4%b8%89%e6%88%90%ef%bc%8c%e4%b8%94%e7%9f%ad%e6%9c%9f%e6%9c%aa%e6%bc%b2%e7%9a%84%e8%82%a1%e7%a5%a8%e9%a0%90/)
+- **場景 1039**：[預估量函數的介紹](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e4%b8%ad%e9%95%b7%e7%b4%85%e4%b9%8b%e5%be%8c%e9%82%84%e6%9c%83%e7%ba%8c%e6%bc%b2/)
+- **場景 1040**：[預估量函數的介紹](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e4%b8%ad%e9%95%b7%e7%b4%85%e4%b9%8b%e5%be%8c%e9%82%84%e6%9c%83%e7%ba%8c%e6%bc%b2/)
+- **場景 1041**：[預估量函數的介紹](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e4%b8%ad%e9%95%b7%e7%b4%85%e4%b9%8b%e5%be%8c%e9%82%84%e6%9c%83%e7%ba%8c%e6%bc%b2/)
+- **場景 1057**：[WVAD威廉變異離散量](https://www.xq.com.tw/xstrader/wvad%e5%a8%81%e5%bb%89%e8%ae%8a%e7%95%b0%e9%9b%a2%e6%95%a3%e9%87%8f/)
+- **場景 1109**：[價量背離很難救!](https://www.xq.com.tw/xstrader/%e5%83%b9%e9%87%8f%e8%83%8c%e9%9b%a2%e5%be%88%e9%9b%a3%e6%95%91/)
+- **場景 1163**：[整日價量背離後尾盤開殺](https://www.xq.com.tw/xstrader/%e6%95%b4%e6%97%a5%e5%83%b9%e9%87%8f%e8%83%8c%e9%9b%a2%e5%be%8c%e5%b0%be%e7%9b%a4%e9%96%8b%e6%ae%ba/)
+- **場景 1164**：[跌停後一直 沒有鎖住](https://www.xq.com.tw/xstrader/%e8%b7%8c%e5%81%9c%e5%be%8c%e4%b8%80%e7%9b%b4-%e6%b2%92%e6%9c%89%e9%8e%96%e4%bd%8f/)
+- **場景 1170**：[多日價量背離](https://www.xq.com.tw/xstrader/694/)
+- **場景 1175**：[在開盤十五分鐘內找到今天可能漲停的股票](https://www.xq.com.tw/xstrader/%e5%9c%a8%e9%96%8b%e7%9b%a4%e5%8d%81%e4%ba%94%e5%88%86%e9%90%98%e5%85%a7%e6%89%be%e5%88%b0%e4%bb%8a%e5%a4%a9%e5%8f%af%e8%83%bd%e6%bc%b2%e5%81%9c%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1183**：[什麼樣的股票當天比較容易漲停板?](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e6%a8%a3%e7%9a%84%e8%82%a1%e7%a5%a8%e7%95%b6%e5%a4%a9%e6%af%94%e8%bc%83%e5%ae%b9%e6%98%93%e6%bc%b2%e5%81%9c%e6%9d%bf/)
+- **場景 1188**：[價量齊揚](https://www.xq.com.tw/xstrader/%e5%83%b9%e9%87%8f%e9%bd%8a%e6%8f%9a/)
+- **場景 1195**：[從預估量方向預測未來漲跌](https://www.xq.com.tw/xstrader/%e5%be%9e%e9%a0%90%e4%bc%b0%e9%87%8f%e6%96%b9%e5%90%91%e9%a0%90%e6%b8%ac%e6%9c%aa%e4%be%86%e6%bc%b2%e8%b7%8c/)
+- **場景 1196**：[預估個股的成交量](https://www.xq.com.tw/xstrader/%e9%a0%90%e4%bc%b0%e5%80%8b%e8%82%a1%e7%9a%84%e6%88%90%e4%ba%a4%e9%87%8f/)
+- **場景 1197**：[預估漲跌幅%!](https://www.xq.com.tw/xstrader/%e9%a0%90%e4%bc%b0%e6%bc%b2%e8%b7%8c%e5%b9%85/)
+- **場景 1209**：[什麼股票? 什麼前提下漲停的股票還可以留意?](https://www.xq.com.tw/xstrader/%e7%ac%ac%e4%b8%80%e6%a0%b9%e6%bc%b2%e5%81%9c%e7%9a%84%e7%ad%96%e7%95%a5/)
+- **場景 1217**：[如何確定上漲趨勢已然成立 ?](https://www.xq.com.tw/xstrader/467/)
+- **場景 1228**：[尋找一段區間內漲跌幅度限縮在特定比例內的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e4%b8%80%e6%ae%b5%e5%8d%80%e9%96%93%e5%85%a7%e6%bc%b2%e8%b7%8c%e5%b9%85%e5%ba%a6%e9%99%90%e7%b8%ae%e5%9c%a8%e7%89%b9%e5%ae%9a%e6%af%94%e4%be%8b%e5%85%a7%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1233**：[從”相對”的角度尋找真正價量齊揚的股票](https://www.xq.com.tw/xstrader/%e5%be%9e%e7%9b%b8%e5%b0%8d%e7%9a%84%e8%a7%92%e5%ba%a6%e5%b0%8b%e6%89%be%e7%9c%9f%e6%ad%a3%e5%83%b9%e9%87%8f%e9%bd%8a%e6%8f%9a%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1236**：[多日價量背離](https://www.xq.com.tw/xstrader/%e5%a4%9a%e6%97%a5%e5%83%b9%e9%87%8f%e8%83%8c%e9%9b%a2/)
+
+### 趨勢判斷（10）
+
+- **場景 645**：[往上走勢超強](https://www.xq.com.tw/xstrader/%e5%be%80%e4%b8%8a%e8%b5%b0%e5%8b%a2%e8%b6%85%e5%bc%b7/)
+- **場景 647**：[市場趨勢轉上](https://www.xq.com.tw/xstrader/%e5%b8%82%e5%a0%b4%e8%b6%a8%e5%8b%a2%e8%bd%89%e4%b8%8a/)
+- **場景 649**：[震盪走高](https://www.xq.com.tw/xstrader/%e9%9c%87%e7%9b%aa%e8%b5%b0%e9%ab%98/)
+- **場景 655**：[出現攻擊仰角](https://www.xq.com.tw/xstrader/%e5%87%ba%e7%8f%be%e6%94%bb%e6%93%8a%e4%bb%b0%e8%a7%92/)
+- **場景 761**：[等待殺過頭的中小型成長股上昇趨勢成形](https://www.xq.com.tw/xstrader/%e7%ad%89%e5%be%85%e6%ae%ba%e9%81%8e%e9%a0%ad%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e6%88%90%e9%95%b7%e8%82%a1%e4%b8%8a%e6%98%87%e8%b6%a8%e5%8b%a2%e6%88%90%e5%bd%a2/)
+- **場景 762**：[等待殺過頭的中小型成長股上昇趨勢成形](https://www.xq.com.tw/xstrader/%e7%ad%89%e5%be%85%e6%ae%ba%e9%81%8e%e9%a0%ad%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e6%88%90%e9%95%b7%e8%82%a1%e4%b8%8a%e6%98%87%e8%b6%a8%e5%8b%a2%e6%88%90%e5%bd%a2/)
+- **場景 1005**：[趨勢檢定器](https://www.xq.com.tw/xstrader/%e8%b6%a8%e5%8b%a2%e6%aa%a2%e5%ae%9a%e5%99%a8/)
+- **場景 1006**：[趨勢檢定器](https://www.xq.com.tw/xstrader/%e8%b6%a8%e5%8b%a2%e6%aa%a2%e5%ae%9a%e5%99%a8/)
+- **場景 1223**：[如何研判上昇趨勢是很明確的?](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e7%a0%94%e5%88%a4%e4%b8%8a%e6%98%87%e8%b6%a8%e5%8b%a2%e6%98%af%e5%be%88%e6%98%8e%e7%a2%ba%e7%9a%84/)
+- **場景 1232**：[上昇趨勢分數。](https://www.xq.com.tw/xstrader/%e4%b8%8a%e6%98%87%e8%b6%a8%e5%8b%a2%e5%88%86%e6%95%b8%e3%80%82/)
+
+### 其他主題策略（222）
+
+- **場景 636**：[DIF-MACD翻負](https://www.xq.com.tw/xstrader/dif-macd%e7%bf%bb%e8%b2%a0/)
+- **場景 637**：[多次到底而破](https://www.xq.com.tw/xstrader/%e5%a4%9a%e6%ac%a1%e8%87%b3%e5%ba%95%e8%80%8c%e7%a0%b4/)
+- **場景 641**：[碗型底](https://www.xq.com.tw/xstrader/%e7%a2%97%e5%9e%8b%e5%ba%95/)
+- **場景 651**：[循環由下往上翻](https://www.xq.com.tw/xstrader/%e5%be%aa%e7%92%b0%e7%94%b1%e4%b8%8b%e5%be%80%e4%b8%8a%e7%bf%bb/)
+- **場景 662**：[籌碼發散的股票是長空的最佳標的嗎?](https://www.xq.com.tw/xstrader/%e7%b1%8c%e7%a2%bc%e7%99%bc%e6%95%a3%e7%9a%84%e8%82%a1%e7%a5%a8%e6%98%af%e9%95%b7%e7%a9%ba%e7%9a%84%e6%9c%80%e4%bd%b3%e6%a8%99%e7%9a%84%e5%97%8e/)
+- **場景 663**：[主流股蓄勢待發](https://www.xq.com.tw/xstrader/%e4%b8%bb%e6%b5%81%e8%82%a1%e8%93%84%e5%8b%a2%e5%be%85%e7%99%bc/)
+- **場景 679**：[私房策略分享之獲利穩定公司落難時](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e7%ad%96%e7%95%a5%e5%88%86%e4%ba%ab%e4%b9%8b%e7%8d%b2%e5%88%a9%e7%a9%a9%e5%ae%9a%e5%85%ac%e5%8f%b8%e8%90%bd%e9%9b%a3%e6%99%82/)
+- **場景 680**：[私房策略分享之獲利穩定公司落難時](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e7%ad%96%e7%95%a5%e5%88%86%e4%ba%ab%e4%b9%8b%e7%8d%b2%e5%88%a9%e7%a9%a9%e5%ae%9a%e5%85%ac%e5%8f%b8%e8%90%bd%e9%9b%a3%e6%99%82/)
+- **場景 682**：[從資本支出挑要作功課的標的](https://www.xq.com.tw/xstrader/7412-2/)
+- **場景 690**：[尋找可能由虧轉盈的公司](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e5%8f%af%e8%83%bd%e7%94%b1%e8%99%a7%e8%bd%89%e7%9b%88%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 700**：[找出盤中有大單的腳本寫法](https://www.xq.com.tw/xstrader/%e6%89%be%e5%87%ba%e7%9b%a4%e4%b8%ad%e6%9c%89%e5%a4%a7%e5%96%ae%e7%9a%84%e8%85%b3%e6%9c%ac%e5%af%ab%e6%b3%95/)
+- **場景 713**：[關於跳空的三個策略](https://www.xq.com.tw/xstrader/%e9%97%9c%e6%96%bc%e8%b7%b3%e7%a9%ba%e7%9a%84%e4%b8%89%e5%80%8b%e7%ad%96%e7%95%a5/)
+- **場景 714**：[開發彼此無相關的複合策略](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%99%bc%e5%bd%bc%e6%ad%a4%e7%84%a1%e7%9b%b8%e9%97%9c%e7%9a%84%e8%a4%87%e5%90%88%e7%ad%96%e7%95%a5/)
+- **場景 715**：[開發彼此無相關的複合策略](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%99%bc%e5%bd%bc%e6%ad%a4%e7%84%a1%e7%9b%b8%e9%97%9c%e7%9a%84%e8%a4%87%e5%90%88%e7%ad%96%e7%95%a5/)
+- **場景 716**：[開發彼此無相關的複合策略](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%99%bc%e5%bd%bc%e6%ad%a4%e7%84%a1%e7%9b%b8%e9%97%9c%e7%9a%84%e8%a4%87%e5%90%88%e7%ad%96%e7%95%a5/)
+- **場景 732**：[找出市場上每股現金最多的公司](https://www.xq.com.tw/xstrader/%e6%89%be%e5%87%ba%e5%b8%82%e5%a0%b4%e4%b8%8a%e6%af%8f%e8%82%a1%e7%8f%be%e9%87%91%e6%9c%80%e5%a4%9a%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 736**：[金牌定存股選股策略](https://www.xq.com.tw/xstrader/%e9%87%91%e7%89%8c%e5%ae%9a%e5%ad%98%e8%82%a1/)
+- **場景 737**：[金牌定存股選股策略](https://www.xq.com.tw/xstrader/%e9%87%91%e7%89%8c%e5%ae%9a%e5%ad%98%e8%82%a1/)
+- **場景 738**：[現金總市值比高的公司](https://www.xq.com.tw/xstrader/%e7%8f%be%e9%87%91%e7%b8%bd%e5%b8%82%e5%80%bc%e6%af%94%e9%ab%98%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 739**：[現金總市值比高的公司](https://www.xq.com.tw/xstrader/%e7%8f%be%e9%87%91%e7%b8%bd%e5%b8%82%e5%80%bc%e6%af%94%e9%ab%98%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 757**：[大跌後的急拉，後市有高點](https://www.xq.com.tw/xstrader/%e5%a4%a7%e8%b7%8c%e5%be%8c%e7%9a%84%e6%80%a5%e6%8b%89%ef%bc%8c%e5%be%8c%e5%b8%82%e6%9c%89%e9%ab%98%e9%bb%9e/)
+- **場景 764**：[雲端策略中心精進版之40~大單敲進線又棒的中小型股](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b40%e5%a4%a7%e5%96%ae%e6%95%b2%e9%80%b2%e7%b7%9a%e5%8f%88%e6%a3%92%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b/)
+- **場景 765**：[雲端策略中心精進版之39~中小型股整理結束](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b39%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1%e6%95%b4%e7%90%86%e7%b5%90%e6%9d%9f/)
+- **場景 766**：[雲端策略中心精進版之37~開高後不拉回的中小型股](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b37%e9%96%8b%e9%ab%98%e5%be%8c%e4%b8%8d%e6%8b%89%e5%9b%9e%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1/)
+- **場景 767**：[雲端策略中心精進版之38~火箭後拉回的中小型股](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b38%e7%81%ab%e7%ae%ad%e5%be%8c%e6%8b%89%e5%9b%9e%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1/)
+- **場景 771**：[雲端策略中心精進版之34~多頭轉強策略](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b34%e5%a4%9a%e9%a0%ad%e8%bd%89%e5%bc%b7%e7%ad%96%e7%95%a5/)
+- **場景 772**：[雲端策略中心精進版之34~多頭轉強策略](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b34%e5%a4%9a%e9%a0%ad%e8%bd%89%e5%bc%b7%e7%ad%96%e7%95%a5/)
+- **場景 780**：[雲端策略中心精進版之25~多次到頂而破](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b25%e5%a4%9a%e6%ac%a1%e5%88%b0%e9%a0%82%e8%80%8c%e7%a0%b4/)
+- **場景 782**：[雲端策略中心精進版之23~週轉率高點買進](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b23%e9%80%b1%e8%bd%89%e7%8e%87%e9%ab%98%e9%bb%9e%e8%b2%b7%e9%80%b2/)
+- **場景 784**：[雲端策略中心精進版之21~烏龜交易法則之買進訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b21%e7%83%8f%e9%be%9c%e4%ba%a4%e6%98%93%e6%b3%95%e5%89%87%e4%b9%8b%e8%b2%b7%e9%80%b2%e8%a8%8a%e8%99%9f/)
+- **場景 785**：[雲端策略中心精進版之20~烏龜交易法則之賣出訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b20%e7%83%8f%e9%be%9c%e4%ba%a4%e6%98%93%e6%b3%95%e5%89%87%e4%b9%8b%e8%b3%a3%e5%87%ba%e8%a8%8a%e8%99%9f/)
+- **場景 788**：[雲端策略中心精進版之17~開盤三連黑](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b17%e9%96%8b%e7%9b%a4%e4%b8%89%e9%80%a3%e9%bb%91/)
+- **場景 796**：[雲端策略中心精進版之9~多頭發動午餐奇襲](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b9%e5%a4%9a%e9%a0%ad%e7%99%bc%e5%8b%95%e5%8d%88%e9%a4%90%e5%a5%87%e8%a5%b2/)
+- **場景 798**：[雲端策略中心精進版之7~分點進出異常賣出訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b7%e5%88%86%e9%bb%9e%e9%80%b2%e5%87%ba%e7%95%b0%e5%b8%b8%e8%b3%a3%e5%87%ba%e8%a8%8a%e8%99%9f/)
+- **場景 799**：[雲端策略中心精進版之6~分點進出異常買進訊號](https://www.xq.com.tw/xstrader/%e9%9b%b2%e7%ab%af%e7%ad%96%e7%95%a5%e4%b8%ad%e5%bf%83%e7%b2%be%e9%80%b2%e7%89%88%e4%b9%8b6%e5%88%86%e9%bb%9e%e9%80%b2%e5%87%ba%e7%95%b0%e5%b8%b8%e8%b2%b7%e9%80%b2%e8%a8%8a%e8%99%9f/)
+- **場景 817**：[打造一個專屬的上市櫃公司健康檢查表](https://www.xq.com.tw/xstrader/%e6%89%93%e9%80%a0%e4%b8%80%e5%80%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e4%b8%8a%e5%b8%82%e6%ab%83%e5%85%ac%e5%8f%b8%e5%81%a5%e5%ba%b7%e6%aa%a2%e6%9f%a5%e8%a1%a8/)
+- **場景 818**：[好久以來的第一根長紅到底能不能追？](https://www.xq.com.tw/xstrader/%e5%a5%bd%e4%b9%85%e4%bb%a5%e4%be%86%e7%9a%84%e7%ac%ac%e4%b8%80%e6%a0%b9%e9%95%b7%e7%b4%85%e5%88%b0%e5%ba%95%e8%83%bd%e4%b8%8d%e8%83%bd%e8%bf%bd%ef%bc%9f/)
+- **場景 819**：[好久以來的第一根長紅到底能不能追？](https://www.xq.com.tw/xstrader/%e5%a5%bd%e4%b9%85%e4%bb%a5%e4%be%86%e7%9a%84%e7%ac%ac%e4%b8%80%e6%a0%b9%e9%95%b7%e7%b4%85%e5%88%b0%e5%ba%95%e8%83%bd%e4%b8%8d%e8%83%bd%e8%bf%bd%ef%bc%9f/)
+- **場景 820**：[研究員生涯回憶之一 ~ 我們來談盈餘品質](https://www.xq.com.tw/xstrader/%e7%a0%94%e7%a9%b6%e5%93%a1%e7%94%9f%e6%b6%af%e5%9b%9e%e6%86%b6%e4%b9%8b%e4%b8%80-%e6%88%91%e5%80%91%e4%be%86%e8%ab%87%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa/)
+- **場景 821**：[研究員生涯回憶之一 ~ 我們來談盈餘品質](https://www.xq.com.tw/xstrader/%e7%a0%94%e7%a9%b6%e5%93%a1%e7%94%9f%e6%b6%af%e5%9b%9e%e6%86%b6%e4%b9%8b%e4%b8%80-%e6%88%91%e5%80%91%e4%be%86%e8%ab%87%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa/)
+- **場景 822**：[研究員生涯回憶之一 ~ 我們來談盈餘品質](https://www.xq.com.tw/xstrader/%e7%a0%94%e7%a9%b6%e5%93%a1%e7%94%9f%e6%b6%af%e5%9b%9e%e6%86%b6%e4%b9%8b%e4%b8%80-%e6%88%91%e5%80%91%e4%be%86%e8%ab%87%e7%9b%88%e9%a4%98%e5%93%81%e8%b3%aa/)
+- **場景 826**：[這根長黑後，大跌的機率有多大?](https://www.xq.com.tw/xstrader/%e9%80%99%e6%a0%b9%e9%95%b7%e9%bb%91%e5%be%8c%ef%bc%8c%e5%a4%a7%e8%b7%8c%e7%9a%84%e6%a9%9f%e7%8e%87%e6%9c%89%e5%a4%9a%e5%a4%a7/)
+- **場景 829**：[什麼方法才能找到會大漲，可以抱一陣子的股票?](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e6%96%b9%e6%b3%95%e6%89%8d%e8%83%bd%e6%89%be%e5%88%b0%e6%9c%83%e5%a4%a7%e6%bc%b2%ef%bc%8c%e5%8f%af%e4%bb%a5%e6%8a%b1%e4%b8%80%e9%99%a3%e5%ad%90%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 832**：[從細產業指數的相對強度看類股的輪動](https://www.xq.com.tw/xstrader/%e5%be%9e%e7%b4%b0%e7%94%a2%e6%a5%ad%e6%8c%87%e6%95%b8%e7%9a%84%e7%9b%b8%e5%b0%8d%e5%bc%b7%e5%ba%a6%e7%9c%8b%e9%a1%9e%e8%82%a1%e7%9a%84%e8%bc%aa%e5%8b%95/)
+- **場景 835**：[1500檔股票，今晚該研究那一檔?](https://www.xq.com.tw/xstrader/1500%e6%aa%94%e8%82%a1%e7%a5%a8%ef%bc%8c%e4%bb%8a%e6%99%9a%e8%a9%b2%e7%a0%94%e7%a9%b6%e9%82%a3%e4%b8%80%e6%aa%94/)
+- **場景 836**：[1500檔股票，今晚該研究那一檔?](https://www.xq.com.tw/xstrader/1500%e6%aa%94%e8%82%a1%e7%a5%a8%ef%bc%8c%e4%bb%8a%e6%99%9a%e8%a9%b2%e7%a0%94%e7%a9%b6%e9%82%a3%e4%b8%80%e6%aa%94/)
+- **場景 838**：[step by step 打造私房投資組合](https://www.xq.com.tw/xstrader/step-by-step-%e6%89%93%e9%80%a0%e7%a7%81%e6%88%bf%e6%8a%95%e8%b3%87%e7%b5%84%e5%90%88/)
+- **場景 839**：[那些股票除權後可以留意?](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e9%99%a4%e6%ac%8a%e5%be%8c%e5%8f%af%e4%bb%a5%e7%95%99%e6%84%8f/)
+- **場景 842**：[每年七月總是會有表現的股票](https://www.xq.com.tw/xstrader/%e6%af%8f%e5%b9%b4%e4%b8%83%e6%9c%88%e7%b8%bd%e6%98%af%e6%9c%83%e6%9c%89%e8%a1%a8%e7%8f%be%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 849**：[找大碗底型態的大型股](https://www.xq.com.tw/xstrader/%e6%89%be%e5%a4%a7%e7%a2%97%e5%ba%95%e5%9e%8b%e6%85%8b%e7%9a%84%e5%a4%a7%e5%9e%8b%e8%82%a1/)
+- **場景 851**：[從OTC與加權指數表現落差觀察大盤轉折點](https://www.xq.com.tw/xstrader/%e5%be%9eotc%e8%88%87%e5%8a%a0%e6%ac%8a%e6%8c%87%e6%95%b8%e8%a1%a8%e7%8f%be%e8%90%bd%e5%b7%ae%e8%a7%80%e5%af%9f%e5%a4%a7%e7%9b%a4%e8%bd%89%e6%8a%98%e9%bb%9e/)
+- **場景 865**：[開高後不拉回的中小型股](https://www.xq.com.tw/xstrader/%e9%96%8b%e9%ab%98%e5%be%8c%e4%b8%8d%e6%8b%89%e5%9b%9e%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1-2/)
+- **場景 868**：[把股性拿來作為過濾條件](https://www.xq.com.tw/xstrader/%e6%8a%8a%e8%82%a1%e6%80%a7%e6%8b%bf%e4%be%86%e4%bd%9c%e7%82%ba%e9%81%8e%e6%bf%be%e6%a2%9d%e4%bb%b6/)
+- **場景 870**：[sector trade(類股輪動操作法)初體驗](https://www.xq.com.tw/xstrader/sector-trade%e9%a1%9e%e8%82%a1%e8%bc%aa%e5%8b%95%e6%93%8d%e4%bd%9c%e6%b3%95%e5%88%9d%e9%ab%94%e9%a9%97/)
+- **場景 872**：[多空交易(long-short trading)](https://www.xq.com.tw/xstrader/%e5%a4%9a%e7%a9%ba%e4%ba%a4%e6%98%93long-short-trading/)
+- **場景 874**：[魚骨圖在投資決策上的實踐方式](https://www.xq.com.tw/xstrader/%e9%ad%9a%e9%aa%a8%e5%9c%96%e5%9c%a8%e6%8a%95%e8%b3%87%e6%b1%ba%e7%ad%96%e4%b8%8a%e7%9a%84%e5%af%a6%e8%b8%90%e6%96%b9%e5%bc%8f/)
+- **場景 875**：[檢查表在程式交易上的呈現方式](https://www.xq.com.tw/xstrader/%e6%aa%a2%e6%9f%a5%e8%a1%a8%e5%9c%a8%e7%a8%8b%e5%bc%8f%e4%ba%a4%e6%98%93%e4%b8%8a%e7%9a%84%e5%91%88%e7%8f%be%e6%96%b9%e5%bc%8f/)
+- **場景 876**：[決策樹在程式交易上的應用](https://www.xq.com.tw/xstrader/%e6%b1%ba%e7%ad%96%e6%a8%b9%e5%9c%a8%e7%a8%8b%e5%bc%8f%e4%ba%a4%e6%98%93%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 881**：[那些公司可以放到觀察名單中？](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e5%85%ac%e5%8f%b8%e5%8f%af%e4%bb%a5%e6%94%be%e5%88%b0%e8%a7%80%e5%af%9f%e5%90%8d%e5%96%ae%e4%b8%ad%ef%bc%9f/)
+- **場景 882**：[那些公司可以放到觀察名單中？](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e5%85%ac%e5%8f%b8%e5%8f%af%e4%bb%a5%e6%94%be%e5%88%b0%e8%a7%80%e5%af%9f%e5%90%8d%e5%96%ae%e4%b8%ad%ef%bc%9f/)
+- **場景 883**：[那些公司可以放到觀察名單中？](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e5%85%ac%e5%8f%b8%e5%8f%af%e4%bb%a5%e6%94%be%e5%88%b0%e8%a7%80%e5%af%9f%e5%90%8d%e5%96%ae%e4%b8%ad%ef%bc%9f/)
+- **場景 884**：[夏季限定版選股~旺季來臨前的選股腳本](https://www.xq.com.tw/xstrader/%e5%a4%8f%e5%ad%a3%e9%99%90%e5%ae%9a%e7%89%88%e9%81%b8%e8%82%a1%e6%97%ba%e5%ad%a3%e4%be%86%e8%87%a8%e5%89%8d%e7%9a%84%e9%81%b8%e8%82%a1%e8%85%b3%e6%9c%ac/)
+- **場景 885**：[大盤不錯才Trade，大盤不好別逆勢作多~兼談跨商品的語法](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e4%b8%8d%e9%8c%af%e6%89%8dtrade%ef%bc%8c%e5%a4%a7%e7%9b%a4%e4%b8%8d%e5%a5%bd%e5%88%a5%e9%80%86%e5%8b%a2%e4%bd%9c%e5%a4%9a%e5%85%bc%e8%ab%87%e8%b7%a8%e5%95%86%e5%93%81%e7%9a%84/)
+- **場景 886**：[年收股息上百萬的定存股怎麼找？怎麼操作?](https://www.xq.com.tw/xstrader/%e5%b9%b4%e6%94%b6%e8%82%a1%e6%81%af%e4%b8%8a%e7%99%be%e8%90%ac%e7%9a%84%e5%ae%9a%e5%ad%98%e8%82%a1%e6%80%8e%e9%ba%bc%e6%89%be%ef%bc%9f%e6%80%8e%e9%ba%bc%e6%93%8d%e4%bd%9c/)
+- **場景 889**：[產業數據在XS上的應用](https://www.xq.com.tw/xstrader/%e7%94%a2%e6%a5%ad%e6%95%b8%e6%93%9a%e5%9c%a8xs%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 890**：[產業數據在XS上的應用](https://www.xq.com.tw/xstrader/%e7%94%a2%e6%a5%ad%e6%95%b8%e6%93%9a%e5%9c%a8xs%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 891**：[當DMI遇上VHF](https://www.xq.com.tw/xstrader/%e7%95%b6dmi%e9%81%87%e4%b8%8avhf/)
+- **場景 892**：[當DMI遇上VHF](https://www.xq.com.tw/xstrader/%e7%95%b6dmi%e9%81%87%e4%b8%8avhf/)
+- **場景 893**：[異同離差乖離率(DBCD)在單一國家股票型基金的應用](https://www.xq.com.tw/xstrader/%e7%95%b0%e5%90%8c%e9%9b%a2%e5%b7%ae%e4%b9%96%e9%9b%a2%e7%8e%87dbcd%e5%9c%a8%e5%96%ae%e4%b8%80%e5%9c%8b%e5%ae%b6%e8%82%a1%e7%a5%a8%e5%9e%8b%e5%9f%ba%e9%87%91%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 894**：[異同離差乖離率(DBCD)在單一國家股票型基金的應用](https://www.xq.com.tw/xstrader/%e7%95%b0%e5%90%8c%e9%9b%a2%e5%b7%ae%e4%b9%96%e9%9b%a2%e7%8e%87dbcd%e5%9c%a8%e5%96%ae%e4%b8%80%e5%9c%8b%e5%ae%b6%e8%82%a1%e7%a5%a8%e5%9e%8b%e5%9f%ba%e9%87%91%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 905**：[籌碼面可以拿來運算的欄位及其相關應用](https://www.xq.com.tw/xstrader/%e7%b1%8c%e7%a2%bc%e9%9d%a2%e5%8f%af%e4%bb%a5%e6%8b%bf%e4%be%86%e9%81%8b%e7%ae%97%e7%9a%84%e6%ac%84%e4%bd%8d%e5%8f%8a%e5%85%b6%e7%9b%b8%e9%97%9c%e6%87%89%e7%94%a8/)
+- **場景 906**：[籌碼面可以拿來運算的欄位及其相關應用](https://www.xq.com.tw/xstrader/%e7%b1%8c%e7%a2%bc%e9%9d%a2%e5%8f%af%e4%bb%a5%e6%8b%bf%e4%be%86%e9%81%8b%e7%ae%97%e7%9a%84%e6%ac%84%e4%bd%8d%e5%8f%8a%e5%85%b6%e7%9b%b8%e9%97%9c%e6%87%89%e7%94%a8/)
+- **場景 907**：[好公司的特徵](https://www.xq.com.tw/xstrader/%e5%a5%bd%e5%85%ac%e5%8f%b8%e7%9a%84%e7%89%b9%e5%be%b5/)
+- **場景 908**：[好公司的特徵](https://www.xq.com.tw/xstrader/%e5%a5%bd%e5%85%ac%e5%8f%b8%e7%9a%84%e7%89%b9%e5%be%b5/)
+- **場景 909**：[好公司的特徵](https://www.xq.com.tw/xstrader/%e5%a5%bd%e5%85%ac%e5%8f%b8%e7%9a%84%e7%89%b9%e5%be%b5/)
+- **場景 928**：[到底什麼樣的股票可以拿來當存股的標的??](https://www.xq.com.tw/xstrader/%e5%88%b0%e5%ba%95%e4%bb%80%e9%ba%bc%e6%a8%a3%e7%9a%84%e8%82%a1%e7%a5%a8%e5%8f%af%e4%bb%a5%e6%8b%bf%e4%be%86%e7%95%b6%e5%ad%98%e8%82%a1%e7%9a%84%e6%a8%99%e7%9a%84/)
+- **場景 929**：[到底什麼樣的股票可以拿來當存股的標的??](https://www.xq.com.tw/xstrader/%e5%88%b0%e5%ba%95%e4%bb%80%e9%ba%bc%e6%a8%a3%e7%9a%84%e8%82%a1%e7%a5%a8%e5%8f%af%e4%bb%a5%e6%8b%bf%e4%be%86%e7%95%b6%e5%ad%98%e8%82%a1%e7%9a%84%e6%a8%99%e7%9a%84/)
+- **場景 942**：[用XS寫籌碼集中度的選股策略](https://www.xq.com.tw/xstrader/%e7%94%a8xs%e5%af%ab%e7%b1%8c%e7%a2%bc%e9%9b%86%e4%b8%ad%e5%ba%a6%e7%9a%84%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5/)
+- **場景 943**：[用XS寫籌碼集中度的選股策略](https://www.xq.com.tw/xstrader/%e7%94%a8xs%e5%af%ab%e7%b1%8c%e7%a2%bc%e9%9b%86%e4%b8%ad%e5%ba%a6%e7%9a%84%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5/)
+- **場景 945**：[急漲拉回轉強三部曲](https://www.xq.com.tw/xstrader/%e6%80%a5%e6%bc%b2%e6%8b%89%e5%9b%9e%e8%bd%89%e5%bc%b7%e4%b8%89%e9%83%a8%e6%9b%b2/)
+- **場景 949**：[火箭後拉回](https://www.xq.com.tw/xstrader/%e7%81%ab%e7%ae%ad%e5%be%8c%e6%8b%89%e5%9b%9e/)
+- **場景 950**：[逢低承接的力道](https://www.xq.com.tw/xstrader/%e7%9f%ad%e7%b7%9a%e6%ad%a2%e8%b7%8c%e7%9a%84%e8%a8%8a%e8%99%9f/)
+- **場景 954**：[John Bogle的股票預期報酬率模型](https://www.xq.com.tw/xstrader/john-bogle%e7%9a%84%e8%82%a1%e7%a5%a8%e9%a0%90%e6%9c%9f%e5%a0%b1%e9%85%ac%e7%8e%87%e6%a8%a1%e5%9e%8b/)
+- **場景 955**：[透過XS選股平台制訂選股策略的流程](https://www.xq.com.tw/xstrader/%e9%80%8f%e9%81%8exs%e9%81%b8%e8%82%a1%e5%b9%b3%e5%8f%b0%e5%88%b6%e8%a8%82%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5%e7%9a%84%e6%b5%81%e7%a8%8b/)
+- **場景 956**：[關於背離的寫法](https://www.xq.com.tw/xstrader/%e9%97%9c%e6%96%bc%e8%83%8c%e9%9b%a2%e7%9a%84%e5%af%ab%e6%b3%95/)
+- **場景 957**：[關於背離的寫法](https://www.xq.com.tw/xstrader/%e9%97%9c%e6%96%bc%e8%83%8c%e9%9b%a2%e7%9a%84%e5%af%ab%e6%b3%95/)
+- **場景 958**：[尋找那些跌過頭的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%82%a3%e4%ba%9b%e8%b7%8c%e9%81%8e%e9%a0%ad%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 961**：[幫手中持股設定賣出訊號出現時的通知機制](https://www.xq.com.tw/xstrader/%e5%b9%ab%e6%89%8b%e4%b8%ad%e6%8c%81%e8%82%a1%e8%a8%ad%e5%ae%9a%e8%b3%a3%e5%87%ba%e8%a8%8a%e8%99%9f%e5%87%ba%e7%8f%be%e6%99%82%e7%9a%84%e9%80%9a%e7%9f%a5%e6%a9%9f%e5%88%b6/)
+- **場景 962**：[那些股票有年底作帳行情?](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%ba%9b%e8%82%a1%e7%a5%a8%e6%9c%89%e5%b9%b4%e5%ba%95%e4%bd%9c%e5%b8%b3%e8%a1%8c%e6%83%85/)
+- **場景 965**：[比大盤強的天數](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e4%b8%83-%e6%af%94%e5%a4%a7%e7%9b%a4%e5%bc%b7%e7%9a%84%e5%a4%a9%e6%95%b8/)
+- **場景 971**：[開盤委買張數](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e5%88%86%e6%9e%90%e4%b9%8b%e5%9b%9b-%e9%96%8b%e7%9b%a4%e5%a7%94%e8%b2%b7%e5%bc%b5%e6%95%b8/)
+- **場景 976**：[紅三兵](https://www.xq.com.tw/xstrader/%e7%b4%85%e4%b8%89%e5%85%b5/)
+- **場景 977**：[多頭遭遇](https://www.xq.com.tw/xstrader/%e5%a4%9a%e9%a0%ad%e9%81%ad%e9%81%87/)
+- **場景 978**：[內困三日翻黑](https://www.xq.com.tw/xstrader/%e5%85%a7%e5%9b%b0%e4%b8%89%e6%97%a5%e7%bf%bb%e9%bb%91/)
+- **場景 979**：[吊人線](https://www.xq.com.tw/xstrader/%e5%90%8a%e4%ba%ba%e7%b7%9a/)
+- **場景 980**：[夜星](https://www.xq.com.tw/xstrader/%e5%a4%9c%e6%98%9f/)
+- **場景 981**：[孕抱線](https://www.xq.com.tw/xstrader/%e5%ad%95%e6%8a%b1%e7%b7%9a/)
+- **場景 982**：[鎚頭](https://www.xq.com.tw/xstrader/%e9%8e%9a%e9%a0%ad/)
+- **場景 983**：[晨星](https://www.xq.com.tw/xstrader/%e6%99%a8%e6%98%9f/)
+- **場景 988**：[XS的時間及頻率設定](https://www.xq.com.tw/xstrader/xs%e7%9a%84%e6%99%82%e9%96%93%e5%8f%8a%e9%a0%bb%e7%8e%87%e8%a8%ad%e5%ae%9a/)
+- **場景 989**：[XS的時間及頻率設定](https://www.xq.com.tw/xstrader/xs%e7%9a%84%e6%99%82%e9%96%93%e5%8f%8a%e9%a0%bb%e7%8e%87%e8%a8%ad%e5%ae%9a/)
+- **場景 990**：[忽略字](https://www.xq.com.tw/xstrader/%e5%bf%bd%e7%95%a5%e5%ad%97/)
+- **場景 991**：[忽略字](https://www.xq.com.tw/xstrader/%e5%bf%bd%e7%95%a5%e5%ad%97/)
+- **場景 995**：[switch case](https://www.xq.com.tw/xstrader/switch-case/)
+- **場景 996**：[begin..end](https://www.xq.com.tw/xstrader/begin-end/)
+- **場景 997**：[if..then](https://www.xq.com.tw/xstrader/if-then/)
+- **場景 998**：[if..then](https://www.xq.com.tw/xstrader/if-then/)
+- **場景 999**：[if..then](https://www.xq.com.tw/xstrader/if-then/)
+- **場景 1000**：[那一年，我們一起尋找的超跌股。](https://www.xq.com.tw/xstrader/%e9%82%a3%e4%b8%80%e5%b9%b4%ef%bc%8c%e6%88%91%e5%80%91%e4%b8%80%e8%b5%b7%e5%b0%8b%e6%89%be%e8%b6%85%e8%b7%8c%e8%82%a1%e3%80%82/)
+- **場景 1007**：[從月線與季線看台股當前的漲昇架構](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%88%e7%b7%9a%e8%88%87%e5%ad%a3%e7%b7%9a%e7%9c%8b%e5%8f%b0%e8%82%a1%e7%95%b6%e5%89%8d%e7%9a%84%e6%bc%b2%e6%98%87%e6%9e%b6%e6%a7%8b/)
+- **場景 1008**：[從月線與季線看台股當前的漲昇架構](https://www.xq.com.tw/xstrader/%e5%be%9e%e6%9c%88%e7%b7%9a%e8%88%87%e5%ad%a3%e7%b7%9a%e7%9c%8b%e5%8f%b0%e8%82%a1%e7%95%b6%e5%89%8d%e7%9a%84%e6%bc%b2%e6%98%87%e6%9e%b6%e6%a7%8b/)
+- **場景 1011**：[紅色供應鍊可能有興趣的股票](https://www.xq.com.tw/xstrader/%e7%b4%85%e8%89%b2%e4%be%9b%e6%87%89%e9%8d%8a%e5%8f%af%e8%83%bd%e6%9c%89%e8%88%88%e8%b6%a3%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1012**：[布林通道的奧義](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e9%80%9a%e9%81%93%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 1013**：[布林通道的奧義](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e9%80%9a%e9%81%93%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 1014**：[布林通道的奧義](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e9%80%9a%e9%81%93%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 1015**：[布林通道的奧義](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e9%80%9a%e9%81%93%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 1017**：[為自己的觀察名單標上交易訊號](https://www.xq.com.tw/xstrader/%e7%82%ba%e8%87%aa%e5%b7%b1%e7%9a%84%e8%a7%80%e5%af%9f%e5%90%8d%e5%96%ae%e6%a8%99%e4%b8%8a%e4%ba%a4%e6%98%93%e8%a8%8a%e8%99%9f/)
+- **場景 1018**：[為自己的觀察名單標上交易訊號](https://www.xq.com.tw/xstrader/%e7%82%ba%e8%87%aa%e5%b7%b1%e7%9a%84%e8%a7%80%e5%af%9f%e5%90%8d%e5%96%ae%e6%a8%99%e4%b8%8a%e4%ba%a4%e6%98%93%e8%a8%8a%e8%99%9f/)
+- **場景 1019**：[為自己的觀察名單標上交易訊號](https://www.xq.com.tw/xstrader/%e7%82%ba%e8%87%aa%e5%b7%b1%e7%9a%84%e8%a7%80%e5%af%9f%e5%90%8d%e5%96%ae%e6%a8%99%e4%b8%8a%e4%ba%a4%e6%98%93%e8%a8%8a%e8%99%9f/)
+- **場景 1020**：[什麼時候起就不能當死多頭?](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e6%99%82%e5%80%99%e8%b5%b7%e5%b0%b1%e4%b8%8d%e8%83%bd%e7%95%b6%e6%ad%bb%e5%a4%9a%e9%a0%ad/)
+- **場景 1021**：[在投資操作上，我犯過最大的三個錯誤!](https://www.xq.com.tw/xstrader/%e5%9c%a8%e6%8a%95%e8%b3%87%e6%93%8d%e4%bd%9c%e4%b8%8a%ef%bc%8c%e6%88%91%e7%8a%af%e9%81%8e%e6%9c%80%e5%a4%a7%e7%9a%84%e4%b8%89%e5%80%8b%e9%8c%af%e8%aa%a4/)
+- **場景 1022**：[尋找cash rich and cash in的公司](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%becash-rich-and-cash-in%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 1023**：[從細產業資金流向看類股輪動](https://www.xq.com.tw/xstrader/%e5%be%9e%e7%b4%b0%e7%94%a2%e6%a5%ad%e8%b3%87%e9%87%91%e6%b5%81%e5%90%91%e7%9c%8b%e9%a1%9e%e8%82%a1%e8%bc%aa%e5%8b%95/)
+- **場景 1024**：[景氣循環股的選股策略](https://www.xq.com.tw/xstrader/%e6%99%af%e6%b0%a3%e5%be%aa%e7%92%b0%e8%82%a1%e7%9a%84%e9%81%b8%e8%82%a1%e7%ad%96%e7%95%a5/)
+- **場景 1025**：[建構專屬的大盤多空檢查表](https://www.xq.com.tw/xstrader/%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e6%aa%a2%e6%9f%a5%e8%a1%a8/)
+- **場景 1026**：[建構專屬的大盤多空檢查表](https://www.xq.com.tw/xstrader/%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e6%aa%a2%e6%9f%a5%e8%a1%a8/)
+- **場景 1027**：[R平方語法的介紹](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e7%9b%ae%e5%89%8d%e8%b6%a8%e5%8b%a2%e9%82%84%e5%90%91%e4%b8%8a%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1028**：[如何確認大盤到底了?](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e7%a2%ba%e8%aa%8d%e5%a4%a7%e7%9b%a4%e5%88%b0%e5%ba%95%e4%ba%86/)
+- **場景 1029**：[跌回起漲點的股票要怎麼找?](https://www.xq.com.tw/xstrader/%e8%b7%8c%e5%9b%9e%e8%b5%b7%e6%bc%b2%e9%bb%9e%e7%9a%84%e8%82%a1%e7%a5%a8%e8%a6%81%e6%80%8e%e9%ba%bc%e6%89%be/)
+- **場景 1036**：[潛龍昇天](https://www.xq.com.tw/xstrader/%e6%bd%9b%e9%be%8d%e9%a3%9b%e5%a4%a9/)
+- **場景 1042**：[除權行情的檢討腳本該怎麼寫](https://www.xq.com.tw/xstrader/%e9%99%a4%e6%ac%8a%e8%a1%8c%e6%83%85%e7%9a%84%e6%aa%a2%e8%a8%8e%e8%85%b3%e6%9c%ac%e8%a9%b2%e6%80%8e%e9%ba%bc%e5%af%ab/)
+- **場景 1043**：[除權行情的檢討腳本該怎麼寫](https://www.xq.com.tw/xstrader/%e9%99%a4%e6%ac%8a%e8%a1%8c%e6%83%85%e7%9a%84%e6%aa%a2%e8%a8%8e%e8%85%b3%e6%9c%ac%e8%a9%b2%e6%80%8e%e9%ba%bc%e5%af%ab/)
+- **場景 1044**：[Print語法調整](https://www.xq.com.tw/xstrader/print%e8%aa%9e%e6%b3%95%e8%aa%bf%e6%95%b4/)
+- **場景 1045**：[Print語法調整](https://www.xq.com.tw/xstrader/print%e8%aa%9e%e6%b3%95%e8%aa%bf%e6%95%b4/)
+- **場景 1046**：[Print語法調整](https://www.xq.com.tw/xstrader/print%e8%aa%9e%e6%b3%95%e8%aa%bf%e6%95%b4/)
+- **場景 1047**：[Print語法調整](https://www.xq.com.tw/xstrader/print%e8%aa%9e%e6%b3%95%e8%aa%bf%e6%95%b4/)
+- **場景 1049**：[當多空勢力懸殊時](https://www.xq.com.tw/xstrader/%e7%95%b6%e5%a4%9a%e7%a9%ba%e5%8b%a2%e5%8a%9b%e6%87%b8%e6%ae%8a%e6%99%82/)
+- **場景 1051**：[改良版的移動平均線~四大力道線](https://www.xq.com.tw/xstrader/%e6%94%b9%e8%89%af%e7%89%88%e7%9a%84%e7%a7%bb%e5%8b%95%e5%b9%b3%e5%9d%87%e7%b7%9a%e5%9b%9b%e5%a4%a7%e5%8a%9b%e9%81%93%e7%b7%9a/)
+- **場景 1052**：[尋找可能斷頭的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e5%8f%af%e8%83%bd%e6%96%b7%e9%a0%ad%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1053**：[盤感好的股票](https://www.xq.com.tw/xstrader/%e7%9b%a4%e6%84%9f%e5%a5%bd%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1054**：[短線交易比例](https://www.xq.com.tw/xstrader/%e7%9f%ad%e7%b7%9a%e9%81%8e%e7%86%b1%e7%9a%84%e6%8c%87%e6%a8%99/)
+- **場景 1055**：[短線交易比例](https://www.xq.com.tw/xstrader/%e7%9f%ad%e7%b7%9a%e9%81%8e%e7%86%b1%e7%9a%84%e6%8c%87%e6%a8%99/)
+- **場景 1056**：[靜極思動](https://www.xq.com.tw/xstrader/%e9%9d%9c%e6%a5%b5%e6%80%9d%e5%8b%95/)
+- **場景 1062**：[DKX多空線](https://www.xq.com.tw/xstrader/dkx%e5%a4%9a%e7%a9%ba%e7%b7%9a/)
+- **場景 1066**：[尋找那些先前大漲過，最近在休息的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%82%a3%e4%ba%9b%e5%85%88%e5%89%8d%e5%a4%a7%e6%bc%b2%e9%81%8e%ef%bc%8c%e6%9c%80%e8%bf%91%e5%9c%a8%e4%bc%91%e6%81%af%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1067**：[大盤多空對策訊號](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e5%b0%8d%e7%ad%96%e8%a8%8a%e8%99%9f/)
+- **場景 1068**：[GetField](https://www.xq.com.tw/xstrader/getfield/)
+- **場景 1069**：[GetField](https://www.xq.com.tw/xstrader/getfield/)
+- **場景 1070**：[GetField](https://www.xq.com.tw/xstrader/getfield/)
+- **場景 1071**：[GetField](https://www.xq.com.tw/xstrader/getfield/)
+- **場景 1072**：[GetField](https://www.xq.com.tw/xstrader/getfield/)
+- **場景 1073**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1074**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1075**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1076**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1077**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1078**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1079**：[變數](https://www.xq.com.tw/xstrader/%e8%ae%8a%e6%95%b8/)
+- **場景 1080**：[參數](https://www.xq.com.tw/xstrader/%e5%8f%83%e6%95%b8/)
+- **場景 1081**：[參數](https://www.xq.com.tw/xstrader/%e5%8f%83%e6%95%b8/)
+- **場景 1088**：[輸出語法](https://www.xq.com.tw/xstrader/%e8%bc%b8%e5%87%ba%e8%aa%9e%e6%b3%95/)
+- **場景 1089**：[輸出語法](https://www.xq.com.tw/xstrader/%e8%bc%b8%e5%87%ba%e8%aa%9e%e6%b3%95/)
+- **場景 1090**：[常數](https://www.xq.com.tw/xstrader/%e5%b8%b8%e6%95%b8/)
+- **場景 1091**：[標點符號](https://www.xq.com.tw/xstrader/%e6%a8%99%e9%bb%9e%e7%ac%a6%e8%99%9f/)
+- **場景 1092**：[標點符號](https://www.xq.com.tw/xstrader/%e6%a8%99%e9%bb%9e%e7%ac%a6%e8%99%9f/)
+- **場景 1093**：[運算子](https://www.xq.com.tw/xstrader/%e9%81%8b%e7%ae%97%e5%ad%90/)
+- **場景 1094**：[運算子](https://www.xq.com.tw/xstrader/%e9%81%8b%e7%ae%97%e5%ad%90/)
+- **場景 1095**：[XS語法的基本結構](https://www.xq.com.tw/xstrader/xs%e8%aa%9e%e6%b3%95%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%b5%90%e6%a7%8b/)
+- **場景 1096**：[XS語法的基本結構](https://www.xq.com.tw/xstrader/xs%e8%aa%9e%e6%b3%95%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%b5%90%e6%a7%8b/)
+- **場景 1097**：[XS語法的基本結構](https://www.xq.com.tw/xstrader/xs%e8%aa%9e%e6%b3%95%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%b5%90%e6%a7%8b/)
+- **場景 1098**：[XS語法的基本結構](https://www.xq.com.tw/xstrader/xs%e8%aa%9e%e6%b3%95%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%b5%90%e6%a7%8b/)
+- **場景 1099**：[XS語法的基本結構](https://www.xq.com.tw/xstrader/xs%e8%aa%9e%e6%b3%95%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%b5%90%e6%a7%8b/)
+- **場景 1104**：[策略型交易結構‬](https://www.xq.com.tw/xstrader/%e7%ad%96%e7%95%a5%e5%9e%8b%e4%ba%a4%e6%98%93%e7%b5%90%e6%a7%8b%e2%80%ac/)
+- **場景 1105**：[選股結果之OutputFiled語法應用](https://www.xq.com.tw/xstrader/%e9%81%b8%e8%82%a1%e7%b5%90%e6%9e%9c%e4%b9%8boutputfiled%e8%aa%9e%e6%b3%95%e6%87%89%e7%94%a8/)
+- **場景 1110**：[從開盤看關鍵轉折點](https://www.xq.com.tw/xstrader/%e5%be%9e%e9%96%8b%e7%9b%a4%e7%9c%8b%e9%97%9c%e9%8d%b5%e8%bd%89%e6%8a%98%e9%bb%9e/)
+- **場景 1112**：[Larry Williams 短線交易秘訣](https://www.xq.com.tw/xstrader/larry-williams-%e7%9f%ad%e7%b7%9a%e4%ba%a4%e6%98%93%e7%a7%98%e8%a8%a3/)
+- **場景 1113**：[Larry Williams 短線交易秘訣](https://www.xq.com.tw/xstrader/larry-williams-%e7%9f%ad%e7%b7%9a%e4%ba%a4%e6%98%93%e7%a7%98%e8%a8%a3/)
+- **場景 1115**：[Mass index](https://www.xq.com.tw/xstrader/mass-index/)
+- **場景 1120**：[凱特納通道](https://www.xq.com.tw/xstrader/%e5%88%a9%e7%94%a8%e5%87%b1%e7%89%b9%e7%b4%8d%e9%80%9a%e9%81%93%e5%92%8c%e6%88%90%e4%ba%a4%e9%87%8f%e8%bf%bd%e8%b9%a4%e4%ba%a4%e6%98%93%e8%b6%a8%e5%8b%a2%e7%9a%84%e7%a9%a9%e5%ae%9a%e6%80%a7/)
+- **場景 1125**：[波動率通道](https://www.xq.com.tw/xstrader/%e6%b3%a2%e5%8b%95%e7%8e%87%e9%80%9a%e9%81%93/)
+- **場景 1126**：[波動率通道](https://www.xq.com.tw/xstrader/%e6%b3%a2%e5%8b%95%e7%8e%87%e9%80%9a%e9%81%93/)
+- **場景 1127**：[唐奇安通道](https://www.xq.com.tw/xstrader/%e5%94%90%e5%a5%87%e5%ae%89%e9%80%9a%e9%81%93/)
+- **場景 1128**：[唐奇安通道](https://www.xq.com.tw/xstrader/%e5%94%90%e5%a5%87%e5%ae%89%e9%80%9a%e9%81%93/)
+- **場景 1129**：[唐奇安通道](https://www.xq.com.tw/xstrader/%e5%94%90%e5%a5%87%e5%ae%89%e9%80%9a%e9%81%93/)
+- **場景 1135**：[多方維持線](https://www.xq.com.tw/xstrader/%e5%a4%9a%e6%96%b9%e7%b6%ad%e6%8c%81%e7%b7%9a/)
+- **場景 1138**：[黑棒吞噬紅棒](https://www.xq.com.tw/xstrader/%e9%bb%91%e6%a3%92%e5%90%9e%e5%99%ac%e7%b4%85%e6%a3%92/)
+- **場景 1143**：[個股VIX恐慌指數](https://www.xq.com.tw/xstrader/%e5%80%8b%e8%82%a1vix%e6%81%90%e6%85%8c%e6%8c%87%e6%95%b8/)
+- **場景 1146**：[從今天開盤起算的語法](https://www.xq.com.tw/xstrader/%e5%be%9e%e4%bb%8a%e5%a4%a9%e9%96%8b%e7%9b%a4%e8%b5%b7%e7%ae%97%e7%9a%84%e8%aa%9e%e6%b3%95/)
+- **場景 1148**：[開盤後漲多跌少](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%9b%a4%e5%be%8c%e6%bc%b2%e5%a4%9a%e8%b7%8c%e5%b0%91/)
+- **場景 1149**：[開盤後漲多跌少](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%9b%a4%e5%be%8c%e6%bc%b2%e5%a4%9a%e8%b7%8c%e5%b0%91/)
+- **場景 1154**：[adaptive price zone](https://www.xq.com.tw/xstrader/adaptive-price-zone/)
+- **場景 1155**：[Arron oscillator](https://www.xq.com.tw/xstrader/arron-oscillator/)
+- **場景 1157**：[BBand width](https://www.xq.com.tw/xstrader/bband-width/)
+- **場景 1158**：[BBand width](https://www.xq.com.tw/xstrader/bband-width/)
+- **場景 1159**：[DMI](https://www.xq.com.tw/xstrader/787/)
+- **場景 1172**：[盤中可以找出那檔股票有大單在敲進的腳本](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%ad%e5%8f%af%e4%bb%a5%e6%89%be%e5%87%ba%e9%82%a3%e6%aa%94%e8%82%a1%e7%a5%a8%e6%9c%89%e5%a4%a7%e5%96%ae%e5%9c%a8%e6%95%b2%e9%80%b2%e7%9a%84%e8%85%b3%e6%9c%ac-2/)
+- **場景 1177**：[只要有心，人人都可以成為小虎隊](https://www.xq.com.tw/xstrader/%e5%8f%aa%e8%a6%81%e6%9c%89%e5%bf%83%ef%bc%8c%e4%ba%ba%e4%ba%ba%e9%83%bd%e5%8f%af%e4%bb%a5%e6%88%90%e7%82%ba%e5%b0%8f%e8%99%8e%e9%9a%8a-2/)
+- **場景 1178**：[開盤五分鐘不回頭](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%9b%a4%e4%ba%94%e5%88%86%e9%90%98%e4%b8%8d%e5%9b%9e%e9%a0%ad/)
+- **場景 1180**：[尋找漲速在加快的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e6%bc%b2%e9%80%9f%e5%9c%a8%e5%8a%a0%e5%bf%ab%e7%9a%84%e8%82%a1%e7%a5%a8-2/)
+- **場景 1182**：[從連續數日的開盤委買張數，找有轉機的股票](https://www.xq.com.tw/xstrader/%e5%be%9e%e9%80%a3%e7%ba%8c%e6%95%b8%e6%97%a5%e7%9a%84%e9%96%8b%e7%9b%a4%e5%a7%94%e8%b2%b7%e5%bc%b5%e6%95%b8%ef%bc%8c%e6%89%be%e6%9c%89%e8%bd%89%e6%a9%9f%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1187**：[Larry Williams 短線決勝關鍵點](https://www.xq.com.tw/xstrader/larry-williams-%e7%9f%ad%e7%b7%9a%e6%b1%ba%e5%8b%9d%e9%97%9c%e9%8d%b5%e9%bb%9e/)
+- **場景 1191**：[漲多後的長上影線](https://www.xq.com.tw/xstrader/%e6%bc%b2%e5%a4%9a%e5%be%8c%e7%9a%84%e9%95%b7%e4%b8%8a%e5%bd%b1%e7%b7%9a/)
+- **場景 1192**：[小型股開高不拉回](https://www.xq.com.tw/xstrader/%e5%b0%8f%e5%9e%8b%e8%82%a1%e9%96%8b%e9%ab%98%e4%b8%8d%e6%8b%89%e5%9b%9e/)
+- **場景 1202**：[原子激態法找即將爆發個股](https://www.xq.com.tw/xstrader/%e5%8e%9f%e5%ad%90%e6%bf%80%e6%85%8b%e6%b3%95/)
+- **場景 1203**：[多方強力發動首選‬](https://www.xq.com.tw/xstrader/508/)
+- **場景 1204**：[歷史沈降法](https://www.xq.com.tw/xstrader/%e6%ad%b7%e5%8f%b2%e6%b2%88%e9%99%8d%e6%b3%95/)
+- **場景 1205**：[歷史沈降法](https://www.xq.com.tw/xstrader/%e6%ad%b7%e5%8f%b2%e6%b2%88%e9%99%8d%e6%b3%95/)
+- **場景 1208**：[F-Score選股法](https://www.xq.com.tw/xstrader/f-score%e9%81%b8%e8%82%a1%e6%b3%95/)
+- **場景 1210**：[尋找波動放大的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e6%b3%a2%e5%8b%95%e6%94%be%e5%a4%a7%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1211**：[追蹤熱門股](https://www.xq.com.tw/xstrader/%e8%bf%bd%e8%b9%a4%e7%86%b1%e9%96%80%e8%82%a1/)
+- **場景 1212**：[月賺八萬選股法](https://www.xq.com.tw/xstrader/%e6%9c%88%e8%b3%ba%e5%85%ab%e8%90%ac%e9%81%b8%e8%82%a1%e6%b3%95/)
+- **場景 1215**：[跳島除權策略](https://www.xq.com.tw/xstrader/%e8%b7%b3%e5%b3%b6%e9%99%a4%e6%ac%8a%e7%ad%96%e7%95%a5/)
+- **場景 1216**：[如何找出新一季可能虧錢的公司](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e6%89%be%e5%87%ba%e6%96%b0%e4%b8%80%e5%ad%a3%e5%8f%af%e8%83%bd%e8%99%a7%e9%8c%a2%e7%9a%84%e5%85%ac%e5%8f%b8/)
+- **場景 1220**：[尋找沈寂已久的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e6%b2%88%e5%af%82%e5%b7%b2%e4%b9%85%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1221**：[高手們的選股法則之持續成長的好公司](https://www.xq.com.tw/xstrader/%e9%ab%98%e6%89%8b%e5%80%91%e7%9a%84%e9%81%b8%e8%82%a1%e6%b3%95%e5%89%87%e4%b9%8b%e6%8c%81%e7%ba%8c%e6%88%90%e9%95%b7%e7%9a%84%e5%a5%bd%e5%85%ac%e5%8f%b8/)
+- **場景 1225**：[尋找噴出後休息再上攻的股票](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e5%99%b4%e5%87%ba%e5%be%8c%e4%bc%91%e6%81%af%e5%86%8d%e4%b8%8a%e6%94%bb%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1226**：[開盤n分鐘內，每根bar都是收紅的股票](https://www.xq.com.tw/xstrader/%e9%96%8b%e7%9b%a4n%e5%88%86%e9%90%98%e5%85%a7%ef%bc%8c%e6%af%8f%e6%a0%b9bar%e9%83%bd%e6%98%af%e6%94%b6%e7%b4%85%e7%9a%84%e8%82%a1%e7%a5%a8/)
+- **場景 1234**：[開高後不拉回的中小型股](https://www.xq.com.tw/xstrader/%e9%96%8b%e9%ab%98%e5%be%8c%e4%b8%8d%e6%8b%89%e5%9b%9e%e7%9a%84%e4%b8%ad%e5%b0%8f%e5%9e%8b%e8%82%a1/)
+- **場景 1235**：[把籌碼面跟技術面的數據放在一起選股](https://www.xq.com.tw/xstrader/%e6%8a%8a%e7%b1%8c%e7%a2%bc%e9%9d%a2%e8%b7%9f%e6%8a%80%e8%a1%93%e9%9d%a2%e7%9a%84%e6%95%b8%e6%93%9a%e6%94%be%e5%9c%a8%e4%b8%80%e8%b5%b7%e9%81%b8%e8%82%a1/)
+- **場景 1238**：[盤中可以找出那檔股票有大單在敲進的腳本](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%ad%e5%8f%af%e4%bb%a5%e6%89%be%e5%87%ba%e9%82%a3%e6%aa%94%e8%82%a1%e7%a5%a8%e6%9c%89%e5%a4%a7%e5%96%ae%e5%9c%a8%e6%95%b2%e9%80%b2%e7%9a%84%e8%85%b3%e6%9c%ac/)
+- **場景 1240**：[買進比重大的非權值股。](https://www.xq.com.tw/xstrader/%e8%b2%b7%e9%80%b2%e6%af%94%e9%87%8d%e5%a4%a7%e7%9a%84%e9%9d%9e%e6%ac%8a%e5%80%bc%e8%82%a1%e3%80%82/)
+- **場景 1241**：[只要有心，人人都可以成為小虎隊](https://www.xq.com.tw/xstrader/%e5%8f%aa%e8%a6%81%e6%9c%89%e5%bf%83%ef%bc%8c%e4%ba%ba%e4%ba%ba%e9%83%bd%e5%8f%af%e4%bb%a5%e6%88%90%e7%82%ba%e5%b0%8f%e8%99%8e%e9%9a%8a/)
+
+## 指標（78 個場景）
+
+### 趨勢與通道（11）
+
+- **場景 642**：[趨向指標轉向多頭（ADX趨勢成形）](https://www.xq.com.tw/xstrader/%e8%b6%a8%e5%90%91%e6%8c%87%e6%a8%99%e8%bd%89%e5%90%91%e5%a4%9a%e9%a0%ad%ef%bc%88adx%e8%b6%a8%e5%8b%a2%e6%88%90%e5%bd%a2%ef%bc%89/)
+- **場景 702**：[權值股多頭排列家數指標](https://www.xq.com.tw/xstrader/%e6%ac%8a%e5%80%bc%e8%82%a1%e5%a4%9a%e9%a0%ad%e6%8e%92%e5%88%97%e5%ae%b6%e6%95%b8%e6%8c%87%e6%a8%99/)
+- **場景 867**：[多空趨勢指標](https://www.xq.com.tw/xstrader/%e9%9b%99k%e6%a3%92%e5%8f%af%e4%bb%a5%e5%bb%b6%e4%bc%b8%e7%9a%84%e5%a4%9a%e7%a9%ba%e8%b6%a8%e5%8b%a2%e6%8c%87%e6%a8%99/)
+- **場景 941**：[運用趨勢性指標時，透過股性做確認趨勢是否成形](https://www.xq.com.tw/xstrader/%e9%81%8b%e7%94%a8%e8%b6%a8%e5%8b%a2%e6%80%a7%e6%8c%87%e6%a8%99%e6%99%82%ef%bc%8c%e9%80%8f%e9%81%8e%e8%82%a1%e6%80%a7%e5%81%9a%e7%a2%ba%e8%aa%8d%e8%b6%a8%e5%8b%a2%e6%98%af%e5%90%a6%e6%88%90%e5%bd%a2/)
+- **場景 1130**：[多空趨勢指標](https://www.xq.com.tw/xstrader/%e5%a4%9a%e7%a9%ba%e8%b6%a8%e5%8b%a2%e6%8c%87%e6%a8%99/)
+- **場景 1131**：[多空趨勢指標](https://www.xq.com.tw/xstrader/%e5%a4%9a%e7%a9%ba%e8%b6%a8%e5%8b%a2%e6%8c%87%e6%a8%99/)
+- **場景 1166**：[移動平均線再平均指標](https://www.xq.com.tw/xstrader/%e7%a7%bb%e5%8b%95%e5%b9%b3%e5%9d%87%e7%b7%9a%e5%86%8d%e5%b9%b3%e5%9d%87%e6%8c%87%e6%a8%99/)
+- **場景 1198**：[布林通道指標](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e9%80%9a%e9%81%93%e6%8c%87%e6%a8%99/)
+- **場景 1199**：[布林通道指標](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e9%80%9a%e9%81%93%e6%8c%87%e6%a8%99/)
+- **場景 1219**：[尋找趨勢是否成形的指標~動量指標](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e8%b6%a8%e5%8b%a2%e6%98%af%e5%90%a6%e6%88%90%e5%bd%a2%e7%9a%84%e6%8c%87%e6%a8%99%e5%8b%95%e9%87%8f%e6%8c%87%e6%a8%99/)
+- **場景 1227**：[尋找趨勢是否成形的指標之動量指標](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e8%b6%a8%e5%8b%a2%e6%98%af%e5%90%a6%e6%88%90%e5%bd%a2%e7%9a%84%e6%8c%87%e6%a8%99%e4%b9%8b%e5%8b%95%e9%87%8f%e6%8c%87%e6%a8%99/)
+
+### 動能與超買超賣（1）
+
+- **場景 919**：[上漲下跌家數差RSI指標](https://www.xq.com.tw/xstrader/%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e5%b7%aersi%e6%8c%87%e6%a8%99/)
+
+### 波動與通道寬度（7）
+
+- **場景 628**：[布林值指標翻多](https://www.xq.com.tw/xstrader/%e5%b8%83%e6%9e%97%e5%80%bc%e6%8c%87%e6%a8%99%e7%bf%bb%e5%a4%9a/)
+- **場景 968**：[真實波動區間指標](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e5%85%ad%e7%9c%9f%e5%af%a6%e6%b3%a2%e5%8b%95%e5%8d%80%e9%96%93/)
+- **場景 969**：[真實波動區間指標](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e5%85%ad%e7%9c%9f%e5%af%a6%e6%b3%a2%e5%8b%95%e5%8d%80%e9%96%93/)
+- **場景 970**：[真實波動區間指標](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e5%85%ad%e7%9c%9f%e5%af%a6%e6%b3%a2%e5%8b%95%e5%8d%80%e9%96%93/)
+- **場景 1136**：[波動率指標](https://www.xq.com.tw/xstrader/918/)
+- **場景 1213**：[波動分析指標](https://www.xq.com.tw/xstrader/475/)
+- **場景 1214**：[波動分析指標](https://www.xq.com.tw/xstrader/475/)
+
+### 籌碼與量能（6）
+
+- **場景 947**：[內外盤量差指標](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e8%bd%89%e6%8f%9b%e9%bb%9e%e4%b9%8b%e6%8e%a2%e8%a8%8e%e7%b3%bb%e5%88%97%e4%ba%8c%e5%85%a7%e5%a4%96%e7%9b%a4%e9%87%8f/)
+- **場景 972**：[法人買張比乖離指標](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e4%b8%89%e6%b3%95%e4%ba%ba%e8%b2%b7%e5%bc%b5%e4%bd%94%e6%88%90%e4%ba%a4%e9%87%8f%e6%af%94%e4%be%8b/)
+- **場景 1123**：[主動買力指標](https://www.xq.com.tw/xstrader/961/)
+- **場景 1124**：[主動買力指標](https://www.xq.com.tw/xstrader/961/)
+- **場景 1133**：[融資異常變化指標](https://www.xq.com.tw/xstrader/%e8%9e%8d%e8%b3%87%e7%95%b0%e5%b8%b8%e8%ae%8a%e5%8c%96%e6%8c%87%e6%a8%99/)
+- **場景 1134**：[籌碼沈澱指標](https://www.xq.com.tw/xstrader/931/)
+
+### 大盤與類股（5）
+
+- **場景 701**：[財務數字是領先還是落後指標？](https://www.xq.com.tw/xstrader/%e8%b2%a1%e5%8b%99%e6%95%b8%e5%ad%97%e6%98%af%e9%a0%98%e5%85%88%e9%82%84%e6%98%af%e8%90%bd%e5%be%8c%e6%8c%87%e6%a8%99%ef%bc%9f/)
+- **場景 866**：[私房版 台灣50的領先指標](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e7%89%88-%e5%8f%b0%e7%81%a350%e7%9a%84%e9%a0%98%e5%85%88%e6%8c%87%e6%a8%99/)
+- **場景 946**：[大盤多空轉換點之探討系列三: MFO資金流震盪指標](https://www.xq.com.tw/xstrader/%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e8%bd%89%e6%8f%9b%e9%bb%9e%e4%b9%8b%e6%8e%a2%e8%a8%8e%e7%b3%bb%e5%88%97%e4%b8%89-mfo%e8%b3%87%e9%87%91%e6%b5%81%e9%9c%87%e7%9b%aa%e6%8c%87%e6%a8%99/)
+- **場景 1037**：[尋找底部到了的領先指標](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e5%ba%95%e9%83%a8%e5%88%b0%e4%ba%86%e7%9a%84%e9%a0%98%e5%85%88%e6%8c%87%e6%a8%99/)
+- **場景 1065**：[尋找大盤短期多空方向的指標](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e5%a4%a7%e7%9b%a4%e7%9f%ad%e6%9c%9f%e5%a4%9a%e7%a9%ba%e6%96%b9%e5%90%91%e7%9a%84%e6%8c%87%e6%a8%99/)
+
+### 其他自製指標（48）
+
+- **場景 633**：[OBV指標](https://www.xq.com.tw/xstrader/obv%e9%80%80%e6%bd%ae%e7%a0%b4%e5%ba%95/)
+- **場景 695**：[雲帶型指標的制作方法](https://www.xq.com.tw/xstrader/%e9%9b%b2%e5%b8%b6%e5%9e%8b%e6%8c%87%e6%a8%99%e7%9a%84%e5%88%b6%e4%bd%9c%e6%96%b9%e6%b3%95/)
+- **場景 696**：[0050溢價是底部指標嗎?](https://www.xq.com.tw/xstrader/0050%e6%ba%a2%e5%83%b9%e6%98%af%e5%ba%95%e9%83%a8%e6%8c%87%e6%a8%99%e5%97%8e/)
+- **場景 697**：[轉強天數指標的應用](https://www.xq.com.tw/xstrader/%e8%bd%89%e5%bc%b7%e5%a4%a9%e6%95%b8%e6%8c%87%e6%a8%99%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 698**：[轉強天數指標的應用](https://www.xq.com.tw/xstrader/%e8%bd%89%e5%bc%b7%e5%a4%a9%e6%95%b8%e6%8c%87%e6%a8%99%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 753**：[choppy market index ，ADX及噪音指標等去盤整指標](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e5%88%a4%e6%96%b7%e7%8f%be%e5%9c%a8%e6%98%af%e8%b6%a8%e5%8b%a2%e9%82%84%e6%98%af%e7%9b%a4%e6%95%b4-%e4%b8%80%e5%80%8b%e9%82%84%e5%9c%a8%e7%a0%94%e7%a9%b6%e7%9a%84%e8%aa%b2/)
+- **場景 754**：[choppy market index ，ADX及噪音指標等去盤整指標](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e5%88%a4%e6%96%b7%e7%8f%be%e5%9c%a8%e6%98%af%e8%b6%a8%e5%8b%a2%e9%82%84%e6%98%af%e7%9b%a4%e6%95%b4-%e4%b8%80%e5%80%8b%e9%82%84%e5%9c%a8%e7%a0%94%e7%a9%b6%e7%9a%84%e8%aa%b2/)
+- **場景 756**：[OTC跟上市成交量比值是股市多空指標](https://www.xq.com.tw/xstrader/otc%e8%b7%9f%e4%b8%8a%e5%b8%82%e6%88%90%e4%ba%a4%e9%87%8f%e6%af%94%e5%80%bc%e6%98%af%e8%82%a1%e5%b8%82%e5%a4%9a%e7%a9%ba%e6%8c%87%e6%a8%99/)
+- **場景 827**：[總市值月營收比值  ~  一個看盡人情冷暖的指標](https://www.xq.com.tw/xstrader/%e7%b8%bd%e5%b8%82%e5%80%bc%e6%9c%88%e7%87%9f%e6%94%b6%e6%af%94%e5%80%bc-%e4%b8%80%e5%80%8b%e7%9c%8b%e7%9b%a1%e4%ba%ba%e6%83%85%e5%86%b7%e6%9a%96%e7%9a%84%e6%8c%87%e6%a8%99/)
+- **場景 828**：[總市值月營收比值  ~  一個看盡人情冷暖的指標](https://www.xq.com.tw/xstrader/%e7%b8%bd%e5%b8%82%e5%80%bc%e6%9c%88%e7%87%9f%e6%94%b6%e6%af%94%e5%80%bc-%e4%b8%80%e5%80%8b%e7%9c%8b%e7%9b%a1%e4%ba%ba%e6%83%85%e5%86%b7%e6%9a%96%e7%9a%84%e6%8c%87%e6%a8%99/)
+- **場景 854**：[盤上成交是否真的是重要指標?](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%8a%e6%88%90%e4%ba%a4%e6%98%af%e5%90%a6%e7%9c%9f%e7%9a%84%e6%98%af%e9%87%8d%e8%a6%81%e6%8c%87%e6%a8%99/)
+- **場景 855**：[盤上成交是否真的是重要指標?](https://www.xq.com.tw/xstrader/%e7%9b%a4%e4%b8%8a%e6%88%90%e4%ba%a4%e6%98%af%e5%90%a6%e7%9c%9f%e7%9a%84%e6%98%af%e9%87%8d%e8%a6%81%e6%8c%87%e6%a8%99/)
+- **場景 863**：[一個觀察大戶在進貨還是出貨的指標](https://www.xq.com.tw/xstrader/%e4%b8%80%e5%80%8b%e8%a7%80%e5%af%9f%e5%a4%a7%e6%88%b6%e5%9c%a8%e9%80%b2%e8%b2%a8%e9%82%84%e6%98%af%e5%87%ba%e8%b2%a8%e7%9a%84%e6%8c%87%e6%a8%99/)
+- **場景 864**：[一個觀察大戶在進貨還是出貨的指標](https://www.xq.com.tw/xstrader/%e4%b8%80%e5%80%8b%e8%a7%80%e5%af%9f%e5%a4%a7%e6%88%b6%e5%9c%a8%e9%80%b2%e8%b2%a8%e9%82%84%e6%98%af%e5%87%ba%e8%b2%a8%e7%9a%84%e6%8c%87%e6%a8%99/)
+- **場景 877**：[Q指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99%e7%9a%84%e6%92%b0%e5%af%ab%e6%8a%80%e5%b7%a7%e4%bb%a5q%e6%8c%87%e6%a8%99%e7%82%ba%e4%be%8b/)
+- **場景 878**：[Q指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99%e7%9a%84%e6%92%b0%e5%af%ab%e6%8a%80%e5%b7%a7%e4%bb%a5q%e6%8c%87%e6%a8%99%e7%82%ba%e4%be%8b/)
+- **場景 879**：[Q指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99%e7%9a%84%e6%92%b0%e5%af%ab%e6%8a%80%e5%b7%a7%e4%bb%a5q%e6%8c%87%e6%a8%99%e7%82%ba%e4%be%8b/)
+- **場景 880**：[Q指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99%e7%9a%84%e6%92%b0%e5%af%ab%e6%8a%80%e5%b7%a7%e4%bb%a5q%e6%8c%87%e6%a8%99%e7%82%ba%e4%be%8b/)
+- **場景 973**：[資金流向指標](https://www.xq.com.tw/xstrader/%e8%82%a1%e6%80%a7%e7%b3%bb%e5%88%97%e4%b9%8b%e4%ba%8c%e8%b3%87%e9%87%91%e6%b5%81%e5%90%91/)
+- **場景 984**：[自訂指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99/)
+- **場景 985**：[自訂指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99/)
+- **場景 986**：[自訂指標](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99/)
+- **場景 1009**：[自訂指標Step by Step](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99step-by-step/)
+- **場景 1010**：[自訂指標Step by Step](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e6%8c%87%e6%a8%99step-by-step/)
+- **場景 1050**：[修正式價量指標VPT(Volume price trend)](https://www.xq.com.tw/xstrader/%e4%bf%ae%e6%ad%a3%e5%bc%8f%e5%83%b9%e9%87%8f%e6%8c%87%e6%a8%99vptvolume-price-trend/)
+- **場景 1058**：[Q指標](https://www.xq.com.tw/xstrader/q%e6%8c%87%e6%a8%99/)
+- **場景 1059**：[KO克林格成交量擺動指標](https://www.xq.com.tw/xstrader/ko%e5%85%8b%e6%9e%97%e6%a0%bc%e6%88%90%e4%ba%a4%e9%87%8f%e6%93%ba%e5%8b%95%e6%8c%87%e6%a8%99/)
+- **場景 1060**：[％B指標](https://www.xq.com.tw/xstrader/%ef%bc%85b%e6%8c%87%e6%a8%99/)
+- **場景 1061**：[％B指標](https://www.xq.com.tw/xstrader/%ef%bc%85b%e6%8c%87%e6%a8%99/)
+- **場景 1063**：[KST確認指標](https://www.xq.com.tw/xstrader/kst%e7%a2%ba%e8%aa%8d%e6%8c%87%e6%a8%99/)
+- **場景 1064**：[ALF亞歷山大過濾指標](https://www.xq.com.tw/xstrader/alf%e4%ba%9e%e6%ad%b7%e5%b1%b1%e5%a4%a7%e9%81%8e%e6%bf%be%e6%8c%87%e6%a8%99/)
+- **場景 1100**：[多空六大階段指標](https://www.xq.com.tw/xstrader/%e5%a4%9a%e7%a9%ba%e5%85%ad%e5%a4%a7%e9%9a%8e%e6%ae%b5%e6%8c%87%e6%a8%99/)
+- **場景 1114**：[先進指標Zero Lag HeikinAshi](https://www.xq.com.tw/xstrader/%e5%85%88%e9%80%b2%e6%8c%87%e6%a8%99zero-lag-heikinashi/)
+- **場景 1132**：[多空點數指標](https://www.xq.com.tw/xstrader/%e5%a4%9a%e7%a9%ba%e9%bb%9e%e6%95%b8%e6%8c%87%e6%a8%99/)
+- **場景 1139**：[外盤成交比例指標](https://www.xq.com.tw/xstrader/%e5%a4%96%e7%9b%a4%e6%88%90%e4%ba%a4%e6%af%94%e4%be%8b%e6%8c%87%e6%a8%99/)
+- **場景 1144**：[交易活躍度指標](https://www.xq.com.tw/xstrader/%e4%ba%a4%e6%98%93%e7%95%b0%e5%b8%b8%e6%b4%bb%e8%ba%8d%e6%8c%87%e6%a8%99/)
+- **場景 1152**：[不明買盤指標](https://www.xq.com.tw/xstrader/%e4%b8%8d%e6%98%8e%e8%b2%b7%e7%9b%a4%e6%8c%87%e6%a8%99/)
+- **場景 1153**：[MA再平均指標](https://www.xq.com.tw/xstrader/809/)
+- **場景 1156**：[築底指標](https://www.xq.com.tw/xstrader/%e7%af%89%e5%ba%95%e6%8c%87%e6%a8%99-2/)
+- **場景 1160**：[散戶作多指標](https://www.xq.com.tw/xstrader/%e6%95%a3%e6%88%b6%e4%bd%9c%e5%a4%9a%e6%8c%87%e6%a8%99/)
+- **場景 1165**：[噪音指標](https://www.xq.com.tw/xstrader/%e5%99%aa%e9%9f%b3%e6%8c%87%e6%a8%99/)
+- **場景 1167**：[隨機漫步指標。](https://www.xq.com.tw/xstrader/738/)
+- **場景 1176**：[外盤量佔比指標](https://www.xq.com.tw/xstrader/%e5%a4%96%e7%9b%a4%e9%87%8f%e4%bd%94%e6%af%94%e6%8c%87%e6%a8%99/)
+- **場景 1200**：[粒子學說指標](https://www.xq.com.tw/xstrader/%e7%b2%92%e5%ad%90%e5%ad%b8%e8%aa%aa%e6%8c%87%e6%a8%99/)
+- **場景 1201**：[粒子學說指標](https://www.xq.com.tw/xstrader/%e7%b2%92%e5%ad%90%e5%ad%b8%e8%aa%aa%e6%8c%87%e6%a8%99/)
+- **場景 1206**：[積極勁道指標](https://www.xq.com.tw/xstrader/%e7%a9%8d%e6%a5%b5%e5%8b%81%e9%81%93%e6%8c%87%e6%a8%99/)
+- **場景 1207**：[xslope速度指標](https://www.xq.com.tw/xstrader/495/)
+- **場景 1218**：[Runscore指標](https://www.xq.com.tw/xstrader/runscore%e6%8c%87%e6%a8%99/)
+
+## 交易（61 個場景）
+
+### 策略架構（26）
+
+- **場景 823**：[尋找野百合的春天~低調獲利穩定股交易策略](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%87%8e%e7%99%be%e5%90%88%e7%9a%84%e6%98%a5%e5%a4%a9%e4%bd%8e%e8%aa%bf%e7%8d%b2%e5%88%a9%e7%a9%a9%e5%ae%9a%e8%82%a1%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5/)
+- **場景 824**：[尋找野百合的春天~低調獲利穩定股交易策略](https://www.xq.com.tw/xstrader/%e5%b0%8b%e6%89%be%e9%87%8e%e7%99%be%e5%90%88%e7%9a%84%e6%98%a5%e5%a4%a9%e4%bd%8e%e8%aa%bf%e7%8d%b2%e5%88%a9%e7%a9%a9%e5%ae%9a%e8%82%a1%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5/)
+- **場景 840**：[日週月線不同指標混搭交易策略](https://www.xq.com.tw/xstrader/%e6%97%a5%e9%80%b1%e6%9c%88%e7%b7%9a%e4%b8%8d%e5%90%8c%e6%8c%87%e6%a8%99%e6%b7%b7%e6%90%ad%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5/)
+- **場景 844**：[脫歐後的交易策略探討~開低殺低後重新站回開盤價的隔日沖勝率](https://www.xq.com.tw/xstrader/%e8%84%ab%e6%ad%90%e5%be%8c%e7%9a%84%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e6%8e%a2%e8%a8%8e%e9%96%8b%e4%bd%8e%e6%ae%ba%e4%bd%8e%e5%be%8c%e9%87%8d%e6%96%b0%e7%ab%99%e5%9b%9e%e9%96%8b%e7%9b%a4%e5%83%b9/)
+- **場景 850**：[周線，日線跟60分鐘線兼顧的交易策略](https://www.xq.com.tw/xstrader/%e5%91%a8%e7%b7%9a%ef%bc%8c%e6%97%a5%e7%b7%9a%e8%b7%9f60%e5%88%86%e9%90%98%e7%b7%9a%e5%85%bc%e9%a1%a7%e7%9a%84%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5/)
+- **場景 856**：[有沒有多空都能賺錢的交易策略??](https://www.xq.com.tw/xstrader/%e6%9c%89%e6%b2%92%e6%9c%89%e5%a4%9a%e7%a9%ba%e9%83%bd%e8%83%bd%e8%b3%ba%e9%8c%a2%e7%9a%84%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5/)
+- **場景 871**：[由市場老手的交易秘訣所衍生出來的交易策略(一)](https://www.xq.com.tw/xstrader/%e7%94%b1%e5%b8%82%e5%a0%b4%e8%80%81%e6%89%8b%e7%9a%84%e4%ba%a4%e6%98%93%e7%a7%98%e8%a8%a3%e6%89%80%e8%a1%8d%e7%94%9f%e5%87%ba%e4%be%86%e7%9a%84%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%80/)
+- **場景 900**：[借券相關欄位在交易策略上的應用](https://www.xq.com.tw/xstrader/%e5%80%9f%e5%88%b8%e7%9b%b8%e9%97%9c%e6%ac%84%e4%bd%8d%e5%9c%a8%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 901**：[借券相關欄位在交易策略上的應用](https://www.xq.com.tw/xstrader/%e5%80%9f%e5%88%b8%e7%9b%b8%e9%97%9c%e6%ac%84%e4%bd%8d%e5%9c%a8%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 902**：[借券相關欄位在交易策略上的應用](https://www.xq.com.tw/xstrader/%e5%80%9f%e5%88%b8%e7%9b%b8%e9%97%9c%e6%ac%84%e4%bd%8d%e5%9c%a8%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 903**：[借券相關欄位在交易策略上的應用](https://www.xq.com.tw/xstrader/%e5%80%9f%e5%88%b8%e7%9b%b8%e9%97%9c%e6%ac%84%e4%bd%8d%e5%9c%a8%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 904**：[借券相關欄位在交易策略上的應用](https://www.xq.com.tw/xstrader/%e5%80%9f%e5%88%b8%e7%9b%b8%e9%97%9c%e6%ac%84%e4%bd%8d%e5%9c%a8%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 910**：[設定交易策略一定要記得不能逆天而行](https://www.xq.com.tw/xstrader/%e8%a8%ad%e5%ae%9a%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b8%80%e5%ae%9a%e8%a6%81%e8%a8%98%e5%be%97%e4%b8%8d%e8%83%bd%e9%80%86%e5%a4%a9%e8%80%8c%e8%a1%8c/)
+- **場景 917**：[交易策略的形成過程~以多次到頂而破](https://www.xq.com.tw/xstrader/%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e7%9a%84%e5%bd%a2%e6%88%90%e9%81%8e%e7%a8%8b%e4%bb%a5%e5%a4%9a%e6%ac%a1%e5%88%b0%e9%a0%82%e8%80%8c%e7%a0%b4/)
+- **場景 918**：[交易策略的形成過程~以多次到頂而破](https://www.xq.com.tw/xstrader/%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e7%9a%84%e5%bd%a2%e6%88%90%e9%81%8e%e7%a8%8b%e4%bb%a5%e5%a4%9a%e6%ac%a1%e5%88%b0%e9%a0%82%e8%80%8c%e7%a0%b4/)
+- **場景 923**：[跨頻率多重濾網交易策略的設計](https://www.xq.com.tw/xstrader/%e8%b7%a8%e9%a0%bb%e7%8e%87%e5%a4%9a%e9%87%8d%e6%bf%be%e7%b6%b2%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e7%9a%84%e8%a8%ad%e8%a8%88/)
+- **場景 924**：[跨頻率多重濾網交易策略的設計](https://www.xq.com.tw/xstrader/%e8%b7%a8%e9%a0%bb%e7%8e%87%e5%a4%9a%e9%87%8d%e6%bf%be%e7%b6%b2%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e7%9a%84%e8%a8%ad%e8%a8%88/)
+- **場景 925**：[跨頻率多重濾網交易策略的設計](https://www.xq.com.tw/xstrader/%e8%b7%a8%e9%a0%bb%e7%8e%87%e5%a4%9a%e9%87%8d%e6%bf%be%e7%b6%b2%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e7%9a%84%e8%a8%ad%e8%a8%88/)
+- **場景 1001**：[私房交易策略之強勢股整理結束](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b9%8b%e5%bc%b7%e5%8b%a2%e8%82%a1%e6%95%b4%e7%90%86%e7%b5%90%e6%9d%9f/)
+- **場景 1002**：[私房交易策略之強勢股整理結束](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%b9%8b%e5%bc%b7%e5%8b%a2%e8%82%a1%e6%95%b4%e7%90%86%e7%b5%90%e6%9d%9f/)
+- **場景 1003**：[私房交易策略介紹之旱地拔葱](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%bb%8b%e7%b4%b9%e4%b9%8b%e6%97%b1%e5%9c%b0%e6%8b%94%e8%91%b1/)
+- **場景 1004**：[私房交易策略介紹之旱地拔葱](https://www.xq.com.tw/xstrader/%e7%a7%81%e6%88%bf%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e4%bb%8b%e7%b4%b9%e4%b9%8b%e6%97%b1%e5%9c%b0%e6%8b%94%e8%91%b1/)
+- **場景 1101**：[每個月賺八萬元的交易策略怎麼寫?](https://www.xq.com.tw/xstrader/%e6%af%8f%e5%80%8b%e6%9c%88%e8%b3%ba%e5%85%ab%e8%90%ac%e5%85%83%e7%9a%84%e4%ba%a4%e6%98%93%e7%ad%96%e7%95%a5%e6%80%8e%e9%ba%bc%e5%af%ab/)
+- **場景 1121**：[尋找具有領先預測性的交易策略](https://www.xq.com.tw/xstrader/%e5%be%9e%e7%9b%b8%e5%b0%8d%e7%9a%84%e8%a7%92%e5%ba%a6%e5%b0%8b%e6%89%be%e7%9c%9f%e6%ad%a3%e5%83%b9%e9%87%8f%e9%bd%8a%e6%8f%9a%e7%9a%84%e8%82%a1%e7%a5%a8-3/)
+- **場景 1122**：[尋找具有領先預測性的交易策略](https://www.xq.com.tw/xstrader/%e5%be%9e%e7%9b%b8%e5%b0%8d%e7%9a%84%e8%a7%92%e5%ba%a6%e5%b0%8b%e6%89%be%e7%9c%9f%e6%ad%a3%e5%83%b9%e9%87%8f%e9%bd%8a%e6%8f%9a%e7%9a%84%e8%82%a1%e7%a5%a8-3/)
+- **場景 1184**：[私房交易策略之第一根長紅收最高](https://www.xq.com.tw/xstrader/%e4%bb%80%e9%ba%bc%e8%82%a1%e7%a5%a8%e9%9a%94%e5%a4%a9%e6%9c%83%e9%96%8b%e9%ab%98/)
+
+### 進出場停損停利（35）
+
+- **場景 666**：[如何尋找波段的操作標的？](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e5%b0%8b%e6%89%be%e6%b3%a2%e6%ae%b5%e7%9a%84%e6%93%8d%e4%bd%9c%e6%a8%99%e7%9a%84%ef%bc%9f/)
+- **場景 667**：[如何尋找波段的操作標的？](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e5%b0%8b%e6%89%be%e6%b3%a2%e6%ae%b5%e7%9a%84%e6%93%8d%e4%bd%9c%e6%a8%99%e7%9a%84%ef%bc%9f/)
+- **場景 668**：[如何尋找波段的操作標的？](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e5%b0%8b%e6%89%be%e6%b3%a2%e6%ae%b5%e7%9a%84%e6%93%8d%e4%bd%9c%e6%a8%99%e7%9a%84%ef%bc%9f/)
+- **場景 669**：[如何尋找波段的操作標的？](https://www.xq.com.tw/xstrader/%e5%a6%82%e4%bd%95%e5%b0%8b%e6%89%be%e6%b3%a2%e6%ae%b5%e7%9a%84%e6%93%8d%e4%bd%9c%e6%a8%99%e7%9a%84%ef%bc%9f/)
+- **場景 671**：[一條公式選股術的回測報告](https://www.xq.com.tw/xstrader/%e4%b8%80%e6%a2%9d%e5%85%ac%e5%bc%8f%e9%81%b8%e8%82%a1%e8%a1%93%e7%9a%84%e5%9b%9e%e6%b8%ac%e5%a0%b1%e5%91%8a/)
+- **場景 672**：[一條公式選股術的回測報告](https://www.xq.com.tw/xstrader/%e4%b8%80%e6%a2%9d%e5%85%ac%e5%bc%8f%e9%81%b8%e8%82%a1%e8%a1%93%e7%9a%84%e5%9b%9e%e6%b8%ac%e5%a0%b1%e5%91%8a/)
+- **場景 675**：[移動停利的腳本寫法](https://www.xq.com.tw/xstrader/%e7%a7%bb%e5%8b%95%e5%81%9c%e5%88%a9%e7%9a%84%e8%85%b3%e6%9c%ac%e5%af%ab%e6%b3%95/)
+- **場景 676**：[移動停利的腳本寫法](https://www.xq.com.tw/xstrader/%e7%a7%bb%e5%8b%95%e5%81%9c%e5%88%a9%e7%9a%84%e8%85%b3%e6%9c%ac%e5%af%ab%e6%b3%95/)
+- **場景 681**：[上漲下跌家數在期指波段交易上的應用](https://www.xq.com.tw/xstrader/%e4%b8%8a%e6%bc%b2%e4%b8%8b%e8%b7%8c%e5%ae%b6%e6%95%b8%e5%9c%a8%e6%9c%9f%e6%8c%87%e6%b3%a2%e6%ae%b5%e4%ba%a4%e6%98%93%e4%b8%8a%e7%9a%84%e6%87%89%e7%94%a8/)
+- **場景 693**：[當沖佔成交易多少比重後短線明顯過熱？](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e4%bd%94%e6%88%90%e4%ba%a4%e6%98%93%e5%a4%9a%e5%b0%91%e6%af%94%e9%87%8d%e5%be%8c%e7%9f%ad%e7%b7%9a%e6%98%8e%e9%a1%af%e9%81%8e%e7%86%b1%ef%bc%9f/)
+- **場景 694**：[當沖佔成交易多少比重後短線明顯過熱？](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e4%bd%94%e6%88%90%e4%ba%a4%e6%98%93%e5%a4%9a%e5%b0%91%e6%af%94%e9%87%8d%e5%be%8c%e7%9f%ad%e7%b7%9a%e6%98%8e%e9%a1%af%e9%81%8e%e7%86%b1%ef%bc%9f/)
+- **場景 708**：[大跌後出現什麼K線型態可以進場？](https://www.xq.com.tw/xstrader/%e5%a4%a7%e8%b7%8c%e5%be%8c%e5%87%ba%e7%8f%be%e4%bb%80%e9%ba%bck%e7%b7%9a%e5%9e%8b%e6%85%8b%e5%8f%af%e4%bb%a5%e9%80%b2%e5%a0%b4%ef%bc%9f/)
+- **場景 709**：[大跌後出現什麼K線型態可以進場？](https://www.xq.com.tw/xstrader/%e5%a4%a7%e8%b7%8c%e5%be%8c%e5%87%ba%e7%8f%be%e4%bb%80%e9%ba%bck%e7%b7%9a%e5%9e%8b%e6%85%8b%e5%8f%af%e4%bb%a5%e9%80%b2%e5%a0%b4%ef%bc%9f/)
+- **場景 712**：[在K線圖上標進出場點](https://www.xq.com.tw/xstrader/%e5%9c%a8k%e7%b7%9a%e5%9c%96%e4%b8%8a%e6%a8%99%e9%80%b2%e5%87%ba%e5%a0%b4%e9%bb%9e/)
+- **場景 744**：[當沖腳本2之多頭市場開盤暴量一分鐘K三連紅](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac2%e4%b9%8b%e5%a4%9a%e9%a0%ad%e5%b8%82%e5%a0%b4%e9%96%8b%e7%9b%a4%e6%9a%b4%e9%87%8f%e4%b8%80%e5%88%86%e9%90%98k%e4%b8%89%e9%80%a3%e7%b4%85/)
+- **場景 745**：[當沖腳本1之五分鐘線狹幅整理後帶量突破](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac1%e4%b9%8b%e4%ba%94%e5%88%86%e9%90%98%e7%b7%9a%e7%8b%b9%e5%b9%85%e6%95%b4%e7%90%86%e5%be%8c%e5%b8%b6%e9%87%8f%e7%aa%81%e7%a0%b4/)
+- **場景 746**：[當沖腳本1之五分鐘線狹幅整理後帶量突破](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac1%e4%b9%8b%e4%ba%94%e5%88%86%e9%90%98%e7%b7%9a%e7%8b%b9%e5%b9%85%e6%95%b4%e7%90%86%e5%be%8c%e5%b8%b6%e9%87%8f%e7%aa%81%e7%a0%b4/)
+- **場景 747**：[進場點一目了然的大盤儀表板](https://www.xq.com.tw/xstrader/%e9%80%b2%e5%a0%b4%e9%bb%9e%e4%b8%80%e7%9b%ae%e4%ba%86%e7%84%b6%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%84%80%e8%a1%a8%e6%9d%bf/)
+- **場景 760**：[當成長股波段趨勢成形](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%88%90%e9%95%b7%e8%82%a1%e6%b3%a2%e6%ae%b5%e8%b6%a8%e5%8b%a2%e6%88%90%e5%bd%a2/)
+- **場景 825**：[當好球員手感開始熱的時候~高ROE股進入上漲軌跡時進場](https://www.xq.com.tw/xstrader/%e7%95%b6%e5%a5%bd%e7%90%83%e5%93%a1%e6%89%8b%e6%84%9f%e9%96%8b%e5%a7%8b%e7%86%b1%e7%9a%84%e6%99%82%e5%80%99%e9%ab%98roe%e8%82%a1%e9%80%b2%e5%85%a5%e4%b8%8a%e6%bc%b2%e8%bb%8c%e8%b7%a1%e6%99%82/)
+- **場景 846**：[當沖腳本之開高不拉回後的創新高](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac%e4%b9%8b%e9%96%8b%e9%ab%98%e4%b8%8d%e6%8b%89%e5%9b%9e%e5%be%8c%e7%9a%84%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 847**：[當沖腳本之開高不拉回後的創新高](https://www.xq.com.tw/xstrader/%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac%e4%b9%8b%e9%96%8b%e9%ab%98%e4%b8%8d%e6%8b%89%e5%9b%9e%e5%be%8c%e7%9a%84%e5%89%b5%e6%96%b0%e9%ab%98/)
+- **場景 848**：[定存股該不該波段操作?](https://www.xq.com.tw/xstrader/%e5%ae%9a%e5%ad%98%e8%82%a1%e8%a9%b2%e4%b8%8d%e8%a9%b2%e6%b3%a2%e6%ae%b5%e6%93%8d%e4%bd%9c/)
+- **場景 913**：[現股當沖腳本的奧義](https://www.xq.com.tw/xstrader/%e7%8f%be%e8%82%a1%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 914**：[現股當沖腳本的奧義](https://www.xq.com.tw/xstrader/%e7%8f%be%e8%82%a1%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 915**：[現股當沖腳本的奧義](https://www.xq.com.tw/xstrader/%e7%8f%be%e8%82%a1%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 916**：[現股當沖腳本的奧義](https://www.xq.com.tw/xstrader/%e7%8f%be%e8%82%a1%e7%95%b6%e6%b2%96%e8%85%b3%e6%9c%ac%e7%9a%84%e5%a5%a7%e7%be%a9/)
+- **場景 920**：[主力，法人，公司派波段買超後的攻擊發起日](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%ef%bc%8c%e6%b3%95%e4%ba%ba%ef%bc%8c%e5%85%ac%e5%8f%b8%e6%b4%be%e6%b3%a2%e6%ae%b5%e8%b2%b7%e8%b6%85%e5%be%8c%e7%9a%84%e6%94%bb%e6%93%8a%e7%99%bc%e8%b5%b7%e6%97%a5/)
+- **場景 926**：[主力一直在買的股票何時可以進場跟單?](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e4%b8%80%e7%9b%b4%e5%9c%a8%e8%b2%b7%e7%9a%84%e8%82%a1%e7%a5%a8%e4%bd%95%e6%99%82%e5%8f%af%e4%bb%a5%e9%80%b2%e5%a0%b4%e8%b7%9f%e5%96%ae/)
+- **場景 927**：[主力一直在買的股票何時可以進場跟單?](https://www.xq.com.tw/xstrader/%e4%b8%bb%e5%8a%9b%e4%b8%80%e7%9b%b4%e5%9c%a8%e8%b2%b7%e7%9a%84%e8%82%a1%e7%a5%a8%e4%bd%95%e6%99%82%e5%8f%af%e4%bb%a5%e9%80%b2%e5%a0%b4%e8%b7%9f%e5%96%ae/)
+- **場景 1140**：[股價漲超過月線多遠得停利?](https://www.xq.com.tw/xstrader/%e8%82%a1%e5%83%b9%e6%bc%b2%e8%b6%85%e9%81%8e%e6%9c%88%e7%b7%9a%e5%a4%9a%e9%81%a0%e5%be%97%e5%81%9c%e5%88%a9/)
+- **場景 1145**：[當沖策略之反常必有妖](https://www.xq.com.tw/xstrader/847/)
+- **場景 1185**：[多頭重新啟動最佳進場點](https://www.xq.com.tw/xstrader/%e5%a4%9a%e9%a0%ad%e9%87%8d%e6%96%b0%e5%95%9f%e5%8b%95%e6%9c%80%e4%bd%b3%e9%80%b2%e5%a0%b4%e9%bb%9e/)
+- **場景 1186**：[多頭重新啟動最佳進場點](https://www.xq.com.tw/xstrader/%e5%a4%9a%e9%a0%ad%e9%87%8d%e6%96%b0%e5%95%9f%e5%8b%95%e6%9c%80%e4%bd%b3%e9%80%b2%e5%a0%b4%e9%bb%9e/)
+- **場景 1230**：[波段操作的價值型標準](https://www.xq.com.tw/xstrader/%e6%b3%a2%e6%ae%b5%e6%93%8d%e4%bd%9c%e7%9a%84%e5%83%b9%e5%80%bc%e5%9e%8b%e6%a8%99%e6%ba%96/)
+
+## 警示（2 個場景）
+
+### 策略雷達（2）
+
+- **場景 707**：[雞尾酒策略雷達的函數化](https://www.xq.com.tw/xstrader/%e9%9b%9e%e5%b0%be%e9%85%92%e7%ad%96%e7%95%a5%e9%9b%b7%e9%81%94%e7%9a%84%e5%87%bd%e6%95%b8%e5%8c%96/)
+- **場景 1111**：[合併多重訊號到單一警示retmsg的應用](https://www.xq.com.tw/xstrader/%e5%90%88%e4%bd%b5%e5%a4%9a%e9%87%8d%e8%a8%8a%e8%99%9f%e5%88%b0%e5%96%ae%e4%b8%80%e8%ad%a6%e7%a4%baretmsg%e7%9a%84%e6%87%89%e7%94%a8/)
+
+## 函數（5 個場景）
+
+### 自訂函數（5）
+
+- **場景 677**：[以週轉率為例，介紹自訂函數及其應用](https://www.xq.com.tw/xstrader/%e4%bb%a5%e9%80%b1%e8%bd%89%e7%8e%87%e7%82%ba%e4%be%8b%ef%bc%8c%e4%bb%8b%e7%b4%b9%e8%87%aa%e8%a8%82%e5%87%bd%e6%95%b8%e5%8f%8a%e5%85%b6%e6%87%89%e7%94%a8/)
+- **場景 678**：[以週轉率為例，介紹自訂函數及其應用](https://www.xq.com.tw/xstrader/%e4%bb%a5%e9%80%b1%e8%bd%89%e7%8e%87%e7%82%ba%e4%be%8b%ef%bc%8c%e4%bb%8b%e7%b4%b9%e8%87%aa%e8%a8%82%e5%87%bd%e6%95%b8%e5%8f%8a%e5%85%b6%e6%87%89%e7%94%a8/)
+- **場景 930**：[計算區間漲跌幅的自訂函數](https://www.xq.com.tw/xstrader/%e8%a8%88%e7%ae%97%e5%8d%80%e9%96%93%e6%bc%b2%e8%b7%8c%e5%b9%85%e7%9a%84%e8%87%aa%e8%a8%82%e5%87%bd%e6%95%b8/)
+- **場景 931**：[計算區間漲跌幅的自訂函數](https://www.xq.com.tw/xstrader/%e8%a8%88%e7%ae%97%e5%8d%80%e9%96%93%e6%bc%b2%e8%b7%8c%e5%b9%85%e7%9a%84%e8%87%aa%e8%a8%82%e5%87%bd%e6%95%b8/)
+- **場景 987**：[自訂函數](https://www.xq.com.tw/xstrader/%e8%87%aa%e8%a8%82%e5%87%bd%e6%95%b8/)
+
+## 工具與心得（22 個場景）
+
+### 雜項（22）
+
+- **場景 699**：[月報酬率等績效圖的寫法](https://www.xq.com.tw/xstrader/%e6%88%91%e7%9a%84%e5%ae%9a%e5%ad%98%e8%82%a1%e5%90%8d%e5%96%ae/)
+- **場景 710**：[用CANSLIM選股法則來說明XS選股平台的四種選股條件產生方法](https://www.xq.com.tw/xstrader/canslim%e9%81%b8%e8%82%a1%e6%b3%95%e5%89%87%e5%9c%a8xs%e4%b8%8a%e5%a6%82%e4%bd%95%e5%af%a6%e7%8f%be/)
+- **場景 711**：[用CANSLIM選股法則來說明XS選股平台的四種選股條件產生方法](https://www.xq.com.tw/xstrader/canslim%e9%81%b8%e8%82%a1%e6%b3%95%e5%89%87%e5%9c%a8xs%e4%b8%8a%e5%a6%82%e4%bd%95%e5%af%a6%e7%8f%be/)
+- **場景 717**：[個股儀表板step by step](https://www.xq.com.tw/xstrader/%e5%80%8b%e8%82%a1%e5%84%80%e8%a1%a8%e6%9d%bfstep-by-step/)
+- **場景 718**：[個股儀表板step by step](https://www.xq.com.tw/xstrader/%e5%80%8b%e8%82%a1%e5%84%80%e8%a1%a8%e6%9d%bfstep-by-step/)
+- **場景 743**：[打造個股儀表板](https://www.xq.com.tw/xstrader/%e6%89%93%e9%80%a0%e5%80%8b%e8%82%a1%e5%84%80%e8%a1%a8%e6%9d%bf/)
+- **場景 748**：[打造自己的大盤多空函數](https://www.xq.com.tw/xstrader/%e6%89%93%e9%80%a0%e8%87%aa%e5%b7%b1%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e5%87%bd%e6%95%b8/)
+- **場景 749**：[打造自己的大盤多空函數](https://www.xq.com.tw/xstrader/%e6%89%93%e9%80%a0%e8%87%aa%e5%b7%b1%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e5%87%bd%e6%95%b8/)
+- **場景 750**：[打造自己的大盤多空函數](https://www.xq.com.tw/xstrader/%e6%89%93%e9%80%a0%e8%87%aa%e5%b7%b1%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%a4%9a%e7%a9%ba%e5%87%bd%e6%95%b8/)
+- **場景 895**：[這個盤接下來到底會不會大跌?     ~ 建構專屬的大盤儀表板](https://www.xq.com.tw/xstrader/%e9%80%99%e5%80%8b%e7%9b%a4%e6%8e%a5%e4%b8%8b%e4%be%86%e5%88%b0%e5%ba%95%e6%9c%83%e4%b8%8d%e6%9c%83%e5%a4%a7%e8%b7%8c-%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%84%80/)
+- **場景 896**：[這個盤接下來到底會不會大跌?     ~ 建構專屬的大盤儀表板](https://www.xq.com.tw/xstrader/%e9%80%99%e5%80%8b%e7%9b%a4%e6%8e%a5%e4%b8%8b%e4%be%86%e5%88%b0%e5%ba%95%e6%9c%83%e4%b8%8d%e6%9c%83%e5%a4%a7%e8%b7%8c-%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%84%80/)
+- **場景 897**：[這個盤接下來到底會不會大跌?     ~ 建構專屬的大盤儀表板](https://www.xq.com.tw/xstrader/%e9%80%99%e5%80%8b%e7%9b%a4%e6%8e%a5%e4%b8%8b%e4%be%86%e5%88%b0%e5%ba%95%e6%9c%83%e4%b8%8d%e6%9c%83%e5%a4%a7%e8%b7%8c-%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%84%80/)
+- **場景 898**：[這個盤接下來到底會不會大跌?     ~ 建構專屬的大盤儀表板](https://www.xq.com.tw/xstrader/%e9%80%99%e5%80%8b%e7%9b%a4%e6%8e%a5%e4%b8%8b%e4%be%86%e5%88%b0%e5%ba%95%e6%9c%83%e4%b8%8d%e6%9c%83%e5%a4%a7%e8%b7%8c-%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%84%80/)
+- **場景 899**：[這個盤接下來到底會不會大跌?     ~ 建構專屬的大盤儀表板](https://www.xq.com.tw/xstrader/%e9%80%99%e5%80%8b%e7%9b%a4%e6%8e%a5%e4%b8%8b%e4%be%86%e5%88%b0%e5%ba%95%e6%9c%83%e4%b8%8d%e6%9c%83%e5%a4%a7%e8%b7%8c-%e5%bb%ba%e6%a7%8b%e5%b0%88%e5%b1%ac%e7%9a%84%e5%a4%a7%e7%9b%a4%e5%84%80/)
+- **場景 939**：[看盤用的腳本](https://www.xq.com.tw/xstrader/%e7%9c%8b%e7%9b%a4%e7%94%a8%e7%9a%84%e8%85%b3%e6%9c%ac/)
+- **場景 940**：[看盤用的腳本](https://www.xq.com.tw/xstrader/%e7%9c%8b%e7%9b%a4%e7%94%a8%e7%9a%84%e8%85%b3%e6%9c%ac/)
+- **場景 1082**：[函數](https://www.xq.com.tw/xstrader/%e5%87%bd%e6%95%b8/)
+- **場景 1083**：[函數](https://www.xq.com.tw/xstrader/%e5%87%bd%e6%95%b8/)
+- **場景 1084**：[函數](https://www.xq.com.tw/xstrader/%e5%87%bd%e6%95%b8/)
+- **場景 1085**：[函數](https://www.xq.com.tw/xstrader/%e5%87%bd%e6%95%b8/)
+- **場景 1086**：[函數](https://www.xq.com.tw/xstrader/%e5%87%bd%e6%95%b8/)
+- **場景 1087**：[函數](https://www.xq.com.tw/xstrader/%e5%87%bd%e6%95%b8/)
 
 ---
 
-## 📈 選股腳本範例索引
+## 常見需求 → 起點建議
 
-### 基本範例（必讀）
-
-| 範例名稱   | 路徑                                                      | 關鍵字                 | 學習重點                  |
-| ---------- | --------------------------------------------------------- | ---------------------- | ------------------------- |
-| \_基本範例 | `references/xscript_preset/選股/00.語法範例/_基本範例.xs` | ret, OutputField, 基礎 | ⭐ 必讀：選股腳本基礎結構 |
-
-### 技術指標選股
-
-| 範例名稱                  | 路徑                                                                      | 關鍵字        | 學習重點     |
-| ------------------------- | ------------------------------------------------------------------------- | ------------- | ------------ |
-| N期股價趨勢向上           | `references/xscript_preset/選股/00.語法範例/N期股價趨勢向上.xs`           | 趨勢, 斜率    | 價格趨勢判斷 |
-| 收盤價近N期漲幅大於X%以上 | `references/xscript_preset/選股/00.語法範例/收盤價近N期漲幅大於X%以上.xs` | 漲幅, 百分比  | 漲跌幅過濾   |
-| 股價大於近N期平均         | `references/xscript_preset/選股/00.語法範例/股價大於近N期平均.xs`         | 均線, Average | 均線篩選     |
-
-### 基本面選股
-
-| 範例名稱        | 路徑                                                            | 關鍵字                            | 學習重點            |
-| --------------- | --------------------------------------------------------------- | --------------------------------- | ------------------- |
-| EPS連續N季成長  | `references/xscript_preset/選股/00.語法範例/EPS連續N季成長.xs`  | EPS, 成長, 季報                   | 盈餘成長篩選        |
-| 本益比小於X倍   | `references/xscript_preset/選股/00.語法範例/本益比小於X倍.xs`   | 本益比, PE, 估值                  | 本益比篩選          |
-| 月營收創N期新高 | `references/xscript_preset/選股/00.語法範例/月營收創N期新高.xs` | 營收, 創新高, GetFieldStartOffset | 🎯 營收創高（重要） |
-
-### 專題選股資料夾
-
-- **04.價量選股**：價量關係、量增價漲
-- **06.籌碼選股**：法人買超、融資券
-- **07.月營收選股**：營收成長、創新高
-- **08.財報選股**：EPS、ROE、毛利率
-- **10.價值投資**：深度價值分析
-- **11.選股機器人**：綜合選股系統
+| 需求 | 看哪些場景 |
+|---|---|
+| 月營收選股 | 「選股 > 營收與財報」整段，特別是場景 621、622、630-661、668、800、869 |
+| 葛拉罕價值投資 | 場景 629（流動資產減負債 vs 總市值） |
+| 布林通道（指標+選股） | 場景 628、688、722-727、870、871 |
+| 唐奇安通道 | 場景 1127-1129 |
+| 多空趨勢（自製） | 場景 1130、1131 |
+| 跨頻率（分鐘 vs 日 vs 週） | 場景 873-880 |
+| 大盤抄底 | 場景 683、684、706、748-750 |
+| 類股輪動 / sector trade | 場景 870-872 |
+| 自製大盤多空函數 | 場景 748-750 |
+| 籌碼異常（融資/外資/主力） | 場景 1133、1134、758-770 |
+| 個股儀表板 | 場景 717、718、743 |
+| 排行語法 rank | 場景 800 附近（搜「排行」/「rank」） |
 
 ---
 
-## 🚨 警示腳本範例索引
+## 也可參考
 
-### 語法範例
-
-請查看 `references/xscript_preset/警示/!語法範例/` 資料夾
-
-### 專題警示資料夾
-
-- **1.籌碼監控**：大單追蹤、法人買超監控
-- **2.市場常用語**：常用警示條件
-- **3.出場常用警示**：停損、停利警示
-- **技術分析**：KD、MACD 警示
-- **當沖交易型**：當沖監控策略
-- **盤中常用**：盤中即時監控
-
----
-
-## 🔧 函數腳本範例索引
-
-### 功能類別
-
-| 類別      | 資料夾路徑                                  | 包含內容          |
-| --------- | ------------------------------------------- | ----------------- |
-| Array函數 | `references/xscript_preset/函數/Array函數/` | 陣列操作函數      |
-| 技術指標  | `references/xscript_preset/函數/技術指標/`  | 封裝好的指標函數  |
-| 跨頻率    | `references/xscript_preset/函數/跨頻率/`    | 跨頻率輔助函數    |
-| 期權相關  | `references/xscript_preset/函數/期權相關/`  | BS 模型、希臘字母 |
-| 統計分析  | `references/xscript_preset/函數/統計分析/`  | 數學統計函數      |
-| 趨勢分析  | `references/xscript_preset/函數/趨勢分析/`  | 趨勢判斷函數      |
-
----
-
-## 🎯 常見需求快速查找
-
-### 需求：我想學習均線策略
-
-**指標腳本：**
-
-- 查找 `references/xscript_preset/指標/XQ技術指標/` 中的均線相關指標
-
-**交易腳本：**
-
-- 查找 `references/xscript_preset/自動交易/常見技術分析/` 中的均線策略
-
-**選股腳本：**
-
-- 使用範例：`股價大於近N期平均.xs`
-
-### 需求：我想學習 KD 指標
-
-**指標腳本：**
-
-- 必讀：`KD 隨機指標.xs`
-- 進階：`快速KD 隨機指標.xs`
-- 跨頻率：`分鐘與日KD.xs`、`週KD.xs`
-
-**交易腳本：**
-
-- 查找技術分析資料夾中的 KD 策略
-
-**警示腳本：**
-
-- 查找技術分析資料夾中的 KD 警示
-
-### 需求：我想學習停損停利
-
-**交易腳本：**
-
-- 必讀：`05-FilledAvgPrice以及停損停利範例.xs`
-- 參考：出場方式資料夾
-
-**警示腳本：**
-
-- 查找 `3.出場常用警示/` 資料夾
-
-### 需求：我想學習跨頻率
-
-**指標腳本：**
-
-- ⭐ 必讀：`分鐘與日KD.xs`
-- 參考：`跨頻率指標` 資料夾所有範例
-
-**函數腳本：**
-
-- 查找 `跨頻率` 資料夾
-
-### 需求：我想學習 rank 排行
-
-**選股腳本：**
-
-- 查閱官方文件：[排行語法教學](https://www.xq.com.tw/lesson/xspractice/%E6%8E%92%E8%A1%8C%E8%AA%9E%E6%B3%95/)
-- 參考：選股機器人資料夾中的 rank 應用
-
-### 需求：我想學習 Tick 數據
-
-**警示腳本：**
-
-- 查找 `!語法範例/` 資料夾
-- 參考：籌碼監控、大單追蹤相關範例
-
----
-
-## 📖 AI 學習建議
-
-### 第一次使用（用戶是初學者）
-
-1. **先讀基本範例**
-   - 指標：`KD 隨機指標.xs`
-   - 交易：`01-SetPosition.xs`、`03-Filled.xs`
-   - 選股：`_基本範例.xs`
-
-2. **理解核心概念**
-   - Position vs Filled（交易）
-   - plot 用法（指標）
-   - ret vs OutputField（選股）
-   - retMSG（警示）
-
-3. **從簡單範例開始**
-   - 避免一開始就參考複雜範例
-   - 先理解基礎結構再擴展
-
-### 進階使用（用戶有經驗）
-
-1. **直接查找相關範例**
-   - 使用本索引的關鍵字搜尋
-   - 找到最相關的範例參考
-
-2. **組合多個概念**
-   - 參考多個範例組合成新策略
-   - 注意不同範例的兼容性
-
-3. **參考進階資料夾**
-   - Algo 策略委託（交易）
-   - 選股機器人（選股）
-   - 期權相關（函數）
-
----
-
-## ⚡ 快速參考表
-
-### 當用戶說...
-
-| 用戶需求                   | 推薦範例路徑                                               | 關鍵 Skill          |
-| -------------------------- | ---------------------------------------------------------- | ------------------- |
-| "幫我寫一個 KD 指標"       | `指標/XQ技術指標/KD 隨機指標.xs`                           | indicator_script    |
-| "幫我寫一個均線策略"       | `自動交易/常見技術分析/均線*.xs`                           | trading_script      |
-| "幫我選出營收創新高的股票" | `選股/07.月營收選股/`                                      | stock_picker_script |
-| "幫我監控大單"             | `警示/1.籌碼監控/`                                         | alert_script        |
-| "幫我寫一個 MACD 函數"     | `函數/技術指標/MACD*.xs`                                   | function_script     |
-| "我要加入停損停利"         | `自動交易/0-基本語法/05-FilledAvgPrice以及停損停利範例.xs` | trading_script      |
-| "分鐘線要引用日線數據"     | `指標/跨頻率指標/分鐘與日KD.xs`                            | indicator_script    |
-
----
-
-**如有疑問，請優先查閱官方文件與 skills 說明。**
+- `references/master-guide.md` — 程序性規則：撰寫流程、可行性預審、look-ahead bias、註解風格、資源宣告
+- `references/cheatsheet.md` — 純查表：函數分類、欄位命名、頻率商品相容、常用片段
+- `references/anti-patterns.md` — 26 條踩雷對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突）
+- `references/script-types/*.md` — 五種腳本類別的專屬規範
