@@ -48,17 +48,34 @@ end;
 var: _temp(0);
 ```
 
-## 3. 跨頻率取值
+## 3. 跨頻率取值不可用 `_var[N]` 回溯
+
+**真正的雷區**：跨頻率取值存進變數後，**對該變數用 `[N]` 索引回溯**。變數會在主頻每根 K 棒被覆寫，`_var[1]` 取到的是「前一根主頻 K 棒當下的快照」，不是「前一根目標頻率的值」。
 
 ```xs
-// ❌ 錯誤：用變數暫存跨頻率資料（會被主頻覆蓋而對位錯誤）
+// ❌ 錯誤：對變數用 [N] 回溯跨頻率值
 var: _weeklyClose(0);
 _weeklyClose = GetField("收盤價", "W");
-if _weeklyClose > _weeklyClose[1] then ...
+if _weeklyClose > _weeklyClose[1] then ...   // [1] 對位錯誤
 
-// ✅ 正確：直接在邏輯中呼叫 GetField
+// ✅ 正確：要回溯就直接在 GetField 內用 [N]
 if GetField("收盤價", "W") > GetField("收盤價", "W")[1] then ...
 ```
+
+**同一根 bar 內賦值再使用是安全的** — 因為值在當下執行週期內就被用掉了，不涉及跨 bar 對位：
+
+```xs
+// ✅ 安全：同 bar 賦值並立即使用（無 [N] 回溯）
+value1 = GetField("RSI", "D");
+plot1(value1, "日線RSI");                       // 同 bar 內用，沒問題
+
+// ✅ 安全：用變數整理可讀性
+var: _dRsi(0);
+_dRsi = GetField("RSI", "D");
+if _dRsi > 70 then ret = 1;                     // 沒對變數做 [N] 回溯
+```
+
+**判斷準則：寫 `_var[N]` 或 `_var[1]` 之前先問自己「`_var` 是不是跨頻率取值？」是的話改寫成 `GetField(..., "W")[N]` 直接從欄位回溯。**
 
 ## 4. Look-ahead Bias（盤中嚴禁取 `[0]`）
 

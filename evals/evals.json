@@ -1,0 +1,47 @@
+{
+  "skill_name": "xq-xscript",
+  "evals": [
+    {
+      "id": 0,
+      "name": "type-ambiguous",
+      "prompt": "我想做一個外資買超的監控，外資連續三天買超的就要通知我",
+      "expected_output": "因為類別模糊（可選股盤後 or 警示盤中），應觸發新版 SKILL.md 的「先問類別」鐵則，反問使用者要做哪一種腳本，不應該逕自寫程式碼",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "selector-revenue",
+      "prompt": "幫我寫個選股腳本：找出最近一個月營收成長率超過 20%，且本益比小於 15 的台股",
+      "expected_output": "正確使用月頻欄位「營收年增率」而非「營收成長率」（後者在月頻會回 0）；本益比欄位字串正確；ret = 1 + OutputField 標準結構",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "trading-day-trade",
+      "prompt": "幫我寫一個股票當沖策略：開盤後 5 分鐘內漲幅超過 2% 就進場做多，停損 1.5%、停利 3%，收盤前 10 分鐘強制平倉",
+      "expected_output": "完整當沖架構：input 區分組、雙重部位同步 (filled=position)、intrabarpersist 狀態變數、IntPortion 張數計算、收盤強平、買賣現沖資格檢查",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "pinescript-conv",
+      "prompt": "幫我把這段 PineScript 轉成 XS：strategy.entry('Long', when=ta.crossover(close, ta.ema(close, 20))) ; strategy.close('Long', when=ta.crossunder(close, ta.ema(close, 20)))",
+      "expected_output": "用 SetPosition 取代 strategy.entry/close；XAverage 或 EMA 取代 ta.ema；CrossOver/CrossUnder 取代 ta.crossover/crossunder；單一 = 而非 ==；不使用 Buy/Sell/MarketPosition 等禁用語法",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "cross-frequency",
+      "prompt": "5 分鐘線上看日線的 RSI，幫我畫成指標",
+      "expected_output": "使用 xfMin_RSI 或 GetField('RSI', 'D') 取得日線 RSI；plot 繪製；SetBarBack 設定足夠回溯範圍（分鐘線跨日需數百根）",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "infeasible-selector",
+      "prompt": "幫我寫個選股，每 1 分鐘抓出當下漲幅超過 3% 的股票",
+      "expected_output": "應該拒絕直接寫選股，說明選股引擎不支援分鐘頻率回溯，並建議改用警示腳本（策略雷達）來達成分鐘級即時監控",
+      "files": []
+    }
+  ]
+}
