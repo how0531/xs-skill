@@ -353,3 +353,27 @@ SetBarBack(500);
 ```
 
 **經驗法則**：分鐘線指標若要引用日頻 `[N]`，`SetTotalBar` 設 `(目標商品一天根數 × N × 1.5)` 起跳；`SetBarBack` 至少 `(目標商品一天根數 × N)`。台股日盤 270 根、全日盤 300 根。指標腳本可粗估 `SetTotalBar(5000)`、`SetBarBack(500)` 應付 1~2 日跨頻引用。
+
+## 23. if-else 鏈不可使用「裸 statement + else」，必須用 begin/end 包裹
+
+XS 不支援 Pascal/Delphi 風格的單行 `if-then-statement; else if ...` 寫法。即使分支只有一條陳述句也必須用 `begin ... end` 包起來，否則編譯器報「else 可能是多餘的」「無法辨認的字」。
+
+```xs
+// ❌ 錯誤：裸 statement + else
+if Low <= _StopLoss then
+    SetPosition(0, label:="停損");
+else if Low <= _ExitDn then
+    SetPosition(0, label:="跌破出場");
+
+// ❌ 錯誤：單行 if 也不能省略 begin/end 就接 else
+if A then SetPosition(1); else SetPosition(-1);
+
+// ✅ 正確：每個分支都包 begin/end，結尾 end 接分號
+if Low <= _StopLoss then begin
+    SetPosition(0, label:="停損");
+end else if Low <= _ExitDn then begin
+    SetPosition(0, label:="跌破出場");
+end;
+```
+
+注意 `end else if` 是 XS 標準寫法（end 與 else 之間有空格，不寫 `end; else`）。trading.md 範例的出場邏輯就是用這種寫法，可參照。
