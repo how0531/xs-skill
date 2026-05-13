@@ -368,8 +368,19 @@ end;
 
 1.  **InputKind 限制**：可使用 `InputKind:=SymbolGroup("類型")` 限制使用者只能選特定類型的群組。
     - 範例：`input: _OptGroup(Group, "選擇權", InputKind:=SymbolGroup("選擇權"));`
-2.  **變數限制**：`GetSymbolField` 支援 `Group[i]` 這種變數形式，但不支援隨意定義的字串變數。
-3.  **效能注意**：遍歷大型群組（如所有上市櫃股票）極度消耗資源，建議僅用於小型群組（如成分股、期權鍊）。
+    - **⚠️ 注意**：部分 XQ 版本不支援 `InputKind:=SymbolGroup(...)`，會報「未知的關鍵字 SymbolGroup」或「目前版本不支援 InputKind 語法」。若遇此錯誤，請改成 `input: _OptGroup(Group, "選擇權群組");` 不帶 InputKind 子句，靠使用者掛指標時自行選對群組。
+2.  **變數限制**：`GetSymbolField` / `GetSymbolInfo` 第一個參數**只接受 String 字面量、Input 變數、或 `Group[i]` 形式**，不接受一般 `var: _sym("")` 字串變數。若先把 `_OptGroup[_i]` 存到 `_sym` 再傳入，會編譯錯「第 1 個參數應該是 String/Input/Group」。
+3.  **聚合代碼過濾**：選擇權群組常包含 `TXO00.TF` 這類「聚合/總代碼」（代表全部合約合計），對它呼叫 `GetSymbolField(_, "未平倉", "D")` 會報「不支援 TXO00.TF」。遍歷時應先用 `GetSymbolInfo` 確認是具體合約再往下取資料：
+
+    ```delphi
+    _strike = GetSymbolInfo(_OptGroup[_i], "履約價");
+    _cp = GetSymbolInfo(_OptGroup[_i], "買賣權");
+    if _strike > 0 and (_cp = "Call" or _cp = "Put") then begin
+        // 只在這個條件成立才呼叫 GetSymbolField
+    end;
+    ```
+
+4.  **效能注意**：遍歷大型群組（如所有上市櫃股票）極度消耗資源，建議僅用於小型群組（如成分股、期權鍊）。
 
 ---
 

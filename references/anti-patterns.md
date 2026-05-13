@@ -309,3 +309,47 @@ if Close <= _StopLossPrice then SetPosition(0);
 if Low <= _StopLossPrice then SetPosition(0);
 // 進階：回測可用 SetPosition(0, _StopLossPrice) 模擬限價單
 ```
+
+## 21. 選擇權群組遍歷未過濾聚合代碼
+
+選擇權群組除了具體合約（如 `TXO202412C21000.TF`），常會包含 `TXO00.TF` 這類「聚合/總代碼」（代表全部合約合計值）。對聚合代碼呼叫 `GetSymbolField` 會編譯失敗報「不支援 TXOxx.TF」。
+
+```xs
+// ❌ 錯誤：直接掃描群組，沒過濾聚合代碼
+for _i = 1 to GroupSize(_OptGroup) begin
+    _myValue = GetSymbolField(_OptGroup[_i], "未平倉", "D");  // 掃到 TXO00.TF 就炸
+end;
+
+// ✅ 正確：先用 GetSymbolInfo 確認是具體合約再取資料
+for _i = 1 to GroupSize(_OptGroup) begin
+    _strike = GetSymbolInfo(_OptGroup[_i], "履約價");
+    _cp = GetSymbolInfo(_OptGroup[_i], "買賣權");
+
+    // 聚合代碼的履約價=0、買賣權=空字串，自然會被跳過
+    if _strike > 0 and (_cp = "Call" or _cp = "Put") then begin
+        _myValue = GetSymbolField(_OptGroup[_i], "未平倉", "D");
+        // ... 後續處理
+    end;
+end;
+```
+
+`GetSymbolInfo` 對聚合代碼回傳安全的預設值（0 / 空字串）不會炸，但 `GetSymbolField` 會。所以總是「先 Info 過濾、再 Field 取值」。
+
+## 22. 分鐘線下跨頻率引用日資料取不到 `[1]`
+
+`SetBarBack` / `SetTotalBar` 是以**腳本主頻**計算的。在分鐘線指標下，若主頻 K 棒數不足以涵蓋目標日 KBar，`GetField("X", "D")[1]` 會超出範圍回 0，造成「OI 變化量」「昨日均價」等邏輯錯誤。
+
+```xs
+// ❌ 錯誤：分鐘線指標只設 SetBarBack(5)，無法跨日取昨日 OI
+SetBarBack(5);
+SetTotalBar(20);
+_delta = GetSymbolField(sym, "未平倉", "D") - GetSymbolField(sym, "未平倉", "D")[1];
+// [1] 落在 SetBarBack 範圍外 → 永遠回 0 → _delta 永遠等於今日 OI
+
+// ✅ 正確：分鐘線下要把主頻 K 棒設得足以跨日
+// 全日盤一天約 300 根、日盤 270 根，至少留 2 天的量
+SetTotalBar(5000);
+SetBarBack(500);
+```
+
+**經驗法則**：分鐘線指標若要引用日頻 `[N]`，`SetTotalBar` 設 `(目標商品一天根數 × N × 1.5)` 起跳；`SetBarBack` 至少 `(目標商品一天根數 × N)`。台股日盤 270 根、全日盤 300 根。指標腳本可粗估 `SetTotalBar(5000)`、`SetBarBack(500)` 應付 1~2 日跨頻引用。
