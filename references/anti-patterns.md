@@ -449,3 +449,28 @@ var: _todayHigh(0);
 **經驗法則**：避開以下「片段」作為自訂變數的名稱主體 — `daily`, `close`, `high`, `low`, `volume`, `bid`, `ask`, `last`。這些都是 XS 報價欄位的核心識別字。
 
 > **取捨**：這條是經驗值不是硬性規則。多數情況下加 `_` 前綴就足夠，但若 input/var 命名後遇到「腳本回傳值不對但找不到語法錯誤」，先檢查是否有片段碰撞。
+
+## 27. 逐筆洗價下 `series[1]` 不能用來偵測「剛變動」
+
+`position`、`filled` 這類序列函數的 `[1]` 是「**上一根 K 棒結束時**」的值，**不是「上個 tick」的值**。在逐筆洗價下，這根 K 棒結束前 `[1]` 永遠維持「上一根 K 結束時」的快照不變，所以 `position <> position[1]` 一旦在這根 K 內成立，會在**整根 K 棒剩下的每個 tick 持續成立** — 想用它觸發「只執行一次」的動作會變成每 tick 都觸發。
+
+```xs
+// ❌ 錯誤：想在「部位剛變動」時 print，結果整根 K 的每個 tick 都 print
+if position <> position[1] then begin
+    print(file(_LogPath), "部位變動：" + numtostr(position, 0));
+end;
+
+// ✅ 正確：用 intrabarpersist 變數追蹤「上次觀察到的值」，動作完立刻更新
+var: intrabarpersist _LastPos(0);
+
+if position <> _LastPos then begin
+    print(file(_LogPath), "部位變動：" + numtostr(position, 0));
+    _LastPos = position;     // ← 印完立刻同步，下個 tick 就不會再進
+end;
+```
+
+同樣模式適用於 `filled`、`State` 狀態機、`_Trend` 趨勢方向等任何「想在剛變動時做一次事」的情境。
+
+**判斷準則**：要偵測的是「**這次執行 vs 上次執行**」的差異，就用 `intrabarpersist _LastX` 追蹤；要偵測的是「**這根 K vs 前一根 K**」的差異（例如「今天剛開盤」），才用 `[1]`。
+
+**配套**：所有用來追蹤狀態的 `intrabarpersist` 變數，記得在每日歸零區（`if isfirstBar then` 或 `if Date <> Date[1] then`）一併重置為 0／false，否則跨日會殘留昨日的值，導致今天的「變動偵測」被擋住。
