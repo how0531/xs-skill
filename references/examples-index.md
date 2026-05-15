@@ -748,5 +748,5 @@
 
 - `references/master-guide.md` — 程序性規則：撰寫流程、可行性預審、look-ahead bias、註解風格、資源宣告
 - `references/cheatsheet.md` — 純查表：函數分類、欄位命名、頻率商品相容、常用片段
-- `references/anti-patterns.md` — 26 條踩雷對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突）
+- `references/anti-patterns.md` — 28 條踩雷對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態）
 - `references/script-types/*.md` — 五種腳本類別的專屬規範

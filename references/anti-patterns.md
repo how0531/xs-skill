@@ -474,3 +474,52 @@ end;
 **判斷準則**：要偵測的是「**這次執行 vs 上次執行**」的差異，就用 `intrabarpersist _LastX` 追蹤；要偵測的是「**這根 K vs 前一根 K**」的差異（例如「今天剛開盤」），才用 `[1]`。
 
 **配套**：所有用來追蹤狀態的 `intrabarpersist` 變數，記得在每日歸零區（`if isfirstBar then` 或 `if Date <> Date[1] then`）一併重置為 0／false，否則跨日會殘留昨日的值，導致今天的「變動偵測」被擋住。
+
+## 28. 「判方向」用前後差、「判狀態」用當下值 — 兩者不可混用
+
+寫部位 log 時最常見的錯誤：用同一套判斷式同時想表達「這筆是買還是賣」（方向／事件）和「現在是多單還是空單」（狀態／快照）。兩者的正確寫法完全不同：
+
+- **判方向（事件）**：這筆動作是 Buy 還是 Sell → 比較 `position` 與「上次記錄的部位」`_LastPos`（前後差）
+- **判狀態（快照）**：現在持有多單還是空單 → 直接看 `position > 0` / `position < 0`（當下值）
+
+```xs
+var: intrabarpersist _LastPos(0);
+
+// ❌ 錯誤一：方向判斷用 filled[1]
+// filled[1] 是「上一根 K 結束時」的 filled，不是上個 tick；
+// 而且 SetPosition 後 filled 還沒回報，空單回補時 filled(-50) > filled[1](-50) = false → 印成 S
+if position <> _LastPos then begin
+    if filled > filled[1] then _Dir = "B" else _Dir = "S";   // 空單回補印錯成 S
+end;
+
+// ❌ 錯誤二：狀態快照誤用前後差
+// 定時回報時 position 早就 = _LastPos，兩個比較都不成立 → _Dir 殘留上次值
+if time = 100300 then begin
+    if position > _LastPos then _Dir = "B"
+    else if position < _LastPos then _Dir = "S";             // 整段不成立，印出殘值
+end;
+
+// ✅ 正確：方向用前後差，狀態用當下值
+if position <> _LastPos then begin                            // 事件：部位剛變動
+    if position > _LastPos then _Dir = "B" else _Dir = "S";   // 前後差判方向
+    print(file(_LogPath), _Dir + "," + numtostr(position * 1000, 0));
+    _LastPos = position;
+end;
+
+if time = 100300 then begin                                   // 快照：定時回報
+    if position > 0 then _Dir = "B"
+    else if position < 0 then _Dir = "S";                     // 當下值判狀態
+    print(file(_LogPath), _Dir + "," + numtostr(position * 1000, 0));
+end;
+```
+
+方向判定四情境驗證（`_LastPos` 為動作前部位）：
+
+| 事件 | position | _LastPos | `position > _LastPos` | 印 |
+|---|---|---|---|---|
+| 做多進場 | +50 | 0 | true | B ✓ |
+| 多單出場 | 0 | +50 | false | S ✓ |
+| 做空進場 | -50 | 0 | false | S ✓ |
+| 空單回補 | 0 | -50 | true | B ✓ |
+
+**與 #27 的關係**：#27 講「偵測剛變動」要用 `intrabarpersist` 不要用 `[1]`；本條進一步講「變動的方向怎麼判」——同樣不能用 `filled[1]`／`position[1]`，要用 `position` 對 `_LastPos` 的前後差。`SetPosition` 一呼叫 `position` 立刻更新但 `filled` 會延遲數個 tick，所以一切方向／變動判斷都應以 `position` 為準，不要碰 `filled[1]`。

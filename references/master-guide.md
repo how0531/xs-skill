@@ -367,7 +367,7 @@
   - `references/script-types/function.md`
 - **References (字典與範例)**：
   - `references/cheatsheet.md` (純查表：函數分類、欄位命名、頻率商品相容、常用片段)
-  - `references/anti-patterns.md` (26 條 wrong → right 對照)
+  - `references/anti-patterns.md` (28 條 wrong → right 對照)
   - `references/examples-index.md` (622 個實戰場景索引)
   - `references/source/XScript_官方語法與核心說明文件.md` (1538 行完整官方語法 + 三大欄位字典)
   - `references/source/XScript_實戰範例寶典_下.md` (622 個場景的完整 XS 程式碼)

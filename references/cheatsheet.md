@@ -311,6 +311,6 @@ if Filled < 0 and Position < 0 and Filled = Position and (出場條件) then Set
 ## 也可參考
 
 - `master-guide.md` — 程序性規則：撰寫流程、可行性預審、look-ahead bias、註解風格、資源宣告
-- `anti-patterns.md` — 26 條 wrong → right 對照與重構案例
+- `anti-patterns.md` — 28 條 wrong → right 對照與重構案例
 - `examples-index.md` — 622 個實戰場景索引
 - `script-types/{indicator, trading, alert, stock-picker, function}.md` — 各類腳本專屬規範
