@@ -33,15 +33,17 @@ if myRank.pos <= 100 then ret = 1;  // 前 100 名
 
 #### Rank 物件屬性
 
-| 屬性       | 說明                            | 範例              |
+| 屬性       | 說明                            | 精確公式 / 範例              |
 | ---------- | ------------------------------- | ----------------- |
-| `pos`      | 排行名次（1=第一名）            | `myRank.pos`      |
-| `range`    | 排行 %（pos / 總數 \* 100）     | `myRank.range`    |
-| `pr`       | Percentile Rank %（100=第一名） | `myRank.pr`       |
-| `count`    | 參與排行的商品個數              | `myRank.count`    |
+| `pos`      | 排行名次，整數，從 1 開始（1=第一名） | `myRank.pos`      |
+| `range`    | 排行 %，**實數**，越小越前面     | `pos / count * 100`，範圍 0~100 |
+| `pr`       | Percentile Rank %，第一名=100    | `(count - pos) / (count - 1) * 100`，範圍 100~0；PR95=前 5% |
+| `count`    | 參與排行的商品個數（對任一商品都固定） | `myRank.count`    |
 | `value`    | retval 回傳數值                 | `myRank.value`    |
 | `avgvalue` | 所有商品 value 的平均值         | `myRank.avgvalue` |
 | `medvalue` | 所有商品 value 的中位數         | `myRank.medvalue` |
+
+> `.range` vs `.pr`：兩者都是百分位，但方向相反。`.range` 越小越前（第一名趨近 0）；`.pr` 越大越前（第一名=100）。取「前段班」用 `.range <= 5` 或 `.pr >= 95`。
 
 #### Rank 語法注意事項
 
@@ -153,6 +155,48 @@ end;
 // 篩選出前期排行與當期排行不同的商品
 if myRank.pos[1] <> myRank.pos then ret = 1;
 ```
+
+**應用：偵測「首次進入前 N 大」**——`pos` 是序列，比對 `pos` 與 `pos[1]` 就能抓「這期進榜、上期不在榜」：
+
+```delphi
+ret = holdingRank.pos <= 10        // 這期前 10
+  and holdingRank.pos[1] > 10      // 上期不在前 10 → 首次進榜
+  and holdingRank.value >= R1;     // 並過最低門檻
+outputField1(holdingRank.value, "增加持股比例%", order:=1);
+outputField2(holdingRank.pos,    "排名");
+outputField3(holdingRank.pos[1], "上期排名");
+```
+
+##### 8. Rank over Rank：在排名範圍中再用另一個值排名
+
+要做「**先 A 排名前 10，這 10 檔再用 B 排名前 10**」這類兩層篩選，宣告兩個 Rank，**在第二個 Rank 內把不符第一層的商品 retval 打成極小值（-999）擠到最後**：
+
+```delphi
+input: Ndays(3, "近幾日");
+
+// 第一層：主力持股增加排名
+rank myRank1 begin
+    var: _N(3);
+    value1 = GetField("主力持股", "D");
+    value2 = value1 - value1[_N];
+    retval = value2;
+end;
+
+// 第二層：外資持股增加排名，但只在「第一層前 10」的範圍內比
+rank myRank2 begin
+    var: _N(3);
+    value1 = GetField("外資持股比例", "D");
+    value2 = value1 - value1[_N];
+    if myRank1.pos > 10 then value2 = -999;   // 不符第一層 → 打到最後
+    retval = value2;
+end;
+
+ret = myRank2.pos <= 10 and myRank2.value > 0;
+outputField1(myRank2.pos,   "排名", order:=-1);
+outputField2(myRank2.value, "增加持股比例");
+```
+
+關鍵：rank 是獨立空間不能用外部 input（見規則 4），但 **可以引用前面其他 rank 的結果**（如 `myRank1.pos`，見規則 5）。「打 -999 擠到最後」是 Rank over Rank 的核心手法。
 
 ### 3️⃣ OutputField 輸出欄位
 

@@ -277,6 +277,40 @@ plot3(value1, "成分股家數");
 
 選擇權群組遍歷時需先過濾聚合代碼（如 `TXO00.TF`），見 `anti-patterns.md` #21。
 
+### 即時排行（指標/警示用 Array_Sort2D 模擬 rank）
+
+`rank` 只能用在選股腳本。指標／警示要「即時排名」（例如找當下最強類股），改用 **`Group` input + 二維陣列 + `Array_Sort2D`**：
+
+```xs
+input: _sectorGroup(Group, "類股");      // Group 型別，元素從 [1] 起算，不是 [0]
+Array: _sortSector[19, 2](-9999);        // 宣告二維陣列：[類股索引, 漲跌幅]
+var: _i(0), _cnt(0), _chg(0);
+
+_cnt = GroupSize(_sectorGroup);
+for _i = 1 to _cnt begin
+    // Group 陣列元素可直接傳給 GetSymbolField（見下方說明）
+    value1 = GetSymbolField(_sectorGroup[_i], "收盤價", "D");
+    value2 = GetSymbolField(_sectorGroup[_i], "收盤價", "D")[1];
+    _chg = (value1 - value2) / value2 * 100;
+    _sortSector[_i, 1] = _i;      // 第幾類股
+    _sortSector[_i, 2] = _chg;    // 漲跌幅
+end;
+
+// Array_Sort2D(陣列, 起始位置, 結束位置, 比較欄位, 順序)；False=大到小, True=小到大
+Array_Sort2D(_sortSector, 1, _cnt, 2, False);
+// 排序後 _sortSector[1,1] 就是最強類股的索引
+```
+
+| 函數 | 用途 |
+|---|---|
+| `Array: name[列, 欄](初值);` | 宣告二維陣列 |
+| `Array_Sort(陣列, 起, 迄, 順序)` | 一維陣列排序 |
+| `Array_Sort2D(陣列, 起, 迄, 比較欄, 順序)` | 二維陣列依指定欄排序（`False`=大到小） |
+| `GroupSize(group)` | Group 元素個數 |
+| `GetSymbolGroup("TSE11.TW", "成分股")` | 取類股成分股（第 1 參數也只吃字面值，不可用變數，需逐一比對） |
+
+**關鍵限制**：`GetSymbolField` / `GetSymbolGroup` 第 1 參數不可用「一般變數」，但 **`Group` 陣列元素 `_sectorGroup[_i]` 可以**——因為 Group 是「不可變動的清單」，編譯器視為合法來源。二維陣列不能混型別（數字與字串），需要存代號又存數值時用兩個一維陣列分開存。設定上：執行商品掛單一商品（如加權指數）、頻率設 60 分之類、**逐筆洗價不要勾**（每 tick 重排沒意義且嚴重拖慢），建議只做提醒不掛自動交易。
+
 ### InputKind 下拉選單
 
 ```xs
