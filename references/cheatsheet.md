@@ -289,8 +289,9 @@ var: _i(0), _cnt(0), _chg(0);
 _cnt = GroupSize(_sectorGroup);
 for _i = 1 to _cnt begin
     // Group 陣列元素可直接傳給 GetSymbolField（見下方說明）
+    // 用「參考價」當昨收，避免 收盤價[1] 在 settotalBar 太小時取不到（見下方陷阱）
     value1 = GetSymbolField(_sectorGroup[_i], "收盤價", "D");
-    value2 = GetSymbolField(_sectorGroup[_i], "收盤價", "D")[1];
+    value2 = GetSymbolField(_sectorGroup[_i], "參考價", "D");
     _chg = (value1 - value2) / value2 * 100;
     _sortSector[_i, 1] = _i;      // 第幾類股
     _sortSector[_i, 2] = _chg;    // 漲跌幅
@@ -309,7 +310,50 @@ Array_Sort2D(_sortSector, 1, _cnt, 2, False);
 | `GroupSize(group)` | Group 元素個數 |
 | `GetSymbolGroup("TSE11.TW", "成分股")` | 取類股成分股（第 1 參數也只吃字面值，不可用變數，需逐一比對） |
 
-**關鍵限制**：`GetSymbolField` / `GetSymbolGroup` 第 1 參數不可用「一般變數」，但 **`Group` 陣列元素 `_sectorGroup[_i]` 可以**——因為 Group 是「不可變動的清單」，編譯器視為合法來源。二維陣列不能混型別（數字與字串），需要存代號又存數值時用兩個一維陣列分開存。設定上：執行商品掛單一商品（如加權指數）、頻率設 60 分之類、**逐筆洗價不要勾**（每 tick 重排沒意義且嚴重拖慢），建議只做提醒不掛自動交易。
+**關鍵限制**：`GetSymbolField` / `GetSymbolGroup` 第 1 參數不可用「一般變數」，但 **`Group` 陣列元素 `_sectorGroup[_i]` 可以**——因為 Group 是「不可變動的清單」，編譯器視為合法來源。設定上：執行商品掛單一商品（如加權指數）、頻率設 60 分之類、**逐筆洗價不要勾**（每 tick 重排沒意義且嚴重拖慢），建議只做提醒不掛自動交易。
+
+#### 兩階段排行（類股 → 成分股）實戰四大陷阱
+
+做「先排最強類股、再進該類股排最強個股」時（XQ 官方教材主題），實測會踩到四個**靜默**錯誤（不報錯、結果卻錯）：
+
+**① 類股漲幅算法：用 `參考價` 不要用 `收盤價[1]`。**
+`settotalBar(1)` 等小值下，跨頻率 `GetSymbolField("收盤價","D")[1]` 取不到昨日 → 回 0 → 漲幅變 `(今/0)` 怪值，類股排序整個錯。改用 `參考價`（當日參考價＝昨收基準）就免 `[1]`，`settotalBar(1)` 也夠。若一定要用 `[1]`，`settotalBar` 至少設 5。
+
+**② Array_Sort2D 只排「被指定的數值陣列」，平行的字串陣列不會跟著動。**
+二維陣列不能混型別，所以股號（字串）要存在另一個字串陣列。排序數值陣列後，**字串陣列仍是原始順序**，不能用排序後名次直接索引，否則「漲幅對、股號錯」。正解：數值陣列存一欄「原始列索引」，排序後靠它回查字串陣列：
+
+```xs
+Array: _sortStock[2000, 2](-9999);   // [原始列索引, 漲跌幅]（數值）
+Array: _regSymbol[2000, 2]("");      // [股號, 類股代號]（字串，平行存放）
+
+// 建表：第 1 欄存「這一列的流水號」，不要存類股索引！
+_sortStock[_row, 1] = _row;          // ← 關鍵：存自己的列號
+_sortStock[_row, 2] = _chg;
+_regSymbol[_row, 1] = _stockGroup[_j];
+_regSymbol[_row, 2] = _sectorGroup[_idx];
+
+Array_Sort2D(_sortStock, 1, _totCount, 2, False);
+
+for _i = 1 to MinList(_topStock, _totCount) begin   // 加 MinList 防越界
+    _k = _sortStock[_i, 1];           // ← 取原始列索引
+    Alert("股號:", _regSymbol[_k, 1], " 漲幅:", NumToStr(_sortStock[_i, 2], 2));
+end;
+```
+
+**③ 混合多類股成分股時，跨類股的列偏移累加用 `k = k + j - 1`。**
+把 TopN 類股的成分股全倒進同一個大陣列再整體排序時，每跑完一個類股要把偏移 `k` 往後推。XS 的 `for j = 1 to n` 結束後 `j = n+1`，所以 `k = k + j - 1` 剛好累加 `n`：
+
+```xs
+_k = 0; _totCount = 0;
+for _i = 1 to _topGroup begin
+    ... // 內層 for _j = 1 to _stockCount，寫入 _sortStock[_j + _k, ...]
+    _k = _k + _j - 1;          // j 結束時 = stockCount+1，故 +j-1 = +stockCount
+    _totCount += _stockCount;
+end;
+```
+
+**④ idx → 代碼對照表是「順序強耦合」。**
+`if idx = N then stockGroup = GetSymbolGroup("TSExx.TW", ...)` 這串硬對照，要求掛指標時 Group「類股」的成員與順序跟對照表 1:1（idx 1→TSE11、2→TSE12…，上市 19 類股：TSE11–TSE29 + TSE99，注意跳過 TSE24 用 TSE25）。Group 一改順序就靜默選錯類股。對照表旁務必註明對應的 Group 版本。
 
 ### InputKind 下拉選單
 
