@@ -62,8 +62,7 @@ xq-xscript/
     └── source/                              ← 來源原始文件，供 grep 查單一場景
         ├── XScript_官方語法與核心說明文件.md   ← 1538 行完整官方語法 + 三大欄位字典
         ├── XScript_實戰範例寶典_下.md          ← 622 個場景的完整 XS 程式碼（21K+ 行）
-        ├── XScript_實戰範例寶典_上.md          ← 場景 1–619 + Gem prompt 參考（待擴充）
-        └── XScript_系統預設腳本庫.md          ← 待補
+        └── XScript_實戰範例寶典_上.md          ← 早期 Gem prompt 參考（⚠️ 命名規範與本 skill 相反，僅供考古）
 ```
 
 ---

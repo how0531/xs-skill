@@ -316,7 +316,7 @@ input: Length(NumericSimple);
 
 ### XScript Preset 函數範例
 
-**資源位置：** `references/xscript_preset/函數/`
+**資源位置：** [XScript_Preset (GitHub)](https://github.com/how0531/XScript_Preset) 的 `函數/` 目錄（**非本地檔案**，需開啟連結瀏覽）
 
 #### 📦 14 個功能類別
 
@@ -361,9 +361,9 @@ input: Length(NumericSimple);
 - [NumericRef 說明](https://xshelp.xq.com.tw/XSHelp/api?a=NumericRef&b=declaration)
 - [選擇權希臘字母應用](https://www.xq.com.tw/lesson/xspractice/)
 
-### 本地資源
+### 外部範例庫（GitHub，非本地）
 
-- **官方範例集：** `references/xscript_preset/函數/`
+- **官方範例集：** <https://github.com/how0531/XScript_Preset> 的 `函數/` 目錄
 - **14 個功能類別**
 - **完整的函數封裝範例**
 

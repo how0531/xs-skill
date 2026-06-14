@@ -352,7 +352,6 @@ input:
     _StopLoss(2, "停損(%)"),
     _TakeProfit(4, "停利(%)"),
     _MA_Short(5, "短均線"),
-    _MA_Short(5, "短均線"),
     _MA_Long(20, "長均線");
 
 // 1.2 交易濾網與限制 (Adv)
@@ -609,7 +608,7 @@ end;
 
 ### XScript Preset 交易範例
 
-**資源位置：** `references/xscript_preset/自動交易/`
+**資源位置：** [XScript_Preset (GitHub)](https://github.com/how0531/XScript_Preset) 的 `自動交易/` 目錄（**非本地檔案**，需開啟連結瀏覽）
 
 #### 🎯 0-基本語法（12 個核心範例）
 
@@ -707,9 +706,9 @@ end;
 - **常見錯誤**: `references/anti-patterns.md`
 - [XScript Preset Repository](https://github.com/how0531/XScript_Preset)
 
-### 本地資源
+### 外部範例庫（GitHub，非本地）
 
-- **官方範例集：** `references/xscript_preset/自動交易/`
+- **官方範例集：** <https://github.com/how0531/XScript_Preset> 的 `自動交易/` 目錄
 - **12 個基本語法範例**
 - **完整的技術分析策略範例**
 

@@ -42,6 +42,27 @@
       "prompt": "幫我寫個選股，每 1 分鐘抓出當下漲幅超過 3% 的股票",
       "expected_output": "應該拒絕直接寫選股，說明選股引擎不支援分鐘頻率回溯，並建議改用警示腳本（策略雷達）來達成分鐘級即時監控",
       "files": []
+    },
+    {
+      "id": 6,
+      "name": "lookahead-bias",
+      "prompt": "幫我寫一個策略雷達：外資今天買超超過 5000 張的股票就推播通知我",
+      "expected_output": "外資買賣超是盤後（約 19:30）才公布的資料，盤中警示腳本嚴禁取當日 [0]，必須用 [1]（昨日）；用 ret = 1 + retmsg 推播，不可用 OutputField；應點出 look-ahead bias 風險",
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "field-rename",
+      "prompt": "幫我寫選股：負債比（總負債除以總資產）小於 40% 的台股",
+      "expected_output": "使用官方正名欄位「負債總額」「資產總額」而非直覺的「總負債」「總資產」（後者靜默回 0）；除法前判斷分母 <> 0；ret = 1 + OutputField 標準結構",
+      "files": []
+    },
+    {
+      "id": 8,
+      "name": "intrabarpersist-detect-change",
+      "prompt": "自動交易腳本裡，我想在部位剛變動的時候印一筆 log，而且只印一次",
+      "expected_output": "用 intrabarpersist 變數（如 _LastPos）追蹤上次觀察值，不可用 position[1] 偵測剛變動（逐筆洗價下整根 K 會重複觸發）；印完立刻同步 _LastPos；方向判定用 position 對 _LastPos 前後差，不用 filled[1]；狀態變數每日歸零",
+      "files": []
     }
   ]
 }

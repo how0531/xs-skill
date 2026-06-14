@@ -426,7 +426,7 @@ end;
 
 ### XScript Preset 指標範例
 
-**資源位置：** `references/xscript_preset/指標/`
+**資源位置：** [XScript_Preset (GitHub)](https://github.com/how0531/XScript_Preset) 的 `指標/` 目錄（**非本地檔案**，需開啟連結瀏覽）
 
 #### 📊 技術指標（83 個範例）
 
@@ -488,9 +488,9 @@ end;
 - **常見錯誤**: `references/anti-patterns.md`
 - [XScript Preset Repository](https://github.com/how0531/XScript_Preset)
 
-### 本地資源
+### 外部範例庫（GitHub，非本地）
 
-- **官方範例集：** `references/xscript_preset/指標/`
+- **官方範例集：** <https://github.com/how0531/XScript_Preset> 的 `指標/` 目錄
 - **83 個技術指標範例**
 - **跨頻率指標範例**
 
