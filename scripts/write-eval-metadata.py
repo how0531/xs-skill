@@ -1,9 +1,21 @@
 # -*- coding: utf-8 -*-
-"""填入 evals.json 中每個 eval 的 assertions，並寫到各 eval 目錄的 eval_metadata.json"""
+"""填入 evals.json 中每個 eval 的 assertions，並寫到各 eval 目錄的 eval_metadata.json
+
+用法：
+    python scripts/write-eval-metadata.py [WORKSPACE]
+
+WORKSPACE 為輸出根目錄，內含 eval-<name>/ 子目錄；省略時可用環境變數
+XS_EVAL_WORKSPACE，再省略則預設為目前目錄下的 ./eval-workspace。
+"""
 import json
+import os
+import sys
 from pathlib import Path
 
-WORKSPACE = Path('C:/Users/How/OneDrive/桌面/xs-skill-workspace/iteration-1')
+WORKSPACE = Path(
+    sys.argv[1] if len(sys.argv) > 1
+    else os.environ.get('XS_EVAL_WORKSPACE', 'eval-workspace')
+)
 
 ASSERTIONS = {
     'type-ambiguous': [
@@ -50,6 +62,26 @@ ASSERTIONS = {
         '建議改用警示腳本（策略雷達）作為替代方案',
         '解釋技術原因（選股引擎是盤後批次、不支援分鐘回溯）',
     ],
+    'lookahead-bias': [
+        '外資買賣超用 GetField("外資買賣超", "D")[1] 而非 [0]',
+        '說明外資資料盤後才公布、盤中取當日會 look-ahead',
+        '用 ret = 1 + retmsg 推播',
+        '不使用 OutputField（警示腳本不支援）',
+    ],
+    'field-rename': [
+        '使用「負債總額」而非「總負債」',
+        '使用「資產總額」而非「總資產」',
+        '除法前判斷分母（資產總額）<> 0',
+        '用 ret = 1 觸發選股',
+        '用 OutputField 輸出顯示欄位',
+    ],
+    'intrabarpersist-detect-change': [
+        '宣告 intrabarpersist 變數（如 _LastPos）追蹤上次值',
+        '不用 position[1] / filled[1] 偵測剛變動',
+        '印完 log 後立刻 _LastPos = position 同步',
+        '狀態變數在每日歸零區重置',
+        '方向判定用 position 對 _LastPos 前後差，不用 filled[1]',
+    ],
 }
 
 PROMPTS = {
@@ -59,6 +91,9 @@ PROMPTS = {
     'pinescript-conv': "幫我把這段 PineScript 轉成 XS：strategy.entry('Long', when=ta.crossover(close, ta.ema(close, 20))) ; strategy.close('Long', when=ta.crossunder(close, ta.ema(close, 20)))",
     'cross-frequency': '5 分鐘線上看日線的 RSI，幫我畫成指標',
     'infeasible-selector': '幫我寫個選股，每 1 分鐘抓出當下漲幅超過 3% 的股票',
+    'lookahead-bias': '幫我寫一個策略雷達：外資今天買超超過 5000 張的股票就推播通知我',
+    'field-rename': '幫我寫選股：負債比（總負債除以總資產）小於 40% 的台股',
+    'intrabarpersist-detect-change': '自動交易腳本裡，我想在部位剛變動的時候印一筆 log，而且只印一次',
 }
 
 for i, name in enumerate(ASSERTIONS):
@@ -69,6 +104,7 @@ for i, name in enumerate(ASSERTIONS):
         'assertions': ASSERTIONS[name],
     }
     eval_dir = WORKSPACE / f'eval-{name}'
+    eval_dir.mkdir(parents=True, exist_ok=True)
     (eval_dir / 'eval_metadata.json').write_text(
         json.dumps(meta, ensure_ascii=False, indent=2),
         encoding='utf-8'

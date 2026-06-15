@@ -64,3 +64,32 @@
 - `suggests_alert_alternative`：建議改用「警示 / 策略雷達」做分鐘級監控
 - `explains_why`：解釋原因（選股引擎是盤後批次、不支援分鐘回溯）
 - `no_full_script_generated`：不交付完整的「選股程式碼」假裝可以執行
+
+## eval-6: lookahead-bias（盤中外資買超警示）
+
+**核心測試**：盤後資料在盤中腳本嚴禁取 `[0]`。
+
+- `uses_offset_1_for_foreign`：外資買賣超用 `GetField("外資買賣超", "D")[1]` 而非 `[0]`
+- `explains_lookahead`：說明外資資料盤後（約 19:30）才公布、盤中取當日會 look-ahead
+- `uses_ret_and_retmsg`：用 `ret = 1` + `retmsg` 推播
+- `no_outputfield`：不使用 `OutputField`（警示腳本不支援）
+
+## eval-7: field-rename（負債比選股的欄位正名）
+
+**核心測試**：直覺欄位名 vs 官方正名，寫錯靜默回 0。
+
+- `uses_debt_total_field`：用 `負債總額` 而非 `總負債`
+- `uses_asset_total_field`：用 `資產總額` 而非 `總資產`
+- `divide_by_zero_guard`：除法前判斷分母（資產總額）`<> 0`
+- `has_ret_1`：用 `ret = 1` 觸發
+- `has_output_field`：用 `OutputField` 輸出顯示欄位
+
+## eval-8: intrabarpersist-detect-change（逐筆洗價偵測部位剛變動）
+
+**核心測試**：anti-pattern #27/#28 — 偵測「剛變動」不可用 `series[1]`。
+
+- `uses_intrabarpersist_lastpos`：宣告 `intrabarpersist` 變數（如 `_LastPos`）追蹤上次值
+- `no_position_subscript_1`：不用 `position[1]` / `filled[1]` 偵測剛變動
+- `syncs_after_action`：印完 log 後立刻 `_LastPos = position` 同步
+- `daily_reset`：狀態變數在每日歸零區（`Date <> Date[1]` 或 `IsFirstBar`）重置
+- `direction_by_diff`：方向判定用 `position` 對 `_LastPos` 前後差，不用 `filled[1]`

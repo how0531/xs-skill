@@ -44,10 +44,15 @@ git clone https://github.com/how0531/xs-skill.git "$env:USERPROFILE\.claude\skil
 xq-xscript/
 ├── SKILL.md                                 ← 主入口（撰寫流程 + 自我檢查清單）
 ├── README.md                                ← 本檔
+├── CLAUDE.md                                ← 維護本 repo 的指引（自動生成檔、同步點、已知陷阱）
 ├── LICENSE / .gitignore
-├── scripts/                                 ← 維護用腳本（重建索引等）
-│   ├── extract-scenes.py
-│   └── build-examples-index.py
+├── scripts/                                 ← 維護用腳本（重建索引、產 eval metadata）
+│   ├── extract-scenes.py                    ← 抽取並分類場景（build-examples-index 的前身/輔助）
+│   ├── build-examples-index.py             ← 由來源重建 examples-index.md（產出檔勿手改）
+│   └── write-eval-metadata.py               ← 產出各 eval 的 metadata（路徑可帶參數/環境變數）
+├── evals/                                   ← 行為測試
+│   ├── evals.json                           ← 9 個 eval（prompt + expected_output）
+│   └── assertions.md                        ← 各 eval 的逐項 assertion
 └── references/
     ├── master-guide.md                      ← **程序性規則**：撰寫流程、可行性預審、look-ahead bias 等
     ├── cheatsheet.md                        ← **純查表**：函數分類、欄位命名規則、頻率商品相容、常用片段
@@ -62,8 +67,7 @@ xq-xscript/
     └── source/                              ← 來源原始文件，供 grep 查單一場景
         ├── XScript_官方語法與核心說明文件.md   ← 1538 行完整官方語法 + 三大欄位字典
         ├── XScript_實戰範例寶典_下.md          ← 622 個場景的完整 XS 程式碼（21K+ 行）
-        ├── XScript_實戰範例寶典_上.md          ← 場景 1–619 + Gem prompt 參考（待擴充）
-        └── XScript_系統預設腳本庫.md          ← 待補
+        └── XScript_實戰範例寶典_上.md          ← 早期 Gem prompt 參考（⚠️ 命名規範與本 skill 相反，僅供考古）
 ```
 
 ---

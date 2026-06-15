@@ -407,7 +407,7 @@ outputField1(GetField("月營收", "M"), "月營收");
 
 ### XScript Preset 選股範例
 
-**資源位置：** `references/xscript_preset/選股/`
+**資源位置：** [XScript_Preset (GitHub)](https://github.com/how0531/XScript_Preset) 的 `選股/` 目錄（**非本地檔案**，需開啟連結瀏覽）
 
 #### 📚 00.語法範例（19 個基礎範例）
 
@@ -498,9 +498,9 @@ outputField1(GetField("月營收", "M"), "月營收");
 - [排行語法教學](https://www.xq.com.tw/lesson/xspractice/%E6%8E%92%E8%A1%8C%E8%AA%9E%E6%B3%95/)
 - [創掛牌新高語法](https://www.xq.com.tw/lesson/xspractice/%E9%81%B8%E8%82%A1%E4%B8%AD%E5%BF%83/)
 
-### 本地資源
+### 外部範例庫（GitHub，非本地）
 
-- **官方範例集：** `references/xscript_preset/選股/`
+- **官方範例集：** <https://github.com/how0531/XScript_Preset> 的 `選股/` 目錄
 - **12 個專題資料夾**
 - **完整的選股策略範例**
 

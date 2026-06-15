@@ -348,7 +348,7 @@ end;
 
 ### XScript Preset 警示範例
 
-**資源位置：** `references/xscript_preset/警示/`
+**資源位置：** [XScript_Preset (GitHub)](https://github.com/how0531/XScript_Preset) 的 `警示/` 目錄（**非本地檔案**，需開啟連結瀏覽）
 
 #### 🚨 !語法範例
 
@@ -375,9 +375,9 @@ end;
 - [盤中即時欄位](https://www.xq.com.tw/lesson/xspractice/%E7%9B%A4%E4%B8%AD%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E6%AC%84%E4%BD%8D%E7%9A%84%E6%87%89%E7%94%A8/)
 - [連續成交序列](https://www.xq.com.tw/lesson/xspractice/%E5%8F%B0%E8%82%A1%E9%80%90%E7%AD%86%E6%92%AE%E5%90%88%E7%9A%84%E7%A9%BF%E5%83%B9tick/)
 
-### 本地資源
+### 外部範例庫（GitHub，非本地）
 
-- **官方範例集：** `references/xscript_preset/警示/`
+- **官方範例集：** <https://github.com/how0531/XScript_Preset> 的 `警示/` 目錄
 - **17 個專題類別**
 - **Tick 數據處理範例**
 
