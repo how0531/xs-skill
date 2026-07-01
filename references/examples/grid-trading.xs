@@ -135,10 +135,11 @@ end;
 // 8. 網格啟動判斷
 // ------------------------------------------------------------
 // (a) 帳上已有部位 → 直接接手（重啟 / 隔夜留倉 / 轉倉後）
-//     用 Filled(帳戶實際部位) 偵測：實盤重啟時 Position 會歸 0，只有 Filled 保有留倉
-if _started = 0 and _inSettle = 0 and (Position <> 0 or Filled <> 0) then begin
+//     用 FilledAtBroker(實際庫存數量) 偵測：實盤重啟時 Position 與策略自身的
+//     Filled(成交部位) 都可能歸 0，只有券商實際庫存 FilledAtBroker 保有留倉
+if _started = 0 and _inSettle = 0 and (Position <> 0 or FilledAtBroker <> 0) then begin
     _started = 1;
-    if _PrintTF = 1 then Print("偵測到既有部位 Filled=", numToStr(Filled,0), " → 網格接手");
+    if _PrintTF = 1 then Print("偵測到既有庫存 FilledAtBroker=", numToStr(FilledAtBroker,0), " → 網格接手");
 end;
 
 // (b) 首次啟動
