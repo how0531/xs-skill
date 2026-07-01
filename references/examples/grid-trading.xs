@@ -178,8 +178,10 @@ end;
 // 11. 定時心跳輸出
 // ------------------------------------------------------------
 // 用 TimeDiff（簽名 (time1,time2,unit) 官方文件與實例一致）判斷距上次列印秒數，
-// 避開 TimeAdd 參數順序在文件表格與實例間的歧義
-if _PrintTF = 1 and (_lastPrintTime = 0 or TimeDiff(CurrentTime, _lastPrintTime, "S") >= _PrintSec) then begin
+// 避開 TimeAdd 參數順序在文件表格與實例間的歧義。
+// `CurrentTime < _lastPrintTime`＝時間回捲(夜盤跨午夜)或新盤，直接重錨並列印，避免午夜後靜默。
+if _PrintTF = 1 and (_lastPrintTime = 0 or CurrentTime < _lastPrintTime
+                     or TimeDiff(CurrentTime, _lastPrintTime, "S") >= _PrintSec) then begin
     _lastPrintTime = CurrentTime;
     Print(numToStr(Date,0), " ", numToStr(Time,0),
           "  現價=", numToStr(Close,0),
