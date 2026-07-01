@@ -20,7 +20,9 @@ input: _BasicPos(1, "基本庫存(最低保留口數,不賣出)");
 input: _InitialTF(0, "進場方式", inputkind:=Dict(["跌到起始價才啟動", 1], ["直接依現價啟動", 0]));
 input: _InitialPrice(0, "起始進場價(僅在跌到起始價模式使用)");
 
-input: _OrderType(0, "下單方式", inputkind:=Dict(["市價(建議,確保成交)", 0], ["限價掛收盤價", 1]));
+// 註：網格一律用市價下單。限價掛單若未成交，SetPosition 後 Position 仍會=目標值，
+//     會讓「_target<>Position」守門恆為 false → 網格永久卡死、Position 與 Filled 背離，
+//     故不提供限價選項（網格要靠每一格確實成交才成立）。
 
 // 結算 / 轉倉
 input: _ExpiryMode(2, "結算處理", inputkind:=Dict(["自動轉倉(當日夜盤買回)", 2], ["到期出場當日不再進場", 1], ["關閉(回測用)", 0]));
@@ -43,8 +45,9 @@ var: _blockDn(0);                          // 目前格下緣價（顯示用）
 
 var: intrabarpersist _started(0);          // 網格是否已啟動
 var: intrabarpersist _inSettle(0);         // 是否處於結算暫停（1=已平倉待恢復）
+var: intrabarpersist _settleDate(0);       // 已在哪一天結算過（防當日重複出場、當恢復判斷的錨）
 var: intrabarpersist _lastPos(0);          // 上次觀察到的部位（偵測剛變動用，見 anti-pattern #27）
-var: intrabarpersist _nextPrintTime(0);    // 下次心跳列印時間
+var: intrabarpersist _lastPrintTime(0);    // 上次心跳列印時間
 
 var: _exitTime(0), _reEnterTime(0);        // 出場/買回時間（once 轉為數字，之後不變）
 var: _i(0), _gp(0), _gq(0);                // 計畫表列印用暫存
@@ -55,6 +58,8 @@ var: _i(0), _gp(0), _gq(0);                // 計畫表列印用暫存
 if _Grid < 1 then raiseRunTimeError("網格數不能小於1");
 if _GridV < 1 then raiseRunTimeError("每格口數不能小於1");
 if _BasicPos < 0 then raiseRunTimeError("基本庫存不能為負");
+if _GridV <> IntPortion(_GridV) then raiseRunTimeError("每格口數必須為整數");
+if _BasicPos <> IntPortion(_BasicPos) then raiseRunTimeError("基本庫存必須為整數");
 if _UpLimit <= _DnLimit then raiseRunTimeError("最高價必須大於最低價");
 if _InitialTF = 1 and (_InitialPrice < _DnLimit or _InitialPrice > _UpLimit) then
     raiseRunTimeError("起始進場價需落在區間內");
@@ -90,33 +95,36 @@ end;
 // 6. 每日重置（換日該歸零的狀態一律放這，見 trading.md「每日參數歸零區」）
 // ------------------------------------------------------------
 if Date <> Date[1] then begin
-    _nextPrintTime = 0;            // 心跳門檻歸零，否則跨日到隔天中午才會恢復列印
+    _lastPrintTime = 0;           // 心跳計時歸零，跨日重新起算
 end;
 
 // ------------------------------------------------------------
 // 7. 結算 / 轉倉（先處理，settle 期間暫停網格）
 // ------------------------------------------------------------
-// 7.1 到期日出場
-if _ExpiryMode > 0 and _inSettle = 0 and Date = _expiry
-   and CurrentTime >= _exitTime and CurrentTime <= 133000 then begin
+// 7.1 到期日出場（不設時間上界，避免與可調的 _ExitTime 衝突或視窗太窄漏抓；
+//     `_settleDate <> Date` 確保每個結算日只出場一次，杜絕恢復後又被重新觸發）
+//     _ExitTime 請設在到期日的盤中時段內（收盤前）。
+if _ExpiryMode > 0 and _inSettle = 0 and _settleDate <> Date and Date = _expiry
+   and CurrentTime >= _exitTime then begin
     if Position <> 0 then SetPosition(0, Market, label:="結算出場");
+    _settleDate = Date;
     _inSettle = 1;
     if _PrintTF = 1 then Print(numToStr(Date,0), " 結算平倉，模式=", numToStr(_ExpiryMode,0));
 end;
 
-// 7.2 恢復條件
+// 7.2 恢復條件（以 _settleDate 為錨，不用會隨轉倉跳月的 _expiry）
 if _inSettle = 1 then begin
     if _ExpiryMode = 1 then begin
-        // 到期出場、當日不再進場：離開到期日（含當晚夜盤/隔日新合約）即恢復
-        if Date <> _expiry then begin
+        // 到期出場、當日不再進場：進入新的一天(離開結算日)才恢復
+        if Date <> _settleDate then begin
             _inSettle = 0;
             if _PrintTF = 1 then Print("已過結算日，網格恢復（新合約依現價自動建倉）");
         end;
     end else if _ExpiryMode = 2 then begin
-        // 自動轉倉：到買回時間即恢復，網格會在新合約依現價把部位補回目標
-        if CurrentTime >= _reEnterTime then begin
+        // 自動轉倉：到買回時間恢復；跨日(日盤商品/無夜盤資料)則隔日恢復當安全網，避免永久卡死
+        if CurrentTime >= _reEnterTime or Date <> _settleDate then begin
             _inSettle = 0;
-            if _PrintTF = 1 then Print("轉倉時段到，網格恢復（新合約依現價自動建倉）");
+            if _PrintTF = 1 then Print("轉倉恢復，網格在新合約依現價自動建倉");
         end;
     end;
 end;
@@ -125,9 +133,10 @@ end;
 // 8. 網格啟動判斷
 // ------------------------------------------------------------
 // (a) 帳上已有部位 → 直接接手（重啟 / 隔夜留倉 / 轉倉後）
-if _started = 0 and _inSettle = 0 and Position <> 0 then begin
+//     用 Filled(帳戶實際部位) 偵測：實盤重啟時 Position 會歸 0，只有 Filled 保有留倉
+if _started = 0 and _inSettle = 0 and (Position <> 0 or Filled <> 0) then begin
     _started = 1;
-    if _PrintTF = 1 then Print("偵測到既有部位 ", numToStr(Position,0), " 口 → 網格接手");
+    if _PrintTF = 1 then Print("偵測到既有部位 Filled=", numToStr(Filled,0), " → 網格接手");
 end;
 
 // (b) 首次啟動
@@ -151,13 +160,7 @@ if _started = 1 and _inSettle = 0 then begin
     _blockDn = _DnLimit + _cell * _gap;
     _blockUp = _DnLimit + (_cell + 1) * _gap;
 
-    if _target <> Position then begin
-        if _OrderType = 0 then begin
-            SetPosition(_target, Market, label:="網格調整");
-        end else begin
-            SetPosition(_target);   // 限價：掛收盤價，快市可能不成交
-        end;
-    end;
+    if _target <> Position then SetPosition(_target, Market, label:="網格調整");
 end;
 
 // ------------------------------------------------------------
@@ -174,8 +177,10 @@ end;
 // ------------------------------------------------------------
 // 11. 定時心跳輸出
 // ------------------------------------------------------------
-if _PrintTF = 1 and CurrentTime >= _nextPrintTime then begin
-    _nextPrintTime = timeAdd(CurrentTime, "S", _PrintSec);
+// 用 TimeDiff（簽名 (time1,time2,unit) 官方文件與實例一致）判斷距上次列印秒數，
+// 避開 TimeAdd 參數順序在文件表格與實例間的歧義
+if _PrintTF = 1 and (_lastPrintTime = 0 or TimeDiff(CurrentTime, _lastPrintTime, "S") >= _PrintSec) then begin
+    _lastPrintTime = CurrentTime;
     Print(numToStr(Date,0), " ", numToStr(Time,0),
           "  現價=", numToStr(Close,0),
           "  格號=", numToStr(_cell,0),
