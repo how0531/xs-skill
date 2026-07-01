@@ -38,7 +38,8 @@ input: _PrintSec(5, "心跳輸出秒數間距");
 // ------------------------------------------------------------
 var: _gap(0);                              // 網格間距（每根重算）
 var: _expiry(0);                           // 到期日 YYYYMMDD（每根重算，隨轉倉更新）
-var: _cell(0);                             // 現價落點格號 0~_Grid
+var: intrabarpersist _cell(0);             // 目前格號 0~_Grid（帶遲滯的狀態，需持久）
+var: intrabarpersist _cellReady(0);        // _cell 是否已依現價定錨（首次/重啟/轉倉後重錨）
 var: _target(0);                           // 現價對應目標口數
 var: _blockUp(0);                          // 目前格上緣價（顯示用）
 var: _blockDn(0);                          // 目前格下緣價（顯示用）
@@ -109,6 +110,7 @@ if _ExpiryMode > 0 and _inSettle = 0 and _settleDate <> Date and Date = _expiry
     if Position <> 0 then SetPosition(0, Market, label:="結算出場");
     _settleDate = Date;
     _inSettle = 1;
+    _cellReady = 0;               // 轉倉後在新合約依現價重新定錨網格
     if _PrintTF = 1 then Print(numToStr(Date,0), " 結算平倉，模式=", numToStr(_ExpiryMode,0));
 end;
 
@@ -155,7 +157,21 @@ end;
 //    (target 已天然夾在 _BasicPos ~ _Grid*_GridV+_BasicPos，無須額外 maxlist/minlist)
 // ------------------------------------------------------------
 if _started = 1 and _inSettle = 0 then begin
-    _cell    = MinList(MaxList(Floor((Close - _DnLimit) / _gap), 0), _Grid);
+    // 定錨：首次啟動/重啟/轉倉後，依現價把 _cell 設到對應格
+    //       (+微量 epsilon 吸收非整數 _gap 在格線上的浮點誤差，避免 off-by-one)
+    if _cellReady = 0 then begin
+        _cell = MinList(MaxList(Floor((Close - _DnLimit) / _gap + 0.00000001), 0), _Grid);
+        _cellReady = 1;
+    end else begin
+        // 遲滯(hysteresis)：需「漲破上一格上緣」或「跌破下一格下緣」整整一格才換手，
+        // 現價貼在單一格線上下抖動時 _cell 不變 → 不再每 tick 一買一賣(whipsaw)。
+        if Close >= _DnLimit + (_cell + 1) * _gap then begin
+            _cell = MinList(Floor((Close - _DnLimit) / _gap + 0.00000001), _Grid);
+        end else if Close <= _DnLimit + (_cell - 1) * _gap then begin
+            _cell = MaxList(Floor((Close - _DnLimit) / _gap + 0.00000001), 0);
+        end;
+    end;
+
     _target  = (_Grid - _cell) * _GridV + _BasicPos;
     _blockDn = _DnLimit + _cell * _gap;
     _blockUp = _DnLimit + (_cell + 1) * _gap;
