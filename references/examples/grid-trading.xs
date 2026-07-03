@@ -56,7 +56,8 @@ var: intrabarpersist _settleDate(0);       // 已在哪一天結算過（防當�
 var: intrabarpersist _lastPos(0);          // 上次觀察到的部位（偵測剛變動用，見 anti-pattern #27）
 var: intrabarpersist _lastPrintTime(0);    // 上次心跳列印時間
 
-var: _exitTime(0), _reEnterTime(0);        // 出場/買回時間（once 轉為數字，之後不變）
+// 注意：XS 不分大小寫，var 名不可與 input 只差大小寫（_exitTime 會撞 _ExitTime），故加 v 前綴
+var: _vExitTime(0), _vReEnterTime(0);      // 出場/買回時間（once 轉為數字，之後不變）
 var: _i(0), _gp(0), _gq(0);                // 計畫表列印用暫存
 
 // ------------------------------------------------------------
@@ -97,8 +98,8 @@ _expiry = getSymbolInfo("到期日");
 // 5. 只做一次：時間轉換 + 網格計畫表（用 Print，不用 alert 洗版）
 // ------------------------------------------------------------
 once begin
-    _exitTime    = stringToTime(_ExitTime);
-    _reEnterTime = stringToTime(_ReEnterTime);
+    _vExitTime    = stringToTime(_ExitTime);
+    _vReEnterTime = stringToTime(_ReEnterTime);
 
     Print("=== 網格交易計畫表 ===");
     Print("區間 ", numToStr(_DnLimit,0), "~", numToStr(_UpLimit,0),
@@ -115,7 +116,7 @@ once begin
     // 若掛 *1 近月連續合約且它已提早換月，到期日會顯示為次月 → 第 7 段的
     // Date=_expiry 對不到、結算/轉倉靜默失效；此時請改掛「特定月份合約」。
     Print("到期日=", numToStr(getSymbolInfo("到期日"),0),
-          "  離到期日天數=", numToStr(DaysToExpiration,0));
+          "  離到期日天數=", numToStr(DaysToExpirationTF,0));
     Print("======================");
 end;
 
@@ -133,7 +134,7 @@ end;
 //     `_settleDate <> Date` 確保每個結算日只出場一次，杜絕恢復後又被重新觸發）
 //     _ExitTime 請設在到期日的盤中時段內（收盤前）。
 if _ExpiryMode > 0 and _inSettle = 0 and _settleDate <> Date and Date = _expiry
-   and CurrentTime >= _exitTime then begin
+   and CurrentTime >= _vExitTime then begin
     if Position <> 0 then SetPosition(0, Market, label:="結算出場");
     _settleDate = Date;
     _inSettle = 1;
@@ -151,7 +152,7 @@ if _inSettle = 1 then begin
         end;
     end else if _ExpiryMode = 2 then begin
         // 自動轉倉：到買回時間恢復；跨日(日盤商品/無夜盤資料)則隔日恢復當安全網，避免永久卡死
-        if CurrentTime >= _reEnterTime or Date <> _settleDate then begin
+        if CurrentTime >= _vReEnterTime or Date <> _settleDate then begin
             _inSettle = 0;
             if _PrintTF = 1 then Print("轉倉恢復，網格在新合約依現價自動建倉");
         end;
