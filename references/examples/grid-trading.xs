@@ -89,6 +89,11 @@ once begin
               "  應持有(含底倉)=", numToStr(_gq,0), " 口");
     end;
     Print("最大部位=", numToStr(_Grid * _GridV + _BasicPos,0), " 口");
+    // 結算診斷：請在結算日當天確認此「到期日」=當天日期。
+    // 若掛 *1 近月連續合約且它已提早換月，到期日會顯示為次月 → 第 7 段的
+    // Date=_expiry 對不到、結算/轉倉靜默失效；此時請改掛「特定月份合約」。
+    Print("到期日=", numToStr(getSymbolInfo("到期日"),0),
+          "  離到期日天數=", numToStr(DaysToExpiration,0));
     Print("======================");
 end;
 
