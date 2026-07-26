@@ -105,7 +105,7 @@ XS 共五類腳本，**規範完全不同**。同一個需求換到不同類別�
 | `MINVAL` (Input 屬性) | XS 不支援 |
 | `NewDay` | `Date <> Date[1]` |
 
-### 三大資料存取函數
+### 四大資料存取函數
 
 ```xs
 // 一般資料欄位（指標/警示/交易/選股都可用，可回溯 [N]）
@@ -118,7 +118,13 @@ Value1 = q_Last;                            // q_ 前綴快捷語法
 
 // 取其他商品的資料（必用此函數，不可寫 Close of "2330"）
 Value1 = GetSymbolField("2330", "收盤價", "D");
+
+// 商品靜態屬性（到期日/合約乘數/現沖資格等，非時序不可回溯）
+Value1 = GetSymbolInfo("合約乘數");          // 大台 200、小台 50
+Value1 = GetSymbolInfo("到期日");            // 支援期貨，YYYYMMDD
 ```
+
+**`GetSymbolInfo` 與 `GetSymbolField` 的關鍵差異**：前者查不到只回安全預設值（`0`/空字串）不報錯，後者會直接報錯。故群組遍歷時一律「先 Info 過濾、再 Field 取值」。完整欄位表見 `references/cheatsheet.md` §1。
 
 ### 🚨 Look-ahead Bias（盤中與籌碼有關的資料嚴禁使用 `[0]`）
 
