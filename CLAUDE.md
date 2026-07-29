@@ -16,7 +16,7 @@ XScript（XS）程式碼。它**沒有可執行的產品程式碼**，本體是�
 | `SKILL.md` | 主入口：撰寫流程、自我檢查清單、frontmatter 觸發詞 | 手動維護 |
 | `references/master-guide.md` | 程序性規則（怎麼做） | 手動維護 |
 | `references/cheatsheet.md` | 純查表（是什麼） | 手動維護 |
-| `references/anti-patterns.md` | 28 條 ❌→✅ 錯誤對照 | 手動維護，新增條目見下方同步點 |
+| `references/anti-patterns.md` | 31 條 ❌→✅ 錯誤對照 | 手動維護，新增條目見下方同步點 |
 | `references/script-types/*.md` | 五類腳本（指標/交易/警示/選股/函數）專屬規範 | 手動維護 |
 | `references/examples-index.md` | 622 場景索引 | **自動生成，禁止手改**（見下方） |
 | `references/source/*.md` | 原始來源，供 grep 查單一場景 | 唯讀為主 |

@@ -173,7 +173,7 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 | `references/script-types/function.md` | 寫自訂函數時必讀（含 NumericRef 機制） |
 | `references/cheatsheet.md` | **純查表**：函數分類、欄位命名規則（含頻率切換/正名對照）、頻率商品相容、常用片段 |
 | `references/examples-index.md` | **622 個實戰場景索引**（場景 620–1241，按主題分類含原始 URL） |
-| `references/anti-patterns.md` | 28 條常見錯誤對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態） |
+| `references/anti-patterns.md` | 31 條常見錯誤對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態） |
 | `references/xshelp/INDEX.md` | **官方 XSHelp 全站鏡像索引**（48 分類 / 1497 項函數與欄位，來源 xshelp.xq.com.tw） |
 
 ### 官方文件鏡像（references/xshelp/ — 函數與欄位的最終權威）

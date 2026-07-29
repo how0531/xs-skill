@@ -105,7 +105,7 @@ _NextMonth = GetSymbolInfo("期貨遠月");     // 例：FITXN02.TF
 
 因此**支援商品 ≠ 支援腳本類型**；寫交易腳本用到冷門商品屬性時，務必先在平台編譯一次確認。
 
-⚠️ **`到期日` 支援期貨**：官方欄位總表把它與選擇權欄位並列，容易誤判成「僅限選擇權」而改寫成其他函數。
+⚠️ **`到期日` 支援期貨**：官方欄位總表把它與選擇權欄位並列，容易誤判成「僅限選擇權」而改寫成其他函數。（官方鏡像兩處敘述不一致：xshelp/QOPTION 對 `GetSymbolInfo("到期日")` 只列「台權證/期貨/選擇權」；可轉債、美特別股僅見於 FIELDFUNC 的資料欄位條目，未明確綁定 GetSymbolInfo — 用到後兩者時先實測。）
 
 **台指期（TX）結算規格與腳本陷阱**（依 TAIFEX 契約規格）：
 
@@ -440,6 +440,33 @@ end;
 **④ idx → 代碼對照表是「順序強耦合」。**
 `if idx = N then stockGroup = GetSymbolGroup("TSExx.TW", ...)` 這串硬對照，要求掛指標時 Group「類股」的成員與順序跟對照表 1:1（idx 1→TSE11、2→TSE12…，上市 19 類股：TSE11–TSE29 + TSE99，注意跳過 TSE24 用 TSE25）。Group 一改順序就靜默選錯類股。對照表旁務必註明對應的 Group 版本。
 
+### 群組聚合值（如股池平均漲跌幅）：每根 K 第一個 tick 重算一次
+
+要在警示/交易腳本盤中追蹤「一籃子商品的聚合值」（平均漲跌幅、上漲家數…），**不要**用 tick 序號做增量更新（要處理漏 tick、補償邏輯複雜且易錯）；直接在「每根 K 的第一個 tick」歸零全重算（官方論壇 虎科大許教授 解法）：
+
+```xs
+input: _myGroup(Group, "股池");
+var: intrabarpersist _groupRatio(0);
+var: intrabarpersist _lastTime(0);
+var: _i(0), _cnt(0);
+
+if GetInfo("IsRealTime") = 0 then return;    // 只在實盤即時執行（注意：回測恆為 0，見 anti-patterns #29）
+
+if _lastTime <> Time then begin              // Time = 當根 K 時間戳 → 每根 K 只進來一次
+    _groupRatio = 0;
+    _lastTime = Time;
+    for _i = 1 to GroupSize(_myGroup) begin
+        _groupRatio += (GetSymbolField(_myGroup[_i], "收盤價", "tick")
+                      - GetSymbolField(_myGroup[_i], "參考價", "D"))
+                      / GetSymbolField(_myGroup[_i], "參考價", "D") * 100 / GroupSize(_myGroup);
+    end;
+end;
+```
+
+- `if _lastTime <> Time` 是「每根 K 第一個 tick 執行一次」的標準 idiom（`Date <> Date[1]` 的 K 棒版；同族技巧見 anti-patterns #27 的 intrabarpersist 追蹤變數）
+- ⚠️ **跨商品 tick 不對齊**：迴圈裡 `GetSymbolField(_myGroup[_i], "...", "tick")` 抓到的是該商品「當下最新一筆 tick」，時間點不與洗價商品的 K 棒邊界對齊（教授原文警告）。要求嚴格對齊時這個方法不適用
+- 偵測漏 tick 可用欄位「當日序號」（Tick 頻率，當日第幾筆成交、從 1 起算，xshelp/TVOLUME）——但通常「全重算」就不需要它
+
 ### InputKind 下拉選單
 
 ```xs
@@ -474,6 +501,6 @@ if Filled < 0 and Position < 0 and Filled = Position and (出場條件) then Set
 ## 也可參考
 
 - `master-guide.md` — 程序性規則：撰寫流程、可行性預審、look-ahead bias、註解風格、資源宣告
-- `anti-patterns.md` — 28 條 wrong → right 對照與重構案例
+- `anti-patterns.md` — 31 條 wrong → right 對照與重構案例
 - `examples-index.md` — 622 個實戰場景索引
 - `script-types/{indicator, trading, alert, stock-picker, function}.md` — 各類腳本專屬規範

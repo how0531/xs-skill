@@ -1038,3 +1038,32 @@ end;
 // 3. 尾盤強制平倉
 if Time >= 134000 and Position <> 0 then SetPosition(0);
 ```
+
+## 12. 期貨結算日自動轉倉（官方論壇實測範本）
+
+**平台語意（虎科大許教授 2025-08-20 實測確認）**：監控「近月連續合約」（如 FITXN*1.TF）時，結算日跨合約切換（8 月 → 9 月）**在策略不中斷的情況下，`Position`、`Filled`、`intrabarpersist` 變數全部保留**。這是自動轉倉可行的前提。
+
+```xs
+// 監控商品：台指期近月份合約(全日盤)(FITXN*1.TF)
+if GetInfo("IsRealTime") = 0 then return;
+var: intrabarpersist _switch(0);
+
+// 結算日 13:29 起記下部位（結算日 13:30 收盤，不要用 13:44！）
+if Date = GetSymbolInfo("到期日") then
+    if CurrentTime >= 132900 then
+        if Position <> 0 then _switch = Position;
+
+// 15:00 夜盤開盤後，在新合約上重建部位
+if CurrentTime >= 150000 and _switch <> 0 then begin
+    SetPosition(Position + _switch, market);
+    _switch = 0;
+end;
+```
+
+三個必懂的眉角：
+
+1. **為何是 `Position + _switch` 不是 `_switch`**：部位變數跨結算保留 — 日盤 1 口多單被結算後，程式裡 `Position`/`Filled` **仍是 1**（實際庫存已歸零）。要真的買 1 口，必須 `SetPosition(2)`。
+2. **到期日判斷用 `GetSymbolInfo("到期日")`，不要用 `GetLastTradeDate`**：後者是「該月第三個星期三」的公式值，**不反映假期（如颱風假）順延**；前者當天開盤前就會更新成順延後的正確日期（教授實測含颱風假情境）。
+3. **結算日時間規則**：最後交易日台指期日盤 **13:30 收盤**（非 13:45）；**到期合約本身沒有盤後時段**，但監控的連續代碼（FITXN*1）15:00 起會接上**新合約的夜盤** — 這正是轉倉程式碼能在 15:00 觸發的前提。任何以「到期合約的 13:30 之後」為前提的判斷不會執行（收盤後無 tick 洗價）— 想在 13:44「收盤前 Filled 一次」的設計整個不可行。
+
+反面教訓（同串討論的原始想法為何行不通）：收盤後（非自動洗價）程式不執行，13:44 根本不會有洗價觸發判斷。注意本串**僅實測確認 `Position`/`Filled`/`intrabarpersist` 變數跨結算保留**；一般變數（如 `Value1`）是否同樣保留未經驗證。正解就是上面「盤中 13:29 記錄 → 15:00 重建」的兩段式。
