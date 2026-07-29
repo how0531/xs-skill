@@ -35,7 +35,7 @@ value3 = GetField("均價");  // 不指定頻率則依執行頻率
 value4 = GetField("買進特大單量", "1");
 value5 = GetField("賣出特大單量", "1");
 value6 = GetField("量比");
-value7 = GetField("成交金額", "1");
+value7 = GetField("成交金額(元)", "1");   // 官方欄位名含 (元)；無單位別名僅限 "D" 頻率
 ```
 
 **支援的即時欄位：**
@@ -62,6 +62,8 @@ value6 = GetField("BidPrice", "Tick");    // 買進價格
 value7 = GetField("AskPrice", "Tick");    // 賣出價格
 value8 = GetField("SeqNo", "Tick");       // 資料編號（每日從 1 開始）
 ```
+
+> ⚠️ 待查證：`BidAskFlag` / `BidPrice` / `AskPrice` / `SeqNo` / `TickGroup` 這幾個 Tick 欄位字串在官方鏡像 `references/xshelp/` 查無收錄（官網可能未把 Tick 欄位字典放進爬取範圍）。實際使用前先在 XQ 編輯器驗證，回 0 時優先懷疑欄位名。
 
 #### 讀取 Tick 序列
 
@@ -111,7 +113,7 @@ end;
 | 4 | 成交量 |
 | 5 | 內外盤註記（1=外盤, -1=內盤） |
 | 6 | Tick 編號（SeqNo） |
-| 7 | 連續成交序列總筆數 |
+| 7 | 成交方式註記（-1=集合競價；0=逐筆撮合單筆成交；>0=MultiTick 序列的 Tick 筆數，官方 PRICERELFUNC 明定） |
 | 8 | 連續成交序列第一筆位置 |
 | 9 | 連續成交序列最後一筆位置 |
 | 10 | 總成交量（連續序列會合併） |

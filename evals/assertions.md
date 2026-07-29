@@ -13,9 +13,9 @@
 
 ## eval-1: selector-revenue（月營收成長率選股）
 
-**核心測試**：頻率切換陷阱 — 月頻必須用「營收年增率」而非「營收成長率」。
+**核心測試**：頻率切換陷阱 — 月頻必須用「月營收年增率」（官方 xshelp/FBASIC 正名）而非「營收成長率」。
 
-- `uses_correct_field_for_M`：程式碼使用 `GetField("營收年增率", "M")` 而非 `GetField("營收成長率", "M")` — 後者會回 0
+- `uses_correct_field_for_M`：程式碼使用 `GetField("月營收年增率", "M")` 而非 `GetField("營收成長率", "M")` — 後者會回 0
 - `uses_pe_ratio_field`：使用 `GetField("本益比", ...)` 或同義欄位
 - `has_ret_1`：使用 `ret = 1` 觸發選股
 - `has_output_field`：使用 `OutputField` 或 `outputField1` 輸出顯示欄位

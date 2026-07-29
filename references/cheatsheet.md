@@ -18,7 +18,7 @@ XS 有四種主要的資料存取函數，適用場景不同：
 | 函數 | 用途 | 適用腳本 | 歷史資料 | 頻率參數 |
 |---|---|---|---|---|
 | `GetField()` | 取得資料欄位（價格、量能、籌碼等） | 指標、警示、交易、選股、函數 | 可回溯 `[N]` | 支援（"D", "W", "M", "Q" 等） |
-| `GetQuote()` | 取得即時報價欄位 | **僅** 警示、交易、函數 | **不可回溯** | 無（僅即時值） |
+| `GetQuote()` | 取得即時報價欄位 | **僅** 警示、交易（官方 FIELDFUNC 明定；函數腳本未列入支援） | **不可回溯** | 無（僅即時值） |
 | `GetSymbolField()` | 取得**其他商品**的資料欄位 | 指標、警示、交易、選股、函數 | 可回溯 `[N]` | 支援 |
 | `GetSymbolInfo()` | 取得**商品靜態屬性**（到期日、合約乘數、資格等） | 指標、警示、交易、選股、函數 | 不適用（屬性非時序） | 無 |
 
@@ -143,14 +143,13 @@ _NextMonth = GetSymbolInfo("期貨遠月");     // 例：FITXN02.TF
 部分欄位名稱包含單位後綴（括號+單位），撰寫時**必須完整保留**，否則 GetField 會失效：
 
 ```xs
-// 正確
+// 正確（欄位名皆經官方鏡像 references/xshelp/ 核實）
 Value1 = GetField("每股稅後淨利(元)");
-Value1 = GetField("營利率(%)");
-Value1 = GetField("流通在外股數(張)");
+Value1 = GetField("成交金額(元)", "D");
 
-// 錯誤 — 會導致執行失敗
+// 錯誤 — 會靜默回 0
 Value1 = GetField("每股稅後淨利");     // 缺少 (元)
-Value1 = GetField("營利率");           // 缺少 (%)
+Value1 = GetField("成交金額", "1");    // 分鐘頻缺 (元)；官方僅在 "D" 頻率允許無單位別名
 ```
 
 ### q_ 前綴快捷語法（僅報價欄位）
@@ -171,20 +170,22 @@ Value1 = q_UpLimitSecs;             // 等同 GetQuote("漲停家數")
 
 | 概念 | 月頻 (`"M"`) | 季頻 (`"Q"`) / 年頻 (`"Y"`) |
 |---|---|---|
-| 營收成長率 | `營收年增率` | `營收成長率` |
-| 累計營收成長率 | `累計營收年增率` | （季年頻一般直接用報表欄位） |
+| 營收成長率 | `月營收年增率`（FBASIC，選股欄位） | `營收成長率`（FFINANCE，選股欄位） |
+| 累計營收成長率 | `累計營收年增率`（FBASIC，選股欄位） | （季年頻一般直接用報表欄位） |
 
 ```xs
 // ❌ 錯誤：月頻用「營收成長率」會回 0
 value1 = GetField("營收成長率", "M");
 
-// ✅ 正確：月頻一律用 YoY 描述
-value1 = GetField("營收年增率", "M");
+// ✅ 正確：月頻一律用 YoY 描述（官方範例 GENERALFUNC 同此寫法）
+value1 = GetField("月營收年增率", "M");
 value2 = GetField("累計營收年增率", "M");
 
 // ✅ 正確：季年頻用「成長率」
 value3 = GetField("營收成長率", "Q");
 ```
+
+注意：「營收年增率」（無「月」字）是**報價欄位**（QFINANCE，僅最新一期、走 `GetQuote`），與月頻 GetField 的「月營收年增率」不同；上表皆為**選股欄位**（F 類），在指標/警示/交易腳本用之前先以 `CheckField` 驗證可用性。
 
 ### 正名差異對照（常見直覺寫法 vs 官方欄位名）
 
@@ -192,12 +193,13 @@ value3 = GetField("營收成長率", "Q");
 |---|---|
 | 總負債 | **負債總額** |
 | 總資產 | **資產總額** |
-| 內部人持股比例 | **董監持股佔股本比例** |
-| 股價現金流比 | **股價自由現金流比** |
+| 股價現金流比 | **股價自由現金流量比** |
 | 企業價值倍數 | **企業價值** |
 | 每股淨利 | **每股稅後淨利(元)** |
 
-撰寫前若不確定欄位名，到 `references/source/XScript_官方語法與核心說明文件.md` §7–9 或 [XSHelp](https://xshelp.xq.com.tw/XSHelp/) 比對。
+注意：「內部人持股比例」與「董監持股佔股本比例」是**兩個都存在、範圍不同**的官方欄位（內部人 ⊇ 董監，見 xshelp/FCHIP.md、TCHIP.md），依需求選用，不要互相「訂正」。
+
+撰寫前若不確定欄位名，先 `grep -rn "^## 欄位名" references/xshelp/`（官方鏡像），輔以 `references/source/XScript_官方語法與核心說明文件.md` §7–9。
 
 ---
 
@@ -219,7 +221,7 @@ value3 = GetField("營收成長率", "Q");
 |---|---|---|---|---|---|---|
 | 價格（開高低收） | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | 成交量/成交金額 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| 籌碼（三大法人/主力） | ✓ | ✗ | ✗ | ✗ | 部分 | ✗ |
+| 籌碼（三大法人/主力） | ✓ | ✗ | ✗ | ✗ | 部分 | 部分（如「外資買賣超」官方明列支援大盤/類股指數） |
 | 融資融券 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | 財務報表（營收/EPS） | ✓ | 部分 | 部分 | 部分 | ✗ | ✗ |
 | 事件（除權息/法說會） | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
@@ -238,27 +240,30 @@ value3 = GetField("營收成長率", "Q");
 
 ## 4. 函數分類速查
 
-### 內建函數（179 個）
+> 數量以官方鏡像 `references/xshelp/INDEX.md` 為準（2026-07 爬取）；查單一函數：`grep -rn "^## 函數名" references/xshelp/`
+
+### 內建函數（182 個，8 分類）
 
 | 分類 | 數量 | 主要函數 |
 |---|---|---|
-| 一般函數 | 48 | `BarAdjusted`, `BarFreq`, `BarInterval`, `CurrentBar`, `OutputField`, `Plot`, `PlotK`, `RaiseRunTimeError`, `SetBarFreq` |
-| 數學函數 | 35 | `AbsValue`, `Ceiling`, `Floor`, `IntPortion`, `FracPortion`, `Mod`, `Power`, `Round`, `SquareRoot`, `MaxList`, `MinList` |
-| 交易函數 | 27 | `SetPosition`, `Position`, `Filled`, `FilledAvgPrice`, `Buy`, `Sell`, `Short`, `Cover`, `Alert`, `IsMarketPrice` |
+| 一般函數 | 47 | `BarAdjusted`, `BarFreq`, `BarInterval`, `CurrentBar`, `OutputField`, `Plot`, `PlotK`, `RaiseRunTimeError`, `SetBarFreq`(僅選股), `IsFirstCall`, `SetRemoveOutlier`, `SetAlign` |
+| 數學函數 | 37 | `AbsValue`, `Ceiling`, `Floor`, `IntPortion`, `FracPortion`, `Mod`, `Power`, `Round`, `SquareRoot`, `MaxList`, `MinList` |
+| 交易函數 | 28 | `SetPosition`, `Position`, `Filled`, `FilledAvgPrice`, `FilledAtBroker`, `DefaultBuyPrice`, `Buy`, `Sell`, `Short`, `Cover`, `IsMarketPrice` |
 | 日期函數 | 16 | `CurrentDate`, `DateAdd`, `DateDiff`, `Year`, `Month`, `DayOfMonth`, `DayOfWeek` |
 | 字串函數 | 15 | `InStr`, `LeftStr`, `MidStr`, `NumToStr`, `StrToNum`, `StrLen`, `Text`, `UpperStr` |
-| 欄位函數 | 14 | `GetField`, `GetQuote`, `GetSymbolField`, `CheckField`, `Symbol`, `SymbolName` |
+| 欄位函數 | 17 | `GetField`, `GetQuote`, `GetSymbolField`, `CheckField`, `CheckSymbolField`, `Symbol`, `SymbolName` |
 | 時間函數 | 13 | `CurrentTime`, `Hour`, `Minute`, `Second`, `TimeValue`, `TimeDiff`, `TimeAdd` |
 | 陣列函數 | 9 | `Array_Sort`, `Array_Sum`, `Array_Copy`, `Array_GetMaxIndex` |
 
-### 系統函數（216 個）
+### 系統函數（267 個，14 分類）
 
 | 分類 | 數量 | 主要函數 |
 |---|---|---|
-| 技術指標 | 49 | `MACD`, `RSI`, `KD(Stochastic)`, `CCI`, `ATR`, `BollingerBand`, `SAR`, `ADI`, `ACC`, `VR` |
+| 技術指標 | 53 | `MACD`, `RSI`, `KD(Stochastic)`, `CCI`, `ATR`, `BollingerBand`, `SAR`, `ADI`, `ACC`, `VR` |
+| 量化因子 | 51 | 見 `references/xshelp/QUANTFACTOR.md` |
 | 價格取得 | 33 | `Highest`, `Lowest`, `AvgPrice`, `TypicalPrice`, `CloseD`, `HighD`, `LowD`, `OpenD` |
-| 跨頻率 | 31 | `xf_GetValue`, `xf_EMA`, `xf_MACD`, `xf_RSI`, `xfMin_GetValue`, `xfMin_EMA`, `BollingerBandWidth` |
-| 價格關係 | 26 | `HighestBar`, `LowestBar`, `HighDays`, `LowDays`, `NthHighest`, `NthLowest`, `MoM`, `QoQ`, `YoY` |
+| 跨頻率 | 29 | `xf_GetValue`, `xf_EMA`, `xf_MACD`, `xf_RSI`, `xfMin_GetValue`, `xfMin_EMA`, `BollingerBandWidth` |
+| 價格關係 | 25 | `HighestBar`, `LowestBar`, `HighDays`, `LowDays`, `NthHighest`, `NthLowest`, `MoM`, `QoQ`, `YoY` |
 | 價格計算 | 13 | `Average`, `EMA`, `XAverage`, `WMA`, `RateOfChange`, `Range`, `TrueRange`, `Summation` |
 | 邏輯判斷 | 13 | `CrossOver`, `CrossUnder`, `AverageIF`, `CountIf`, `SummationIf`, `IFF`, `Filter` |
 | 期權相關 | 12 | `BSDelta`, `BSGamma`, `BSTheta`, `BSVega`, `IVolatility`, `HVolatility` |
@@ -267,8 +272,24 @@ value3 = GetField("營收成長率", "Q");
 | 統計分析 | 6 | `StandardDev`, `Correlation`, `Covariance`, `RSquare` |
 | 量能相關 | 4 | `DiffBidAskVolumeLxL`, `DiffUpDownVolume` |
 | Array 函數 | 4 | `ArraySeries`, `ArrayMASeries`, `ArrayLinearRegSlope` |
+| 交易相關 | 2 | `calcvwapdistribution`(VWAP 分佈), `EnterMarketCloseTime` |
 
-完整函數簽名與用法在 `references/source/XScript_官方語法與核心說明文件.md` §5。
+完整函數簽名與用法：優先查 `references/xshelp/`（官方鏡像），輔以 `references/source/XScript_官方語法與核心說明文件.md` §5。
+
+### 官方防呆與進階函數（skill 過去未收錄，實戰高價值）
+
+| 函數 | 用途 | 出處 |
+|---|---|---|
+| `CheckField` / `CheckSymbolField` | 呼叫 GetField 前先確認欄位資料存在（回傳 True/False），**官方版「靜默回 0」解藥** | xshelp/FIELDFUNC.md |
+| `IsSupportField` / `IsSupportSymbolField` | 判斷欄位是否被目前商品支援 | xshelp/GENERALFUNC.md |
+| `IsFirstCall("Bar"/"Date"/"Realtime"...)` | 精準判斷各種「第一次洗價」時機，比 `Date <> Date[1]` 更細 | xshelp/GENERALFUNC.md |
+| `SetAlign` / `DataAlign` | 跨頻率取值的資料對位模式（絕對 vs 遞補），anti-pattern #22 的機制根源 | xshelp/GENERALFUNC.md、FIELDFUNC.md |
+| `SetRemoveOutlier` | Rank 排行時排除離群值（zscore/IQR） | xshelp/GENERALFUNC.md |
+| `FilledAtBroker` | 券商實際庫存（官方明言可能 ≠ `Filled`） | xshelp/TRANSACTIONFUNC.md |
+| `FilledRecordCount/Price/Qty/Date/BS` | 逐筆歷史成交紀錄，自算已實現損益 | xshelp/TRANSACTIONFUNC.md |
+| `DefaultBuyPrice` / `DefaultSellPrice` | 官方標準的委託價換算（優於手刻漲停價算張數） | xshelp/TRANSACTIONFUNC.md |
+| `IsListedSymbol` | 判斷商品是策略原設定或後補庫存商品 | xshelp/TRANSACTIONFUNC.md |
+| `GetBarBack` / `GetTotalBar` | 讀出目前資料範圍設定值（與 Set 系列成對，可防呆） | xshelp/GENERALFUNC.md |
 
 ---
 

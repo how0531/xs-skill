@@ -83,7 +83,7 @@ XS 共五類腳本，**規範完全不同**。同一個需求換到不同類別�
 | **語句結尾** | 每行 `;` |
 | **首根 K 棒** | 用 `Date <> Date[1]` 或 `IsFirstBar`，**禁用** `NewDay` |
 | **欄位字串** | `GetField` 字串必須與官方標籤 100% 一致，含括號單位（如 `"每股稅後淨利(元)"`） |
-| **欄位頻率切換** | 月頻用 `"營收年增率"`、季年用 `"營收成長率"`（見 anti-patterns #24） |
+| **欄位頻率切換** | 月頻用 `"月營收年增率"`、季年用 `"營收成長率"`（見 anti-patterns #24） |
 | **欄位正名** | `負債總額` ≠ 總負債、`資產總額` ≠ 總資產、`董監持股佔股本比例` 才是內部人（見 anti-patterns #25） |
 | **除以零** | 涉及除法先判斷分母 `<> 0` |
 | **跨頻率** | 要回溯用 `GetField("欄位", "W")[N]`，不要對暫存變數用 `[N]` |
@@ -112,7 +112,7 @@ XS 共五類腳本，**規範完全不同**。同一個需求換到不同類別�
 Value1 = GetField("收盤價", "D");          // 指定日頻
 Value1 = GetField("外資買賣超", "D")[1];    // 前一日（盤中嚴禁取 [0]，看下方）
 
-// 即時報價（僅警示/交易/函數，不可回溯）
+// 即時報價（官方僅支援警示/交易腳本，不可回溯）
 Value1 = GetQuote("成交");
 Value1 = q_Last;                            // q_ 前綴快捷語法
 
@@ -174,6 +174,24 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 | `references/cheatsheet.md` | **純查表**：函數分類、欄位命名規則（含頻率切換/正名對照）、頻率商品相容、常用片段 |
 | `references/examples-index.md` | **622 個實戰場景索引**（場景 620–1241，按主題分類含原始 URL） |
 | `references/anti-patterns.md` | 28 條常見錯誤對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態） |
+| `references/xshelp/INDEX.md` | **官方 XSHelp 全站鏡像索引**（48 分類 / 1497 項函數與欄位，來源 xshelp.xq.com.tw） |
+
+### 官方文件鏡像（references/xshelp/ — 函數與欄位的最終權威）
+
+官方說明網站全站爬取版，每分類一檔、每個函數/欄位一節 `## 名稱`，含語法/說明/範例。**函數簽名或欄位名稱有疑義時，以此目錄為準**。
+
+查法（不要整檔 Read，先 grep 定位）：
+
+```
+# 查函數（例：SetPosition）
+grep -rn "^## SetPosition" references/xshelp/
+# 查欄位正名（例：確認「外資買賣超」存在且拼法一致）
+grep -rn "^## 外資買賣超" references/xshelp/
+```
+
+分類速查：關鍵字（SKIPWORD/CONSTANT/CONTROLFLOW/DECLARATION）、內建函數 8 檔（GENERALFUNC/TIMEFUNC/DATEFUNC/STRINGFUNC/NUMBERFUNC/FIELDFUNC/ARRAYFUNC/TRANSACTIONFUNC）、系統函數 14 檔（PRICEGETFUNC…QUANTFACTOR）、報價欄位 Q*、資料欄位 T*、選股欄位 F*。完整清單見 `references/xshelp/INDEX.md`。
+
+更新方式：`python scripts/crawl_xshelp.py`（有快取，全新抓取先刪 `references/xshelp/.cache/`）。
 
 ### 來源文件（references/source/ — 適合 grep / Read 查單一場景）
 
@@ -203,4 +221,4 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 2. **頻率與商品也要問清楚**：類別確認後，再確認執行頻率（Tick / 分鐘 / 日線等）、目標商品（台股 / 期貨 / 選擇權 / 美股）— 因為這兩項會影響欄位可用性與寫法。
 3. **不可行就直說**：不要為了取悅使用者強寫不可行的腳本（例如分鐘級選股）。
 4. **先給可執行最小版**：把核心邏輯寫對，再逐步加上停損停利、濾網、防呆。
-5. **欄位字串要校驗**：寫完後比對 `references/cheatsheet.md` §2 或 `references/source/XScript_官方語法與核心說明文件.md` §7–9 確認欄位名稱位元級正確。
+5. **欄位字串要校驗**：寫完後先 `grep -rn "^## 欄位名" references/xshelp/`（官方鏡像，最終權威）確認欄位名稱位元級正確；輔以 `references/cheatsheet.md` §2 的頻率切換/正名對照。

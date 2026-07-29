@@ -13,7 +13,7 @@
 if (篩選條件) then ret = 1;
 
 // 輸出自訂欄位
-outputField1(GetField("月營收", "M"), "月營收");
+outputField1(GetField("月營收", "M"), 0, "月營收");
 outputField2(GetField("本益比", "D"), "本益比");
 ```
 
@@ -200,14 +200,18 @@ outputField2(myRank2.value, "增加持股比例");
 
 ### 3️⃣ OutputField 輸出欄位
 
+官方簽名（xshelp/GENERALFUNC）：`OutputField1(數值, 小數位數, 輸出欄位名稱)` — **第二參數是小數位數**，欄位名稱在第三個位置（5.60 版後支援）；或用 `OutputField1(數值); SetOutputName1("名稱");` 兩段式。
+
 ```delphi
-// 基本輸出
-outputField1(GetField("月營收", "M"), "月營收");
-outputField2(GetField("本益比", "D"), "本益比");
+// 基本輸出（官方三參數形式：數值, 小數位數, 名稱）
+outputField1(GetField("月營收", "M"), 0, "月營收");
+outputField2(GetField("本益比", "D"), 1, "本益比");
 
 // 輸出排行（order:=1 表示由大到小排序）
-outputField3(value888, "大單買超", order:=1);
+outputField3(value888, 0, "大單買超", order:=1);
 ```
+
+⚠️ 舊範例常見的兩參數寫法 `outputField1(數值, "名稱")` 把字串放在「小數位數」的位置，**不符官方簽名**；請一律用三參數或 SetOutputName。
 
 ### 4️⃣ 資料長度判斷 (GetFieldStartOffset)
 
@@ -237,12 +241,12 @@ value1 = GetFieldStartOffset("月營收", "M");
 
 if value1 = 0 then begin
     ret = 1;  // 只有 1 期，當成創新高
-    outputField1(GetField("月營收", "M"), "月營收");
+    outputField1(GetField("月營收", "M"), 0, "月營收");
 end else if value1 > 0 then begin
     // 算出前 N 期的最大值
     value2 = Highest(GetField("月營收", "M")[1], value1);
     if GetField("月營收", "M") > value2 then ret = 1;
-    outputField1(GetField("月營收", "M"), "月營收");
+    outputField1(GetField("月營收", "M"), 0, "月營收");
 end;
 ```
 
@@ -262,7 +266,7 @@ if value1 > 0 then begin
     value2 = Highest(GetField("月營收", "M")[1], value1);
     if GetField("月營收", "M") > value2 then begin
         ret = 1;
-        outputField1(GetField("月營收", "M"), "月營收");
+        outputField1(GetField("月營收", "M"), 0, "月營收");
         outputField2(GetFieldDate("月營收", "M"), "資料日期");
     end;
 end;
@@ -382,7 +386,7 @@ outputField1(GetField("月營收", "M"));
 
 ```delphi
 // ✅ 正確：加上中文名稱
-outputField1(GetField("月營收", "M"), "月營收");
+outputField1(GetField("月營收", "M"), 0, "月營收");
 ```
 
 ## 💡 xs-helper 最佳實踐

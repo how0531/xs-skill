@@ -50,6 +50,8 @@ if trend = -1 then plot2(supertrend, "下降趨勢");
 
 #### Plot 偏移參數 (shift:=N) 【新功能】
 
+> ⚠️ 未見於官方文件：`shift:=` 在官方鏡像 `references/xshelp/` 的 Plot/PlotK/PlotFill 條目中皆未列出（可能為新版功能官網未更新）。使用前先在 XQ 編輯器實測可編譯。
+
 **背景：** 在某些指標（如一目均衡表、預測指標）中，需要在當前 K 棒的基礎上向前（未來）或向後（過去）偏移繪製數值。
 
 **支援的 Plot 函數：**
@@ -369,7 +371,7 @@ end;
 1.  **InputKind 限制**：可使用 `InputKind:=SymbolGroup("類型")` 限制使用者只能選特定類型的群組。
     - 範例：`input: _OptGroup(Group, "選擇權", InputKind:=SymbolGroup("選擇權"));`
     - **⚠️ 注意**：部分 XQ 版本不支援 `InputKind:=SymbolGroup(...)`，會報「未知的關鍵字 SymbolGroup」或「目前版本不支援 InputKind 語法」。若遇此錯誤，請改成 `input: _OptGroup(Group, "選擇權群組");` 不帶 InputKind 子句，靠使用者掛指標時自行選對群組。
-2.  **變數限制**：`GetSymbolField` / `GetSymbolInfo` 第一個參數**只接受 String 字面量、Input 變數、或 `Group[i]` 形式**，不接受一般 `var: _sym("")` 字串變數。若先把 `_OptGroup[_i]` 存到 `_sym` 再傳入，會編譯錯「第 1 個參數應該是 String/Input/Group」。
+2.  **變數限制**：`GetSymbolField` / `GetSymbolInfo` 第一個參數**只接受 String 字面量、Input 變數、或 `Group[i]` 形式**，不接受一般 `var: _sym("")` 字串變數。（另注意：官方 FIELDFUNC 只列出 `GetSymbolInfo("欄位")` 單參數形式；本節的雙參數跨商品用法是實測可行、官方文件未收錄。）若先把 `_OptGroup[_i]` 存到 `_sym` 再傳入，會編譯錯「第 1 個參數應該是 String/Input/Group」。
 3.  **聚合代碼過濾**：選擇權群組常包含 `TXO00.TF` 這類「聚合/總代碼」（代表全部合約合計），對它呼叫 `GetSymbolField(_, "未平倉", "D")` 會報「不支援 TXO00.TF」。遍歷時應先用 `GetSymbolInfo` 確認是具體合約再往下取資料：
 
     ```delphi

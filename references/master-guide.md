@@ -93,7 +93,7 @@
   - **全日盤商品 (如 FITXN\*1)：** 一天約 300 根 (視夜盤長度)，遠多於日盤的 60 根。若需回溯 N 天，`SetTotalBar` 估算值請乘以 3~5 倍。
 
 - **優先執行與預讀取機制 (Pre-execution Logic)：**
-  - **不受流程控制的函數**：`SetTotalBar`, `SetBarFreq`, `SetBarBack` 等設定函數，以及 `GetSymbolField` (涉及資料讀取)。
+  - **不受流程控制的函數**：`SetTotalBar`, `SetBarFreq`（注意：官方明定 SetBarFreq **僅選股腳本可用**）, `SetBarBack` 等設定函數，以及 `GetSymbolField` (涉及資料讀取)。
   - **行為**：這些函數在腳本「初始化階段」就會被執行，**無視 if 條件判斷**。
   - **禁忌**：
     - ❌ `if condition then SetTotalBar(100);` (無效，系統會直接設定)
