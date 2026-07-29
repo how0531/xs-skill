@@ -37,9 +37,9 @@
 
 **核心測試**：禁用語法替換。
 
-- `no_strategy_entry`：不出現 `strategy.entry` / `strategy.close`
-- `no_buy_sell`：不出現 `Buy` / `Sell` / `Short` / `Cover`
-- `no_double_equals`：不出現 `==`
+- `no_strategy_entry`：**XS 程式碼區塊內（含註解）**不出現 `strategy.entry` / `strategy.close`（程式碼區塊外的新舊語法對照說明不算違規）
+- `no_buy_sell`：**XS 程式碼區塊內（含註解）**不以交易指令身分出現 `Buy` / `Sell` / `Short` / `Cover`（區塊外的「禁用對照」說明不算違規）
+- `no_double_equals`：**XS 程式碼區塊內**不出現 `==`
 - `uses_setposition`：使用 `SetPosition(口數)` 進出場
 - `uses_crossover_function`：使用 `CrossOver` / `CrossUnder` （也接受 `crosses above` / `crosses below`）
 - `uses_xs_ema`：使用 `XAverage` 或 `EMA`（不是 `ta.ema`）
@@ -91,5 +91,5 @@
 - `uses_intrabarpersist_lastpos`：宣告 `intrabarpersist` 變數（如 `_LastPos`）追蹤上次值
 - `no_position_subscript_1`：不用 `position[1]` / `filled[1]` 偵測剛變動
 - `syncs_after_action`：印完 log 後立刻 `_LastPos = position` 同步
-- `daily_reset`：狀態變數在每日歸零區（`Date <> Date[1]` 或 `IsFirstBar`）重置
+- `daily_reset`：有每日歸零區（`Date <> Date[1]` 或 `IsFirstBar`）且處理方式正確：時間/旗標類變數歸 0，`_LastPos` 這類部位對照變數**同步為 position**（硬歸 0 算 fail — 留倉會誤觸發假變動；見 anti-patterns #27 配套）
 - `direction_by_diff`：方向判定用 `position` 對 `_LastPos` 前後差，不用 `filled[1]`

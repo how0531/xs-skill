@@ -19,6 +19,8 @@ XScript（XS）程式碼。它**沒有可執行的產品程式碼**，本體是�
 | `references/anti-patterns.md` | 31 條 ❌→✅ 錯誤對照 | 手動維護，新增條目見下方同步點 |
 | `references/script-types/*.md` | 五類腳本（指標/交易/警示/選股/函數）專屬規範 | 手動維護 |
 | `references/examples-index.md` | 622 場景索引 | **自動生成，禁止手改**（見下方） |
+| `references/xshelp/*.md`（除 DIGEST） | 官方 XSHelp 全站鏡像（48 分類 / 1497 項） | **爬蟲生成，禁止手改**：改內容請重跑 `scripts/crawl_xshelp.py` |
+| `references/xshelp/DIGEST.md` | 全量精讀摘要（445 條限制/陷阱） | 由精讀代理批次生成；小幅修正可手改，大改建議重跑精讀流程 |
 | `references/source/*.md` | 原始來源，供 grep 查單一場景 | 唯讀為主 |
 | `evals/` | 行為測試（evals.json + assertions.md） | 手動維護 |
 | `scripts/*.py` | 維護工具 | 手動維護 |
@@ -64,7 +66,8 @@ git diff references/examples-index.md   # 確認改動如預期
 - input/var 加 `_` 前綴、無重複宣告
 - 相等與賦值都用 `=`（無 `==`）
 - 每句 `;` 結尾、`if-else` 用 `begin/end`
-- 欄位字串含單位後綴、頻率切換正名正確（營收年增率 vs 營收成長率）
+- 欄位字串含單位後綴、頻率切換正名正確（月頻「月營收年增率」vs 季年頻「營收成長率」）
+- 欄位/函數名有疑義時以 `references/xshelp/`（官方鏡像）為準：`grep -rn "^## 名稱" references/xshelp/`
 
 兩支可重跑的腳本：
 

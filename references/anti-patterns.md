@@ -461,6 +461,13 @@ end;
 
 // ✅ 正確：用 intrabarpersist 變數追蹤「上次觀察到的值」，動作完立刻更新
 var: intrabarpersist _LastPos(0);
+var: intrabarpersist _LoggedToday(false);
+
+// 每日歸零區（必備）：時間/旗標類歸 0，部位對照類「同步」不歸 0
+if Date <> Date[1] then begin
+    _LoggedToday = false;      // 旗標類 → 歸 false
+    _LastPos = position;       // 部位對照類 → 同步為當下值（硬歸 0 留倉會誤觸發假變動）
+end;
 
 if position <> _LastPos then begin
     print(file(_LogPath), "部位變動：" + numtostr(position, 0));
@@ -472,7 +479,10 @@ end;
 
 **判斷準則**：要偵測的是「**這次執行 vs 上次執行**」的差異，就用 `intrabarpersist _LastX` 追蹤；要偵測的是「**這根 K vs 前一根 K**」的差異（例如「今天剛開盤」），才用 `[1]`。
 
-**配套**：所有用來追蹤狀態的 `intrabarpersist` 變數，記得在每日歸零區（`if isfirstBar then` 或 `if Date <> Date[1] then`）一併重置為 0／false，否則跨日會殘留昨日的值，導致今天的「變動偵測」被擋住。
+**配套**：所有用來追蹤狀態的 `intrabarpersist` 變數，都要在每日歸零區（`if isfirstBar then` 或 `if Date <> Date[1] then`）處理，但**「重置」的正確方式依變數性質而異**：
+
+- **時間/旗標類**（`_last_log_time`、`_alerted`…）→ 重置為 0／false。不重置會被昨日值卡住（例：今日定時回報整天不會印）
+- **部位對照類**（`_LastPos`…）→ **同步為當下值** `_LastPos = position;`，**不可硬歸 0** — 留倉時歸 0 會讓 `position <> _LastPos` 在開盤第一個 tick 誤觸發一筆假「變動」
 
 ## 28. 「判方向」用前後差、「判狀態」用當下值 — 兩者不可混用
 

@@ -12,7 +12,7 @@
       "id": 1,
       "name": "selector-revenue",
       "prompt": "幫我寫個選股腳本：找出最近一個月營收成長率超過 20%，且本益比小於 15 的台股",
-      "expected_output": "正確使用月頻欄位「營收年增率」而非「營收成長率」（後者在月頻會回 0）；本益比欄位字串正確；ret = 1 + OutputField 標準結構",
+      "expected_output": "正確使用月頻欄位「月營收年增率」（官方 xshelp/FBASIC 正名）而非「營收成長率」（後者在月頻會回 0）；本益比欄位字串正確；ret = 1 + OutputField 標準結構",
       "files": []
     },
     {

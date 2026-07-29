@@ -49,6 +49,7 @@ xq-xscript/
 ├── scripts/                                 ← 維護用腳本（重建索引、產 eval metadata）
 │   ├── extract-scenes.py                    ← 抽取並分類場景（build-examples-index 的前身/輔助）
 │   ├── build-examples-index.py             ← 由來源重建 examples-index.md（產出檔勿手改）
+│   ├── crawl_xshelp.py                      ← 爬官方 XSHelp 全站 → references/xshelp/（產出檔勿手改）
 │   └── write-eval-metadata.py               ← 產出各 eval 的 metadata（路徑可帶參數/環境變數）
 ├── evals/                                   ← 行為測試
 │   ├── evals.json                           ← 9 個 eval（prompt + expected_output）
@@ -58,6 +59,10 @@ xq-xscript/
     ├── cheatsheet.md                        ← **純查表**：函數分類、欄位命名規則、頻率商品相容、常用片段
     ├── anti-patterns.md                     ← **錯誤對照**：31 條常見錯誤 wrong → right（含營收年增率/負債總額正名、變數命名片段衝突、部位 log 方向 vs 狀態）
     ├── examples-index.md                    ← **場景索引**：622 個實戰場景（場景 620–1241，主題分類含原始 URL）
+    ├── xshelp/                              ← **官方文件鏡像**：48 分類 / 1497 項（爬蟲生成勿手改）
+    │   ├── INDEX.md                         ← 全站索引（分類 → 檔案 → 項目數）
+    │   ├── DIGEST.md                        ← 全量精讀摘要：445 條限制/陷阱/特殊語意
+    │   └── <分類>.md × 48                    ← 每分類一檔，每項含語法/說明/範例
     ├── script-types/
     │   ├── indicator.md                     ← 指標腳本規範
     │   ├── trading.md                       ← 交易腳本規範（當沖、波段、選擇權範例）
