@@ -7,3 +7,5 @@ Thumbs.db
 __pycache__/
 *.pyc
 references/xshelp/.cache/
+references/xshelp/.lesson_tmp/
+references/xshelp/.lesson_urls.json
