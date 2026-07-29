@@ -51,9 +51,9 @@ git diff references/examples-index.md   # 確認改動如預期
 
 ## 已知的內容陷阱
 
-- `references/source/XScript_實戰範例寶典_上.md` 是**早期 Gem prompt**，其命名規範
-  與本 skill **相反**（它禁用 `_` 前綴、本 skill 強制 `_` 前綴）。**絕對不要**模仿它的
-  風格，也不要把它的規則複製進其他文件。它只保留作考古。
+- `XScript_實戰範例寶典_上.md`（早期 Gem prompt）**已於 2026-07-29 刪除** — 其命名規範
+  與本 skill 相反、且含多個錯誤欄位名（股價自由現金流比、月頻「營收年增率」等）。
+  如需考古請查 git 歷史，**不要**把它的規則抄回任何文件。
 - `XScript_Preset` 範例集在 **GitHub**（<https://github.com/how0531/XScript_Preset>），
   **不在本 repo**。文件中引用範例時一律指向 GitHub，不要寫 `references/xscript_preset/...`
   這種不存在的本地路徑。

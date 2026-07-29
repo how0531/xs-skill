@@ -202,7 +202,6 @@ grep -rn "^## 外資買賣超" references/xshelp/
 |---|---|
 | `references/source/XScript_官方語法與核心說明文件.md` | 1538 行完整官方語法：基礎/運算子/流程/資料存取/179 內建+216 系統函數總覽/報價 132、資料 500+、選股 400+ 欄位字典 |
 | `references/source/XScript_實戰範例寶典_下.md` | 21K+ 行、**622 個場景的完整原始 XS 程式碼**（場景 620–1241）。⚠️ **此檔 594 KB，禁止整檔 Read**（會吃光 context）；一律先用 `grep "## 場景 N："` 定位，再 Read 該段落的行號區間 |
-| `references/source/XScript_實戰範例寶典_上.md` | 早期 Gem prompt 參考（**注意：此檔的 `_` 前綴禁令與本 skill 規範相反，請以本 skill 為準**） |
 
 **外部資源（必要時引導使用者開啟）：**
 

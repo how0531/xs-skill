@@ -383,7 +383,7 @@ Value1 \= GetField("外資買賣超");      // 取得今日外資買賣超（張
 
 Value2 \= GetField("外資買賣超")\[1\];   // 取得前一日外資買賣超
 
-Value3 \= GetField("營收年增率", "M"); // 取得月頻率的營收年增率
+Value3 \= GetField("月營收年增率", "M"); // 取得月頻率的營收年增率（官方正名含「月」字，見 xshelp/FBASIC）
 
 ⚠️ GetField 的資料都是盤後資料（日資料），使用這些欄位的腳本，在設定策略雷達時，頻率必須設定為**日線以上**。
 
@@ -406,7 +406,7 @@ Value3 \= GetField("營收年增率", "M"); // 取得月頻率的營收年增率
 | 成交金額 | TradeValue | 成交金額 |
 | 內盤量 | TradeVolumeAtBid | 內盤量 |
 | 外盤量 | TradeVolumeAtAsk | 外盤量 |
-| 董監持股佔股本比例 | — | 內部人持股 |
+| 董監持股佔股本比例 | — | 董監持股（與「內部人持股比例」是不同官方欄位，內部人範圍大於董監） |
 
 ℹ️ GetField 可同時使用中文名或英文名，例如 `GetField("外資買賣超")` 等同於 `GetField("Fdifference")`。
 
