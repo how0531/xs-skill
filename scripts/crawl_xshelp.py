@@ -178,6 +178,65 @@ def crawl_sdt(cache_dir):
             "items": items}
 
 
+# rest API 全面掃描用查詢詞：字母+數字抓英文名/ename，常用中文字抓純中文條目
+SWEEP_TERMS = (list("abcdefghijklmnopqrstuvwxyz0123456789")
+               + list("價量率數日時買賣成交均指股金額比委盤期週月年外資主力融券現沖幅家淨值營收益稅債資產週轉息"))
+
+# rest 條目的 father → 鏡像分類 code（欄位類走 categoryid 對映）
+FATHER_ROUTE = {"屬性欄位": "ATTRFIELD", "宣告": "DECLARATION", "流程控制": "CONTROLFLOW",
+                "忽略字": "SKIPWORD", "常數": "CONSTANT"}
+
+
+def rest_item(it):
+    return {"name": it["name"], "cname": it.get("abbrev") or "",
+            "syntax": html_to_md(it.get("desc") or ""),
+            "desc": html_to_md((it.get("fulldesc") or "").replace("\r\n", "\n\n"))}
+
+
+def sweep_rest(cats, cache_dir):
+    """官網搜尋 rest API 全面掃描：找出分類選單漏掉的條目，補進對應分類。
+    新增分類：ATTRFIELD（屬性欄位=GetSymbolInfo 商品資訊欄位，選單完全沒有）。"""
+    union = {}
+    for t in SWEEP_TERMS:
+        key = "rest_sweep_%s.json" % re.sub(r"[^\w]", "_", t)
+        try:
+            for it in json.loads(fetch(f"{BASE}/XSHelp/rest?a={urllib.parse.quote(t)}", cache_dir, key)):
+                union[it["id"]] = it
+        except Exception as e:
+            print(f"  [WARN] sweep {t}: {e}", flush=True)
+    have = {i["name"].strip().lower() for c in cats for i in c["items"]}
+    # categoryid → code 對映（由已入庫條目投票）
+    cid_map = {}
+    for it in union.values():
+        if it["name"].strip().lower() in have and it.get("categoryid"):
+            for c in cats:
+                if any(i["name"].strip().lower() == it["name"].strip().lower() for i in c["items"]):
+                    cid_map.setdefault(it["categoryid"], c["code"])
+                    break
+    added, attr_items = {}, []
+    for it in sorted(union.values(), key=lambda x: (x["name"] or "").lower()):
+        if not it["name"] or it["name"].strip().lower() in have:
+            continue
+        have.add(it["name"].strip().lower())
+        code = FATHER_ROUTE.get(it.get("father") or "") or cid_map.get(it.get("categoryid"))
+        if code == "ATTRFIELD":
+            attr_items.append(rest_item(it))
+            continue
+        target = next((c for c in cats if c["code"] == code), None)
+        if target is None:  # 對不到分類 → 收進 RESTMISC
+            target = next((c for c in cats if c["code"] == "RESTMISC"), None)
+            if target is None:
+                target = {"section": "其他", "code": "RESTMISC", "cname": "搜尋API補遺", "items": []}
+                cats.append(target)
+        target["items"].append(rest_item(it))
+        added[target["code"]] = added.get(target["code"], 0) + 1
+    if attr_items:
+        cats.append({"section": "屬性欄位", "code": "ATTRFIELD",
+                     "cname": "商品資訊欄位(GetSymbolInfo)", "items": attr_items})
+        added["ATTRFIELD"] = len(attr_items)
+    print("rest 掃描補入：", added, flush=True)
+
+
 def crawl_category(section, code, cname, cache_dir):
     if code == "SDT":
         return crawl_sdt(cache_dir)
@@ -200,9 +259,12 @@ def crawl_category(section, code, cname, cache_dir):
 
 
 def write_category_md(cat):
-    src = (f"{BASE}/XSHelp/rest?a=SDT（站內搜尋 API；此家族不在官網分類選單、單頁已損壞）"
-           if cat["code"] == "SDT"
-           else f"{BASE}/XSHelp/lists?a={cat['code']}（官方 XSHelp，自動爬取）")
+    if cat["code"] == "SDT":
+        src = f"{BASE}/XSHelp/rest?a=SDT（站內搜尋 API；此家族不在官網分類選單、單頁已損壞）"
+    elif cat["code"] in ("ATTRFIELD", "RESTMISC"):
+        src = f"{BASE}/XSHelp/rest 全面掃描（站內搜尋 API；官網分類選單無此分類）"
+    else:
+        src = f"{BASE}/XSHelp/lists?a={cat['code']}（官方 XSHelp，自動爬取）"
     lines = [
         f"# {cat['section']} - {cat['cname']}（{cat['code']}）",
         "",
@@ -258,6 +320,9 @@ def main():
     # 依官網選單順序輸出
     order = {c: i for i, (_, c, _) in enumerate(menu)}
     cats.sort(key=lambda x: order[x["code"]])
+
+    if not args.only:
+        sweep_rest(cats, args.cache)  # 補選單外條目（屬性欄位、關鍵字全字典、試搓欄位等）
 
     idx = ["# XSHelp 官方文件索引", "",
            f"> 來源：{BASE}/XSHelp/ ；重跑 `python scripts/crawl_xshelp.py` 可更新（有快取，全新抓取先刪 references/xshelp/.cache）",

@@ -68,6 +68,8 @@ Value1 = GetSymbolInfo(_OptGroup[_i], "履約價");     // 指定商品（Group 
 
 回傳型別依欄位而異（String / Boolean / Numeric / Date）。**不支援的商品×欄位組合回傳安全預設值（`0` / 空字串）而不報錯** —— 與 `GetSymbolField` 相反，故遍歷群組時應「先 Info 過濾、再 Field 取值」（見 anti-patterns 聚合代碼過濾）。
 
+官方完整欄位字典見 `references/xshelp/ATTRFIELD.md`（33 項，來自官網搜尋 API；官網分類選單無此分類）。下表為實戰整理版：
+
 | 欄位 | 說明 | 型別 | 支援商品 |
 |---|---|---|---|
 | `到期日` | 到期日 YYYYMMDD（如 20221101） | Date | **期貨**、選擇權、台權證、可轉債、美(特別股) |

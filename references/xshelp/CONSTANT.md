@@ -55,3 +55,19 @@ Value1 = 3.14159
 ```
 
 是一樣的意思，可是程式讀起來會比較清楚。
+
+## Friday
+
+## Monday
+
+## PI
+
+## Saturday
+
+## Sunday
+
+## Thursday
+
+## Tuesday
+
+## Wednesday

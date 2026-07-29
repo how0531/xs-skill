@@ -507,3 +507,61 @@ XOR運算式是用來計算兩個邏輯數值的差集。
 - False XOR True 傳回True
 
 - False XOR False 傳回False
+
+## Above
+
+## Begin
+
+## Below
+
+## case
+
+## Cross
+
+## Cross Above
+
+## Cross Below
+
+## Cross Over
+
+## Cross Under
+
+## Crosses
+
+## Crosses Above
+
+## Crosses Below
+
+## Crosses Over
+
+## Crosses Under
+
+## default
+
+## DownTo
+
+## Else
+
+## End
+
+## False
+
+## For
+
+## If
+
+## Over
+
+## repeat
+
+## switch
+
+## Then
+
+## To
+
+## True
+
+## Under
+
+## until

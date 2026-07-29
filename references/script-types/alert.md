@@ -63,7 +63,7 @@ value7 = GetField("AskPrice", "Tick");    // 賣出價格
 value8 = GetField("SeqNo", "Tick");       // 資料編號（每日從 1 開始）
 ```
 
-> ⚠️ 待查證：`BidAskFlag` / `BidPrice` / `AskPrice` / `SeqNo` / `TickGroup` 這幾個 Tick 欄位字串在官方鏡像 `references/xshelp/` 查無收錄（官網可能未把 Tick 欄位字典放進爬取範圍）。實際使用前先在 XQ 編輯器驗證，回 0 時優先懷疑欄位名。
+> ✅ 已查證（官方搜尋 API ename 對應）：`BidAskFlag`=內外盤、`BidPrice`=買入價、`AskPrice`=賣出價、`SeqNo`=當日序號 — 皆為資料欄位的官方英文代碼，中英文皆可用。僅 `TickGroup` 官方查無（實測可用再保留），使用前先在 XQ 驗證。
 
 #### 讀取 Tick 序列
 
