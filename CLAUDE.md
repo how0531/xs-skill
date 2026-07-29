@@ -17,6 +17,7 @@ XScript（XS）程式碼。它**沒有可執行的產品程式碼**，本體是�
 | `references/master-guide.md` | 程序性規則（怎麼做） | 手動維護 |
 | `references/cheatsheet.md` | 純查表（是什麼） | 手動維護 |
 | `references/anti-patterns.md` | 31 條 ❌→✅ 錯誤對照 | 手動維護，新增條目見下方同步點 |
+| `references/error-codes.md` | 官方錯誤代碼四套對照表（指標/交易/雷達/選股） | 手動維護（來源：XQ lesson 教學站） |
 | `references/script-types/*.md` | 五類腳本（指標/交易/警示/選股/函數）專屬規範 | 手動維護 |
 | `references/examples-index.md` | 622 場景索引 | **自動生成，禁止手改**（見下方） |
 | `references/xshelp/*.md`（除 DIGEST） | 官方 XSHelp 全站鏡像（51 分類 / 1663 項；含選單外分類 SDT/ATTRFIELD/RESTMISC，來自站內搜尋 rest API 全面掃描） | **爬蟲生成，禁止手改**：改內容請重跑 `scripts/crawl_xshelp.py` |

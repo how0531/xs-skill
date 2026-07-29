@@ -58,6 +58,7 @@ xq-xscript/
     ├── master-guide.md                      ← **程序性規則**：撰寫流程、可行性預審、look-ahead bias 等
     ├── cheatsheet.md                        ← **純查表**：函數分類、欄位命名規則、頻率商品相容、常用片段
     ├── anti-patterns.md                     ← **錯誤對照**：31 條常見錯誤 wrong → right（含營收年增率/負債總額正名、變數命名片段衝突、部位 log 方向 vs 狀態）
+    ├── error-codes.md                       ← **錯誤代碼**：指標/交易/雷達/選股四套官方對照表
     ├── examples-index.md                    ← **場景索引**：622 個實戰場景（場景 620–1241，主題分類含原始 URL）
     ├── xshelp/                              ← **官方文件鏡像**：51 分類 / 1663 項（爬蟲生成勿手改，含選單外分類 SDT/ATTRFIELD/RESTMISC）
     │   ├── INDEX.md                         ← 全站索引（分類 → 檔案 → 項目數）

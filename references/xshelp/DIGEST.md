@@ -58,7 +58,7 @@
 - **GetSymbolFieldStartOffset**：GetFieldStartOffset的跨商品版本，同樣「※僅支援『選股』腳本類型」。
 - **GetSymbolGroup**：若不指定商品參數則預設抓「目前執行商品」的清單，但「前提是該清單存在」；第二參數（清單類型）為必填。
 - **GroupSize**：官方明寫用途是「避免取用到超出陣列範圍的資料而導致錯誤」，寫Group迴圈前務必先用它界定上限。
-- **IsFirstCall**：依事件字串（""/"Bar"/"Date"/"Realtime"/"RealBar"）判斷首次洗價時機；"RealBar"「通常會與"Realtime"一致」，但「若是在揭示未成交K棒時，遇到暫緩開盤或開盤後沒有成交事件，兩者就會產生差異」，不能假設兩者永遠等價。
+- **IsFirstCall**：依事件字串（""/"Bar"/"Date"/"Realtime"/"RealBar"）判斷首次洗價時機；"RealBar"「通常會與"Realtime"一致」，但「若是在揭示未成交K棒時，遇到暫緩開盤或開盤後沒有成交事件，兩者就會產生差異」，不能假設兩者永遠等價。`isfirstcall("Date")` 的**換日時點依商品交易日**（股票 09:00、期貨一般 08:45、期貨全日 15:00），不是午夜 00:00 — 隔日沖開盤清倉用它才通用全商品（比 `date<>date[1]` 好）。**陷阱**：它讀「當次洗價是否為事件首次」，不受 if/else 流程控制影響；但若把 `isfirstcall` 包在一個會避開事件首次洗價的 if 裡，事件會被「消耗」掉，之後即使第一次真正呼叫也回 false。
 - **NoPlot**：必須先呼叫過Plot(n)畫出該序列，才能在同一根K棒用NoPlot(n)清掉該點數值（如只在上漲時顯示：`if Value1<=0 then NoPlot(1)`）。
 - **OutputField**：僅選股腳本輸出額外欄位使用；序號1~99；第三、四參數（小數位數/標題）可不傳，標題預設為"欄位"+序號；也可寫成OutputField1/2/3把序號內嵌於函數名。
 - **Playsound**：「若同一次腳本運算中執行了複數個PlaySound函數，只會撥放最後執行的音訊檔案」；未指定絕對路徑時會從固定預設資料夾 `C:\SysJust\XQ2005\User\Sound` 搜尋檔案。

@@ -527,3 +527,52 @@ outputField1(GetField("月營收", "M"), 0, "月營收");
 - [ ] input 參數都有 `_` 前綴且有中文描述
 - [ ] 關鍵邏輯有繁體中文註解
 - [ ] 已設定 SetBarBack 與 SetTotalBar 確保數據足夠
+
+## 官方選股實戰補遺（XQ lesson 教學站彙整）
+
+> 錯誤代碼另見 `references/error-codes.md`（選股 50xxx/59xxx）。特別：`50020`「嘗試取得未來資料，請注意 [] 是否使用負數」是 look-ahead 守門；`50305` 最大引用筆數比資料長度長。
+
+### OutputField 用具名參數 `order:=` 直接排序（最省事）
+
+v2.30 起 `OutputField` 可把輸出欄位當排序鍵：`OutputField(1, GetField("每股稅後淨利(元)","Q"), 2, "EPS", order:=1)` → 整份結果依該欄位**由大至小**排序；`order:=-1` 由小至大。免再手動點欄位排序或另寫 rank 區塊。`order` 接在 `(序號, 數值, 小數位數, 欄位名)` 之後。
+
+### 股權分散表大戶/散戶欄位：param 級距語意不對稱 + 只支援週頻
+
+集保股權分散在 XS 有 7 個欄位（大戶/散戶 各「持股比例/持股張數/持股人數」+「總持股人數」）。用法 `GetField("大戶持股比例", "W", param:=1000)`。
+
+- 🚨 **同一 param 在大戶=「該張數以上」、在散戶=「該張數以下」**（大戶 `param:=1000` 是 ≥1000 張大戶比例；散戶 `param:=1000` 是 ≤1000 張散戶比例）。級距多段（1/5/10/15/20/30/40/50/100/200/400/600/800/1000 張，**以官方欄位頁為準**）。「總持股人數」不吃級距 param。
+- **資料每週更新一次**（官方鏡像 TCHIP「每週更新一次」）；頻率**不支援日頻 `"D"`**，週以上（`"W"`/`"M"`/`"Q"`/`"H"`/`"Y"`）皆可。這些欄位在指標/警示/**交易**/函數腳本同樣可用。
+
+### 以公司事件日算「事件後至今漲跌幅」（填息選股骨架）
+
+```xs
+Value1 = GetField("除息日期");
+If datediff(Date, Value1) >= 0 and datediff(Date, Value1) <= _dist then begin
+    Value2 = GetBarOffset(Value1);          // 事件日 → 相對 K 棒數
+    Value3 = RateOfChange(Close, Value2);   // 事件日至今漲跌幅
+    if Value3 >= _ratio then Ret = 1;
+end;
+```
+
+要點：`GetField("除息日期")`/`("除息值")` 是選股/指標/警示/函數共用的資料欄位；`datediff(Date, 事件日)` 在 0~N 之間即「事件後 N 日內」；`GetBarOffset(日期)` 把交易日轉相對 K 棒數當 `RateOfChange` 期數。**選股資料筆數要設 ≥ `_dist`**，否則 `GetBarOffset` 取不到會錯。
+
+### 籌碼集中度自訂算法（無現成欄位時）
+
+```xs
+// 籌碼集中度 = 主力 N 日買賣超張數 / N 日成交量 × 100
+if summation(volume, _days) <> 0 then
+    value1 = summation(GetField("主力買賣超張數"), _days) / summation(volume, _days) * 100;
+```
+
+`主力買賣超張數` 是可直接 `GetField` 的籌碼欄位；對成交量標準化才能跨個股比較。搭配「集中度高但區間漲幅還小」選潛伏股。
+
+### 選股因子分析工具（2025/12 新增，驗證因子有效性）
+
+用一支只算因子值、經 `retVal` 回傳的函數當因子，系統每日把全市場依因子值分 **D1–D10 十等分**畫「等分報酬率圖」，看各分位未來平均報酬與勝率。好因子 = D1→D10 報酬**單調遞增/遞減**。樣本可選 原始值/ZScore(剔 |z|>3)/IQR 去離群值。驗證後套進選股：
+
+```xs
+rank myfactor begin retval = CallFunction("52週動能_最高價"); end;
+if myfactor.pr >= 90 then ret = 1;    // 取 D10
+```
+
+系統附內建因子函數可直接 `CallFunction`（52週動能_最高價、QMJ_safe、ROE_P、外資10日買張佔股本比…）。

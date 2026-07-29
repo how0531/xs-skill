@@ -386,3 +386,23 @@ input: Length(NumericSimple);
 - [ ] 函數邏輯清晰、易於理解
 - [ ] 關鍵計算邏輯有繁體中文註解
 - [ ] 已測試函數在不同腳本類型中的呼叫
+
+## 用字串型 input 參數當商品代碼（突破「商品參數不可用一般變數」限制）
+
+XQ .18.01 起**函數腳本**可用字串型 input 參數當商品代碼，函數參數被編譯器視為合法商品來源（如同 Group 元素）：
+
+```xs
+// 函數：_getIdOpen
+input: _id(string);
+retval = GetSymbolField(_id, "Open", "D");
+```
+
+呼叫時第一參數可傳固定代碼、執行商品、input 商品或 Group 元素：
+
+```xs
+value1 = _getIdOpen("2330.TW");     // 固定代碼
+value2 = _getIdOpen(symbol);        // 執行商品
+value3 = _getIdOpen(myGroup[1]);    // Group 元素
+```
+
+函數內也能 `myGroup = GetSymbolGroup(_id, "成分股")` 再逐檔 `GetSymbolField`，寫出可重用的「單一商品/單一清單」函數。**這是主腳本「`GetSymbolField` 第一參數不可用一般變數」限制的正式突破口** — 把跨商品取值封裝進函數，主腳本就能用變數化的方式呼叫。
