@@ -19,7 +19,7 @@ XScript（XS）程式碼。它**沒有可執行的產品程式碼**，本體是�
 | `references/anti-patterns.md` | 31 條 ❌→✅ 錯誤對照 | 手動維護，新增條目見下方同步點 |
 | `references/script-types/*.md` | 五類腳本（指標/交易/警示/選股/函數）專屬規範 | 手動維護 |
 | `references/examples-index.md` | 622 場景索引 | **自動生成，禁止手改**（見下方） |
-| `references/xshelp/*.md`（除 DIGEST） | 官方 XSHelp 全站鏡像（48 分類 / 1497 項） | **爬蟲生成，禁止手改**：改內容請重跑 `scripts/crawl_xshelp.py` |
+| `references/xshelp/*.md`（除 DIGEST） | 官方 XSHelp 全站鏡像（49 分類 / 1535 項；SDT 家族來自站內搜尋 rest API，官網選單無此分類） | **爬蟲生成，禁止手改**：改內容請重跑 `scripts/crawl_xshelp.py` |
 | `references/xshelp/DIGEST.md` | 全量精讀摘要（445 條限制/陷阱） | 由精讀代理批次生成；小幅修正可手改，大改建議重跑精讀流程 |
 | `references/source/*.md` | 原始來源，供 grep 查單一場景 | 唯讀為主 |
 | `evals/` | 行為測試（evals.json + assertions.md） | 手動維護 |
@@ -54,7 +54,7 @@ git diff references/examples-index.md   # 確認改動如預期
 - `XScript_實戰範例寶典_上.md`（早期 Gem prompt）**已於 2026-07-29 刪除** — 其命名規範
   與本 skill 相反、且含多個錯誤欄位名（股價自由現金流比、月頻「營收年增率」等）。
   如需考古請查 git 歷史，**不要**把它的規則抄回任何文件。
-- `XScript_Preset` 範例集在 **GitHub**（<https://github.com/how0531/XScript_Preset>），
+- `XScript_Preset` 系統腳本原始碼在 **GitHub**（官方 <https://github.com/sysjust-xq/XScript_Preset>），
   **不在本 repo**。文件中引用範例時一律指向 GitHub，不要寫 `references/xscript_preset/...`
   這種不存在的本地路徑。
 

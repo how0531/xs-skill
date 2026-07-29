@@ -176,14 +176,14 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 | `references/cheatsheet.md` | **純查表**：函數分類、欄位命名規則（含頻率切換/正名對照）、頻率商品相容、常用片段 |
 | `references/examples-index.md` | **622 個實戰場景索引**（場景 620–1241，按主題分類含原始 URL） |
 | `references/anti-patterns.md` | 31 條常見錯誤對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態） |
-| `references/xshelp/INDEX.md` | **官方 XSHelp 全站鏡像索引**（48 分類 / 1497 項函數與欄位，來源 xshelp.xq.com.tw） |
-| `references/xshelp/DIGEST.md` | **全量精讀摘要**：1497 項逐項讀完萃取的 445 條限制/陷阱/特殊語意，寫碼前先掃相關分類段 |
+| `references/xshelp/INDEX.md` | **官方 XSHelp 全站鏡像索引**（49 分類 / 1535 項函數與欄位，來源 xshelp.xq.com.tw，含選單外的 SDT 家族） |
+| `references/xshelp/DIGEST.md` | **全量精讀摘要**：1535 項逐項讀完萃取的 454 條限制/陷阱/特殊語意，寫碼前先掃相關分類段 |
 
 ### 官方文件鏡像（references/xshelp/ — 函數與欄位的最終權威）
 
 官方說明網站全站爬取版，每分類一檔、每個函數/欄位一節 `## 名稱`，含語法/說明/範例。**函數簽名或欄位名稱有疑義時，以此目錄為準**。
 
-查法：先看 `DIGEST.md` 對應分類段（445 條精讀萃取的限制/陷阱，快掃）；要完整語法與範例再 grep 原文定位（不要整檔 Read）：
+查法：先看 `DIGEST.md` 對應分類段（454 條精讀萃取的限制/陷阱，快掃）；要完整語法與範例再 grep 原文定位（不要整檔 Read）：
 
 ```
 # 查函數（例：SetPosition）
@@ -192,7 +192,7 @@ grep -rn "^## SetPosition" references/xshelp/
 grep -rn "^## 外資買賣超" references/xshelp/
 ```
 
-分類速查：關鍵字（SKIPWORD/CONSTANT/CONTROLFLOW/DECLARATION）、內建函數 8 檔（GENERALFUNC/TIMEFUNC/DATEFUNC/STRINGFUNC/NUMBERFUNC/FIELDFUNC/ARRAYFUNC/TRANSACTIONFUNC）、系統函數 14 檔（PRICEGETFUNC…QUANTFACTOR）、報價欄位 Q*、資料欄位 T*、選股欄位 F*。完整清單見 `references/xshelp/INDEX.md`。
+分類速查：關鍵字（SKIPWORD/CONSTANT/CONTROLFLOW/DECLARATION）、內建函數 9 檔（GENERALFUNC/TIMEFUNC/DATEFUNC/STRINGFUNC/NUMBERFUNC/FIELDFUNC/ARRAYFUNC/TRANSACTIONFUNC/SDT）、系統函數 14 檔（PRICEGETFUNC…QUANTFACTOR）、報價欄位 Q*、資料欄位 T*、選股欄位 F*。完整清單見 `references/xshelp/INDEX.md`。SDT 家族不在官網選單（來源為站內搜尋 API），跨腳本共享狀態需求先查 `SDT.md`。
 
 更新方式：`python scripts/crawl_xshelp.py`（有快取，全新抓取先刪 `references/xshelp/.cache/`）。
 
@@ -206,7 +206,7 @@ grep -rn "^## 外資買賣超" references/xshelp/
 **外部資源（必要時引導使用者開啟）：**
 
 - XS 官方語法手冊：<https://xshelp.xq.com.tw/XSHelp/>
-- 官方範例集：<https://github.com/how0531/XScript_Preset>
+- 官方系統腳本原始碼：<https://github.com/sysjust-xq/XScript_Preset>（1449 支 .xs，五類齊全；查系統函數實作細節時可引用）
 - 量化積木：<https://github.com/sysjust-xq/XS_Blocks/>（使用者指定「量化積木」時才用）
 
 ## 程式碼風格

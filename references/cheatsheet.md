@@ -242,7 +242,7 @@ value3 = GetField("營收成長率", "Q");
 
 > 數量以官方鏡像 `references/xshelp/INDEX.md` 為準（2026-07 爬取）；查單一函數：`grep -rn "^## 函數名" references/xshelp/`
 
-### 內建函數（182 個，8 分類）
+### 內建函數（220 個，9 分類）
 
 | 分類 | 數量 | 主要函數 |
 |---|---|---|
@@ -254,6 +254,7 @@ value3 = GetField("營收成長率", "Q");
 | 欄位函數 | 17 | `GetField`, `GetQuote`, `GetSymbolField`, `CheckField`, `CheckSymbolField`, `Symbol`, `SymbolName` |
 | 時間函數 | 13 | `CurrentTime`, `Hour`, `Minute`, `Second`, `TimeValue`, `TimeDiff`, `TimeAdd` |
 | 陣列函數 | 9 | `Array_Sort`, `Array_Sum`, `Array_Copy`, `Array_GetMaxIndex` |
+| SDT 共享資料表 | 38 | `SDT_SetValue`/`SDT_GetValue`, `SDT_SetValueIf`(CAS 鎖), `SDT_Sort`, `SDT_Max`/`Min`/`Median`, `SDT_HasKey`（每組都有 `_L` 變體，差異官方未說明；陷阱見 xshelp/DIGEST.md SDT 段） |
 
 ### 系統函數（267 個，14 分類）
 

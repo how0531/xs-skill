@@ -159,7 +159,28 @@ def crawl_keyword_category(section, code, cname, cache_dir, list_html):
     return {"section": section, "code": code, "cname": cname, "items": results}
 
 
+def crawl_sdt(cache_dir):
+    """SDT 共享資料表函數家族：不在官網分類選單、單頁也損壞（redirect 到 Emptys），
+    唯一完整來源是站內搜尋的 rest API（回傳 desc+fulldesc）。"""
+    text = fetch(f"{BASE}/XSHelp/rest?a=SDT", cache_dir, "rest_SDT.json")
+    items = []
+    for it in json.loads(text):
+        if not it["name"].upper().startswith("SDT_"):
+            continue
+        items.append({
+            "name": it["name"],
+            "cname": it.get("abbrev") or "",
+            "syntax": html_to_md(it.get("desc") or ""),
+            "desc": html_to_md((it.get("fulldesc") or "").replace("\r\n", "\n\n")),
+        })
+    items.sort(key=lambda x: x["name"].lower())
+    return {"section": "內建函數", "code": "SDT", "cname": "SDT共享資料表",
+            "items": items}
+
+
 def crawl_category(section, code, cname, cache_dir):
+    if code == "SDT":
+        return crawl_sdt(cache_dir)
     list_html = fetch(f"{BASE}/XSHelp/lists?a={code}", cache_dir, f"list_{code}.html")
     items = parse_list(list_html)
     if not items and 'class="keyword_title"' in list_html:
@@ -179,10 +200,13 @@ def crawl_category(section, code, cname, cache_dir):
 
 
 def write_category_md(cat):
+    src = (f"{BASE}/XSHelp/rest?a=SDT（站內搜尋 API；此家族不在官網分類選單、單頁已損壞）"
+           if cat["code"] == "SDT"
+           else f"{BASE}/XSHelp/lists?a={cat['code']}（官方 XSHelp，自動爬取）")
     lines = [
         f"# {cat['section']} - {cat['cname']}（{cat['code']}）",
         "",
-        f"> 來源：{BASE}/XSHelp/lists?a={cat['code']}（官方 XSHelp，自動爬取）",
+        f"> 來源：{src}",
         "",
     ]
     for it in cat["items"]:
@@ -212,6 +236,9 @@ def main():
 
     index_html = fetch(f"{BASE}/XSHelp/", args.cache, "index.html")
     menu = parse_menu(index_html)
+    # SDT 家族不在選單，經 rest API 補抓；插在內建函數（TRANSACTIONFUNC）之後
+    ins = next((i + 1 for i, (_, c, _) in enumerate(menu) if c == "TRANSACTIONFUNC"), len(menu))
+    menu.insert(ins, ("內建函數", "SDT", "SDT共享資料表"))
     if args.only:
         menu = [m for m in menu if m[1] == args.only]
     print(f"共 {len(menu)} 個分類", flush=True)
