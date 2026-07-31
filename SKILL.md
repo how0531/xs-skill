@@ -168,7 +168,7 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 | 檔案 | 何時讀 |
 |---|---|
 | `references/master-guide.md` | 完整撰寫主指引（含資源宣告、註解風格、look-ahead bias 等深入主題） |
-| `references/script-types/indicator.md` | 寫指標時必讀 |
+| `references/script-types/indicator.md` | 寫指標時必讀（含跨頻率繪圖、跨商品價差樣板） |
 | `references/script-types/trading.md` | 寫交易/自動交易時必讀（含當沖、波段、選擇權策略模板） |
 | `references/script-types/alert.md` | 寫警示/策略雷達時必讀（含 Tick 處理、ReadTicks） |
 | `references/script-types/stock-picker.md` | 寫選股時必讀（含 rank 排行語法） |
