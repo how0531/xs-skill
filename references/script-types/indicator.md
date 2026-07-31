@@ -688,7 +688,7 @@ var: _freqMode(0);                  // 0=日線(含週月), 1=分鐘
 
 SetTotalBar(3600);
 
-if BarFreq = "Min" then begin
+if BarFreq = "min" then begin
     _freqMode = 1;
 end
 else begin
@@ -785,5 +785,3 @@ end;
 3. **百分比模式要乘 100**：`(近月 - 加權) / 加權` 是比率（0.0035），選項名掛 `%` 就要 `* 100` 才會顯示成 0.35；兩者只差一個係數，但查價視窗讀起來差很多。
 4. **模式切換不會污染均線**：`Average(_spread, N)` 吃的是 `_spread` 序列，改參數會整支重算，不會混到上一個模式的點數值。但**時段濾掉的 K 棒仍然有被賦值**（只是沒畫），所以分鐘線的均線會含到非現貨時段的停滯價差 — 要更嚴謹可在時段外讓 `_spread` 維持前值或改用計數式均線。
 5. **`GetSymbolField` 無視 if 條件預先載入**（見 anti-patterns #18）：三個代碼 × 兩種頻率的資料在初始化階段就會全部載入，switch 只影響「用哪個」而非「載不載」，模式再多也不會省到載入成本。
-
-> ⚠️ 別把 `BarFreq = "Min"` 的大小寫當成陷阱去「修」：**XS 不區分大小寫，字串比對預設也不分大小寫**（見 anti-patterns #26、trading.md 鎖帳號段）— 寫 `"min"` 一樣成立，要區分大小寫得用 `StrCompare(a, b, False)`。
