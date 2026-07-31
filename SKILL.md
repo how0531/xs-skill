@@ -168,12 +168,12 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 | 檔案 | 何時讀 |
 |---|---|
 | `references/master-guide.md` | 完整撰寫主指引（含資源宣告、註解風格、look-ahead bias 等深入主題） |
-| `references/script-types/indicator.md` | 寫指標時必讀 |
+| `references/script-types/indicator.md` | 寫指標時必讀（含跨頻率繪圖、跨商品價差樣板） |
 | `references/script-types/trading.md` | 寫交易/自動交易時必讀（含當沖、波段、選擇權策略模板） |
 | `references/script-types/alert.md` | 寫警示/策略雷達時必讀（含 Tick 處理、ReadTicks） |
 | `references/script-types/stock-picker.md` | 寫選股時必讀（含 rank 排行語法） |
 | `references/script-types/function.md` | 寫自訂函數時必讀（含 NumericRef 機制） |
-| `references/cheatsheet.md` | **純查表**：函數分類、欄位命名規則（含頻率切換/正名對照）、頻率商品相容、常用片段 |
+| `references/cheatsheet.md` | **純查表**：函數分類、欄位命名規則（含頻率切換/正名對照）、頻率商品相容、常用片段、語言基礎特性（大小寫） |
 | `references/examples-index.md` | **622 個實戰場景索引**（場景 620–1241，按主題分類含原始 URL） |
 | `references/anti-patterns.md` | 31 條常見錯誤對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態） |
 | `references/error-codes.md` | **官方錯誤代碼對照表**（指標/交易/雷達/選股四套獨立碼；含 look-ahead 守門碼、RaiseRunTimeError、最大引用不足等） |
