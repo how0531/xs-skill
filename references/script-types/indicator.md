@@ -243,6 +243,64 @@ _vol = GetField("成交量", _Freq);
 plot1(_vol, "成交量");
 ```
 
+### 📊 期貨三大法人未平倉差值（外資淨 － 投信淨）
+
+**沒有現成的「淨口數」欄位** — 官方只提供多空兩邊，淨額要自己相減：`外資買方未平倉口數` / `外資賣方未平倉口數` / `投信買方未平倉口數` / `投信賣方未平倉口數`（另有 `自營商…`、`三大法人買方未平倉`／`三大法人賣方未平倉`（此組**無**「口數」後綴））。四個欄位語法皆為「期貨 選擇權」，掛在台股/大盤上會**靜默回傳 0**。
+
+```delphi
+// 商品：台指期（建議近月連續 FITXN*1.TF）｜頻率：日線
+
+// 0. 環境設定（設定函數不受 if 控制，一律放最上方）
+SetAlign("籌碼", 1);        // 公布日對位：盤中取最近一筆已公布的籌碼；改 0 = 絕對對位
+SetBarBack(60, "D");        // 均線回溯用
+
+input: _MaLen(5, "差值均線天期");
+
+var: _ForeignBull(0), _ForeignBear(0), _TrustBull(0), _TrustBear(0);
+var: _ForeignNet(0), _TrustNet(0), _NetDiff(0), _DiffMa(0), _Len(0);
+
+// 1. 環境預檢：三大法人未平倉只有日頻
+if BarFreq <> "D" then RaiseRunTimeError("三大法人未平倉為日頻資料，請將週期切換為『日』");
+
+if _MaLen < 1 then begin
+    _Len = 1;
+end else begin
+    _Len = _MaLen;
+end;
+
+// 2. 讀取多空未平倉口數
+_ForeignBull = GetField("外資買方未平倉口數", "D", Default:=0);
+_ForeignBear = GetField("外資賣方未平倉口數", "D", Default:=0);
+_TrustBull   = GetField("投信買方未平倉口數", "D", Default:=0);
+_TrustBear   = GetField("投信賣方未平倉口數", "D", Default:=0);
+
+// 3. 淨口數與差值
+_ForeignNet = _ForeignBull - _ForeignBear;
+_TrustNet   = _TrustBull   - _TrustBear;
+_NetDiff    = _ForeignNet  - _TrustNet;
+_DiffMa     = Average(_NetDiff, _Len);   // 同為日頻序列，可直接取均線
+
+// 4. 繪圖：差值用雙色柱，另附均線與零軸
+if _NetDiff >= 0 then begin
+    Plot1(_NetDiff, "外資淨－投信淨(正)", checkbox:=1);
+end else begin
+    Plot2(_NetDiff, "外資淨－投信淨(負)", checkbox:=1);
+end;
+
+Plot3(_DiffMa,     "差值均線",     checkbox:=1);
+Plot4(0,           "零軸",         checkbox:=1);
+Plot5(_ForeignNet, "外資淨未平倉", checkbox:=0);
+Plot6(_TrustNet,   "投信淨未平倉", checkbox:=0);
+```
+
+三個關鍵點：
+
+1. **對位**：指標腳本預設絕對對位，而當日未平倉要收盤後才公布 → 盤中讀當根日 K 抓不到資料（`Default:=0` 會讓最後一根掉成 0，畫出假訊號）。`SetAlign("籌碼", 1)` 改公布日對位可解，代價是序列相對 K 棒往後挪一天（即「當下真的能知道的值」）。要嚴格依資料日做盤後分析才用 0。
+2. **鎖日線**：這些欄位只有日頻。若要在分鐘線上跑，均線必須改成直接對欄位回溯 `GetField("外資買方未平倉口數","D")[N]`，**不可**對變數用 `[N]`（跨頻率對位錯，見 anti-patterns #3）。
+3. **商品別**：數值屬於「掛載的那個期貨商品」，大台（FITX/FITXN）與小台（FIMTX）不同；第一次使用建議與期交所當日公布數字對帳一次。
+
+掛上圖後：Plot1/Plot2 分設紅綠、樣式選「柱狀」，且**兩者座標軸必須設為同一個**，座標範圍選「對稱」讓零軸置中。要改掛在大盤等非期貨商品上看，把四行改成 `GetSymbolField(_FutSymbol, "外資買方未平倉口數", "D", Default:=0)` 並以 `input: _FutSymbol("FITXN*1.TF", "台指期商品代碼");` 傳入即可（第一參數只吃字串字面量／input／`Group[i]`）。
+
 ## 🚨 常見錯誤與修正
 
 ### ❌ 錯誤 1：Plot 序列不連續
