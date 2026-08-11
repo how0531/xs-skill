@@ -178,13 +178,13 @@ if filled > 0 and position > 0 and filled = position and (出場條件) then Set
 | `references/anti-patterns.md` | 31 條常見錯誤對照與重構案例（含頻率切換、欄位正名、變數命名片段衝突、部位 log 方向 vs 狀態） |
 | `references/error-codes.md` | **官方錯誤代碼對照表**（指標/交易/雷達/選股四套獨立碼；含 look-ahead 守門碼、RaiseRunTimeError、最大引用不足等） |
 | `references/xshelp/INDEX.md` | **官方 XSHelp 全站鏡像索引**（51 分類 / 1663 項函數與欄位，來源 xshelp.xq.com.tw，含選單外分類 SDT/ATTRFIELD/RESTMISC） |
-| `references/xshelp/DIGEST.md` | **全量精讀摘要**：逐項讀完萃取的 481 條限制/陷阱/特殊語意，寫碼前先掃相關分類段 |
+| `references/xshelp/DIGEST.md` | **全量精讀摘要**：逐項讀完萃取的 485 條限制/陷阱/特殊語意，寫碼前先掃相關分類段 |
 
 ### 官方文件鏡像（references/xshelp/ — 函數與欄位的最終權威）
 
 官方說明網站全站爬取版，每分類一檔、每個函數/欄位一節 `## 名稱`，含語法/說明/範例。**函數簽名或欄位名稱有疑義時，以此目錄為準**。
 
-查法：先看 `DIGEST.md` 對應分類段（481 條精讀萃取的限制/陷阱，快掃）；要完整語法與範例再 grep 原文定位（不要整檔 Read）：
+查法：先看 `DIGEST.md` 對應分類段（485 條精讀萃取的限制/陷阱，快掃）；要完整語法與範例再 grep 原文定位（不要整檔 Read）：
 
 ```
 # 查函數（例：SetPosition）

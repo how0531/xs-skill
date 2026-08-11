@@ -273,7 +273,7 @@ value3 = GetField("營收成長率", "Q");
 | 欄位函數 | 17 | `GetField`, `GetQuote`, `GetSymbolField`, `CheckField`, `CheckSymbolField`, `Symbol`, `SymbolName` |
 | 時間函數 | 13 | `CurrentTime`, `Hour`, `Minute`, `Second`, `TimeValue`, `TimeDiff`, `TimeAdd` |
 | 陣列函數 | 9 | `Array_Sort`, `Array_Sum`, `Array_Copy`, `Array_GetMaxIndex` |
-| SDT 共享資料表 | 38 | `SDT_SetValue`/`SDT_GetValue`, `SDT_SetValueIf`(CAS 鎖), `SDT_Sort`, `SDT_Max`/`Min`/`Median`, `SDT_HasKey`（`_L`＝多商品共用、無`_L`＝個別商品專用；跨商品共用僅警示/交易腳本可行，選股/指標不行；詳見 xshelp/DIGEST.md SDT 段） |
+| SDT 共享資料表 | 38 | `SDT_SetValue`/`SDT_GetValue`, `SDT_SetValueIf`(CAS 鎖), `SDT_Sort`, `SDT_Max`/`Min`/`Median`, `SDT_HasKey`（二維表；`_L`＝策略共享、無`_L`＝商品獨立；`_L` 僅**策略雷達/自動交易實盤**可用，指標/選股/所有回測不支援；上限 5000 列×100 行；完整平台表與 CSV 匯入見 xshelp/DIGEST.md SDT 段） |
 
 ### 系統函數（267 個，14 分類）
 

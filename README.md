@@ -62,7 +62,7 @@ xq-xscript/
     ├── examples-index.md                    ← **場景索引**：622 個實戰場景（場景 620–1241，主題分類含原始 URL）
     ├── xshelp/                              ← **官方文件鏡像**：51 分類 / 1663 項（爬蟲生成勿手改，含選單外分類 SDT/ATTRFIELD/RESTMISC）
     │   ├── INDEX.md                         ← 全站索引（分類 → 檔案 → 項目數）
-    │   ├── DIGEST.md                        ← 全量精讀摘要：481 條限制/陷阱/特殊語意
+    │   ├── DIGEST.md                        ← 全量精讀摘要：485 條限制/陷阱/特殊語意
     │   └── <分類>.md × 51                    ← 每分類一檔，每項含語法/說明/範例
     ├── script-types/
     │   ├── indicator.md                     ← 指標腳本規範

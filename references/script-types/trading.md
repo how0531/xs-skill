@@ -1095,3 +1095,44 @@ end;
 - **送單前系統檢查是否過收單時段**：例如收到 13:30:00 收盤價觸發洗價時呼叫交易指令，因已過收盤，委託不會送出。
 - 自動交易僅支援證券、期貨帳號（複委託/群組/零股不支援）。
 - **鎖帳號**：`GetInfo("AT_AID")` 字串**區分大小寫**，但 XS 字串比對預設不分大小寫 — 要用 `StrCompare(a, b, False)=0` 才會區分大小寫來鎖定帳號（不符可 `RaiseRunTimeError` 擋下）。券商代碼由 `GetInfo("AT_BID")` 取得（SINOAP 永豐金、YUANTA 元大、KGIAP 凱基、FUBONFAP 富邦、MEGA 兆豐、SYSTRADE 內建模擬…）。
+
+## 14. SDT 共享資料表：多商品策略資金控管（官方範例）
+
+> SDT 完整規範見 `references/xshelp/DIGEST.md` SDT 段。**`_L`（策略共享）僅策略雷達與自動交易實盤支援，回測不支援。** 用來讓同一策略掛的多檔商品互通交易狀態。
+
+經典用途：**全策略資金上限控管** — 每檔商品把自己占用的資金寫進共用 SDT，進場前先 `SDT_Sum_L` 算全策略已投入金額，未超上限才下單：
+
+```xs
+input: _AVAILABLE_FUNDS(1000000, "資金上限"), _TRADE_NUM(5, "下單張數");
+vars: _usedFund(0);
+array: _keyName[]("");
+
+once begin
+    SDT_SetValue_L(Symbol, "實際庫存", 0);
+    SDT_SetValue_L(Symbol, "占用資金", 0);
+end;
+
+// 成交狀態變動時，更新這檔商品的實際占用資金
+if Filled <> SDT_GetValue_L(Symbol, "實際庫存") then begin
+    SDT_SetValue_L(Symbol, "實際庫存", Filled);
+    if Position > Filled then                       // 有未成交委託：未成交部分先用漲停價保守估
+        Value1 = (Filled * FilledAvgPrice + (Position - Filled) * GetField("漲停價", "D")) * 1000
+    else
+        Value1 = Filled * FilledAvgPrice * 1000;
+    SDT_SetValue_L(Symbol, "占用資金", Value1);
+end;
+
+_usedFund = SDT_Sum_L("占用資金");                    // 全策略已投入金額
+
+Condition1 = Close cross over Average(Close, 10);
+// 進場前檢查：加碼後總資金不可超過上限（市價用漲停價估算）
+Condition3 = _AVAILABLE_FUNDS >= (_usedFund + (GetField("漲停價", "D") * 1000 * _TRADE_NUM));
+
+if GetInfo("IsRealTime") = 1 and Condition1 and Condition3
+        and Position = 0 and Filled = 0 then begin
+    SetPosition(_TRADE_NUM, Market);
+    SDT_SetValue_L(Symbol, "占用資金", GetField("漲停價", "D") * 1000 * _TRADE_NUM);  // 送單時先記估算值
+end;
+```
+
+三個要點：① 市價單無法預知成交價，**送單時先用漲停價估占用資金**（保守），**成交後再以 `FilledAvgPrice` 更新**為實際成本；② 台股張數要 `× 1000` 換股數算金額；③ 跨商品「先讀 `_usedFund` 再決定下單」有競態風險，資金控管這種強一致需求，關鍵寫入可改用 `SDT_SetValueIf_L` 保證原子性。

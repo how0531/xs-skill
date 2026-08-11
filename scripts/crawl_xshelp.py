@@ -336,6 +336,10 @@ def main():
         total += len(cat["items"])
     idx.append("")
     idx.append(f"總計 {total} 項。查特定函數/欄位：先 grep 本目錄 `^## 名稱`，再 Read 該檔對應段落。")
+    # --only 只重生單一分類 .md，不可覆寫 INDEX/.meta（否則會把全站索引砍成只剩該分類）
+    if args.only:
+        print(f"完成：{len(cats)} 分類 / {total} 項（--only 模式，未動 INDEX.md/.meta.json）", flush=True)
+        return
     with io.open(os.path.join(OUT_DIR, "INDEX.md"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(idx))
     with io.open(os.path.join(OUT_DIR, ".meta.json"), "w", encoding="utf-8") as f:
