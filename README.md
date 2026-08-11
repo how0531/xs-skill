@@ -54,6 +54,12 @@ xq-xscript/
 ├── evals/                                   ← 行為測試
 │   ├── evals.json                           ← 9 個 eval（prompt + expected_output）
 │   └── assertions.md                        ← 各 eval 的逐項 assertion
+├── strategies/                              ← TradingView 熱門策略 → 台指期 XS 交易腳本
+│   ├── README.md                            ← 策略總覽、來源連結、PineScript→XS 對照
+│   ├── 01-supertrend-trend.xs               ← SuperTrend 趨勢跟蹤（多空互換）
+│   ├── 02-opening-range-breakout.xs         ← 開盤區間突破（ORB）當沖
+│   ├── 03-donchian-channel-breakout.xs      ← Donchian 通道突破（海龜）
+│   └── 04-rsi-mean-reversion.xs             ← RSI 均值回歸
 └── references/
     ├── master-guide.md                      ← **程序性規則**：撰寫流程、可行性預審、look-ahead bias 等
     ├── cheatsheet.md                        ← **純查表**：函數分類、欄位命名規則、頻率商品相容、常用片段
