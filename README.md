@@ -56,7 +56,8 @@ xq-xscript/
 │   └── assertions.md                        ← 各 eval 的逐項 assertion
 ├── outputs/                                 ← 用本 skill 產出的定稿腳本（非 skill 規範內容）
 │   ├── README.md                            ← 各產出腳本的說明、跨平台對應與已知差異
-│   └── txf_dual_green_strategy.xs           ← 台指期雙陽開泰策略（PineScript v6 → XS 交易腳本）
+│   ├── txf_dual_green_strategy.xs           ← 台指期雙陽開泰策略（PineScript v6 → XS 交易腳本）
+│   └── txf_dual_grid_dca_strategy.xs       ← 台指期雙向 DCA 網格策略（PineScript v6 → XS 交易腳本）
 └── references/
     ├── master-guide.md                      ← **程序性規則**：撰寫流程、可行性預審、look-ahead bias 等
     ├── cheatsheet.md                        ← **純查表**：函數分類、欄位命名規則、頻率商品相容、常用片段
