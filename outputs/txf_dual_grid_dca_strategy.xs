@@ -14,8 +14,12 @@
 // 1.1 交易總開關
 input: _MakeSure(0, "了解策略風險請選【是】", InputKind:=Dict(["否", 0], ["是", 1]), Quickedit:=True);
 
-// 1.2 均線通道（原策略為 360 分鐘，XS 官方頻率代碼無 360，最接近為 240）
-input: _ChanFreq("240", "均線通道取價頻率", InputKind:=Dict(["240分鐘", "240"], ["180分鐘", "180"], ["120分鐘", "120"], ["90分鐘", "90"], ["60分鐘", "60"], ["30分鐘", "30"]), Quickedit:=True);
+// 1.2 均線通道期數
+// 取價頻率無法做成參數：GetField 與 SetBarBack 的頻率必須是字串常數，
+// 資料在初始化階段就要決定載入哪一個頻率，傳入 input 變數會編譯失敗。
+// 原策略為 360 分鐘，XS 官方頻率代碼沒有 360
+// （只有 1／2／3／5／10／15／20／30／45／60／90／120／135／180／240），故取最接近的 240。
+// 要改頻率請同步修改下方三處標記【通道頻率】的字串。
 input: _ChanLen(200, "均線通道期數");
 
 // 1.3 MACD 設定（原策略以簡單移動平均計算，非標準指數型 MACD）
@@ -65,7 +69,7 @@ var:
 // ==============================================================
 // 通道均線在主頻上平滑，需要主頻至少 期數＋緩衝 根；跨頻率取價另外預留
 SetBarBack(MaxList(_ChanLen, _MacdSlow, _SignalLen) + 120);
-SetBarBack(150, _ChanFreq);
+SetBarBack(150, "240");        // 【通道頻率】
 
 if BarFreq <> "Min" then RaiseRunTimeError("本策略僅支援分鐘頻率");
 if _MakeSure <> 1 then RaiseRunTimeError("請確實了解策略內容，並將【了解策略風險】設為【是】");
@@ -89,8 +93,8 @@ _Macd = Average(Close, _MacdFast) - Average(Close, _MacdSlow);
 _MacdSignal = Average(_Macd, _SignalLen);
 
 // 通道：取指定頻率的高低價，再於主頻做指數平滑（與原策略的計算層級相同）
-_MaHigh = XAverage(GetField("最高價", _ChanFreq), _ChanLen);
-_MaLow = XAverage(GetField("最低價", _ChanFreq), _ChanLen);
+_MaHigh = XAverage(GetField("最高價", "240"), _ChanLen);   // 【通道頻率】
+_MaLow = XAverage(GetField("最低價", "240"), _ChanLen);    // 【通道頻率】
 
 // 訊號需回溯到前兩根 K 棒，資料不足時不做判斷
 if CurrentBar <= 4 then return;
