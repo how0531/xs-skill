@@ -237,7 +237,7 @@ value3 = GetField("營收成長率", "Q");
 - 成交量單位因商品而異：台股=張、指數=元、期貨=口、海外=股
 - **籌碼欄位幾乎全為台股專屬**，撰寫美股/港股策略時不可使用融資融券、主力買賣超等欄位
 - 使用不支援的商品+欄位組合**不會報錯**，但回傳值為 0 或空值，容易造成隱蔽的邏輯錯誤
-- **選股欄位（財報等）自 15.01 起可在指標/警示/交易腳本用 `GetField`**（原本只能選股中心），但需「選股欄位權限」；注意指標/雷達/交易對財報預設「絕對對位」會偷看未來，必要時 `SetAlign` 改公布日對位
+- **選股欄位（財報等）自 15.01 起可在指標/警示/交易腳本用 `GetField`**（原本只能選股中心），但需「選股欄位權限」；注意對位預設值**依腳本類型而異**（官方 GENERALFUNC.md：`SetAlign("籌碼", 0)` 是**指標腳本**預設＝絕對對位，`SetAlign("籌碼", 1)` 是**警示、自動交易腳本**預設＝公布日對位；選股腳本不吃 `SetAlign`，其籌碼欄位固定絕對對位）。絕對對位會偷看未來，必要時改公布日對位 —— 但公布日對位在系統內是記日期還是記時間戳，官方未載明，要求嚴格無前視時應改用「絕對對位＋自行位移 `[N]`」並實測驗證
 
 ### 盤中即時資料欄位在較大分鐘頻率的聚合規則（易錯）
 
@@ -303,7 +303,8 @@ value3 = GetField("營收成長率", "Q");
 | `CheckField` / `CheckSymbolField` | 呼叫 GetField 前先確認欄位資料存在（回傳 True/False），**官方版「靜默回 0」解藥** | xshelp/FIELDFUNC.md |
 | `IsSupportField` / `IsSupportSymbolField` | 判斷欄位是否被目前商品支援 | xshelp/GENERALFUNC.md |
 | `IsFirstCall("Bar"/"Date"/"Realtime"...)` | 精準判斷各種「第一次洗價」時機，比 `Date <> Date[1]` 更細 | xshelp/GENERALFUNC.md |
-| `SetAlign` / `DataAlign` | 跨頻率取值的資料對位模式（絕對 vs 遞補），anti-pattern #22 的機制根源 | xshelp/GENERALFUNC.md、FIELDFUNC.md |
+| `SetAlign` / `DataAlign` | **兩條不同的軸線，別混用術語**：`SetAlign("籌碼"\|"營收財報", 0\|1)` 是「絕對對位 vs **公布日**對位」；`DataAlign(0\|1)` 是「絕對對位 vs **遞補**對位」。anti-pattern #22 的機制根源 | xshelp/GENERALFUNC.md、FIELDFUNC.md |
+| `GetFieldDate` / `GetFieldPublishDate` | 前者回「欄位資料所屬期別的日期」，後者回「該欄位在 XQ 更新的日期」。**驗證前視偏差必須兩個並列比對**，只看 `GetFieldDate` 不夠 | xshelp/FIELDFUNC.md |
 | `SetRemoveOutlier` | Rank 排行時排除離群值（zscore/IQR） | xshelp/GENERALFUNC.md |
 | `FilledAtBroker` | 券商實際庫存（官方明言可能 ≠ `Filled`） | xshelp/TRANSACTIONFUNC.md |
 | `FilledRecordCount/Price/Qty/Date/BS` | 逐筆歷史成交紀錄，自算已實現損益 | xshelp/TRANSACTIONFUNC.md |
