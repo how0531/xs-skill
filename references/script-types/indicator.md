@@ -656,3 +656,132 @@ end;
 
 - 座標範圍：**自動**（副圖一般用此）、**對稱**（零軸固定中央，適合 MACD 柱體等零軸擺盪）、**自訂**（手動上下限）、**價位座標**（套主圖 K 棒比例，均線/成本線/通道等主圖疊圖類**務必選此**否則比例不符）。每個指標最多 2 座標軸。
 - 🚨 **雙色柱狀圖**（紅漲綠跌，如 MA-Osc）：因單一 plot 只能一色，依正負拆兩條 `if v>=0 then Plot1(v,"+") else Plot2(v,"-")` 各設不同色。**兩序列座標軸必須設同一個**，否則上下比例被各自座標拉錯、圖形失真。
+
+## 12. 跨商品價差樣板（頻率 × 模式雙層 switch）
+
+### 📐 期現價差 / 近遠月價差（點數與百分比可切換）
+
+**適用情境：** 台指期 vs 加權（期現價差、正逆價差判斷）、近月 vs 遠月（轉倉價差觀察），且同一支指標要能掛在日線也能掛在分鐘線。
+
+**核心概念：**
+
+1. **雙層 switch 分派**：外層依 `BarFreq` 決定跨商品取值要用哪個頻率字串（分鐘線用 `"1"`、日/週/月用 `"D"`），內層依模式決定「對照腿」是誰。兩層各自把頻率字串寫死，不用變數當頻率參數。
+2. **點差與百分比共用同一條計算**：先算絕對價差，百分比模式再除以對照腿；分母為 0（無資料或非交易時段）時歸零，避免除零。
+3. **對照腿是現貨就必須濾時段**：加權指數只有 09:00–13:30 有報價，夜盤與盤前的分鐘 K 會拿到停滯值，價差沒有意義 — 該時段要用 `NoPlot` 把**所有序列一起清掉**（只清一條，另一條會留著上一根的數值）。
+
+```delphi
+//==========================================================
+//  台指期價差指標（switch 分派頻率與模式）
+//  日線 / 分鐘線皆可；加權價差 / 近遠月價差 / 加權價差% 可切換
+//==========================================================
+
+input: _Mode(1, "價差類型", InputKind:=Dict(
+    ["加權價差",   1],
+    ["近遠月價差", 2],
+    ["加權價差%",  3]
+), Quickedit:=True);
+
+var: intrabarpersist _near(0);      // 近月台指期
+var: intrabarpersist _ref(0);       // 對照腿
+var: intrabarpersist _spread(0);    // 價差（模式 3 為百分比）
+var: _freqMode(0);                  // 0=日線(含週月), 1=分鐘
+
+SetTotalBar(3600);
+
+if BarFreq = "min" then begin
+    _freqMode = 1;
+end
+else begin
+    _freqMode = 0;
+end;
+
+switch (_freqMode)
+begin
+
+    case 1:   //==== 分鐘線：頻率寫死 "1" ====
+        _near = GetSymbolField("FITXN*1.TF", "收盤價", "1");
+        switch (_Mode)
+        begin
+            case 1:
+                _ref = GetSymbolField("TSE.TW", "收盤價", "1");
+                SetPlotLabel(1, "加權價差");
+            case 2:
+                _ref = GetSymbolField("FITXN*2.TF", "收盤價", "1");
+                SetPlotLabel(1, "近遠月價差");
+            case 3:
+                _ref = GetSymbolField("TSE.TW", "收盤價", "1");
+                SetPlotLabel(1, "加權價差%");
+            Default:
+                _ref = 0;
+        end;
+
+        _spread = _near - _ref;
+
+        // 百分比模式：除以加權指數換算成相對比率，分母 0 代表當下取不到加權報價
+        if _Mode = 3 then begin
+            if _ref <> 0 then begin
+                _spread = _spread / _ref * 100;
+            end
+            else begin
+                _spread = 0;
+            end;
+        end;
+
+        if _Mode = 1 or _Mode = 3 then begin
+            // 對照腿是加權指數，只有現貨盤 09:00–13:30 的價差才有意義
+            if Time > 090000 and Time < 133000 then begin
+                plot1(_spread, "價差");
+                plot2(average(_spread, 5), "均線");
+            end
+            else begin
+                noplot(1);
+                noplot(2);
+            end;
+        end
+        else begin
+            // 近遠月價差：兩腿都是期貨，夜盤同樣有報價，連續畫
+            plot1(_spread, "價差");
+            plot2(average(_spread, 5), "均線");
+        end;
+
+    Default:  //==== 日線 / 週 / 月：頻率寫死 "D" ====
+        _near = GetSymbolField("FITXN*1.TF", "收盤價", "D");
+        switch (_Mode)
+        begin
+            case 1:
+                _ref = GetSymbolField("TSE.TW", "收盤價", "D");
+                SetPlotLabel(1, "加權價差");
+            case 2:
+                _ref = GetSymbolField("FITXN*2.TF", "收盤價", "D");
+                SetPlotLabel(1, "近遠月價差");
+            case 3:
+                _ref = GetSymbolField("TSE.TW", "收盤價", "D");
+                SetPlotLabel(1, "加權價差%");
+            Default:
+                _ref = 0;
+        end;
+
+        _spread = _near - _ref;
+
+        if _Mode = 3 then begin
+            if _ref <> 0 then begin
+                _spread = _spread / _ref * 100;
+            end
+            else begin
+                _spread = 0;
+            end;
+        end;
+
+        plot1(_spread, "價差");
+        plot2(average(_spread, 3), "均線");
+
+end;
+```
+
+**設計要點：**
+
+1. **`Case` 不要用逗號列舉多值**：官方只示範單值與 `Case 6 to 20:` 區間形式，模式 1 與模式 3 共用同一條對照腿時，寧可各寫一個 `case` 把取值重複一次，也不要賭逗號語法。
+2. **`SetPlotLabel` 讓同一條線隨模式改名**：`Plot` 第二參數只吃固定字串，模式切換後的動態名稱一律用 `SetPlotLabel(序號, 字串)`。
+3. **百分比模式要乘 100**：`(近月 - 加權) / 加權` 是比率（0.0035），選項名掛 `%` 就要 `* 100` 才會顯示成 0.35；兩者只差一個係數，但查價視窗讀起來差很多。
+4. **模式切換不會污染均線**：`Average(_spread, N)` 吃的是 `_spread` 序列，改參數會整支重算，不會混到上一個模式的點數值。但**時段濾掉的 K 棒仍然有被賦值**（只是沒畫），所以分鐘線的均線會含到非現貨時段的停滯價差 — 要更嚴謹可在時段外讓 `_spread` 維持前值或改用計數式均線。
+5. **`GetSymbolField` 無視 if 條件預先載入**（見 anti-patterns #18）：三個代碼 × 兩種頻率的資料在初始化階段就會全部載入，switch 只影響「用哪個」而非「載不載」，模式再多也不會省到載入成本。

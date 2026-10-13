@@ -518,6 +518,25 @@ if Filled < 0 and Position < 0 and Filled = Position and (出場條件) then Set
 
 ---
 
+## 7. 語言基礎特性（容易被誤判成 bug）
+
+### 大小寫：XS 全域不分大小寫
+
+函數名、變數名、關鍵字、**字串比對**一律不分大小寫：
+
+```xs
+if BarFreq = "min" then ...      // 與 "Min"、"MIN" 完全等價
+value1 = average(Close, 20);     // 與 Average 等價
+```
+
+**實務影響**：官方文件寫 `BarFreq` 回傳 `"Min"`、腳本寫成 `"min"`，**那不是 bug，不要去「修」**。同理不必為了大小寫統一去改動使用者既有腳本。
+
+要**區分**大小寫得改用字串函數並關掉預設：`StrCompare(a, b, False) = 0`（第三參數 False 才區分）。`StrStartWith` / `StrEndWith` 同樣預設不分大小寫。
+
+真正受大小寫影響的只有兩處：`FormatDate` 的格式代碼（`d`/`dd`/`M`/`MM` 靠大小寫與重複次數區分語意），以及 `GetInfo("AT_AID")` 這類需要精確比對的回傳字串（見 `script-types/trading.md` 鎖帳號段）。
+
+---
+
 ## 也可參考
 
 - `master-guide.md` — 程序性規則：撰寫流程、可行性預審、look-ahead bias、註解風格、資源宣告
